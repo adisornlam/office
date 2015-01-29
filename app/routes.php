@@ -21,9 +21,13 @@ Route::group(array('prefix' => 'mis/backend', 'before' => 'authen'), function() 
 
     Route::get('computer', 'App\Controllers\Backend\ComputerController@index');
 
-    Route::get('hsware', 'App\Controllers\Backend\HswareController@index');
+    Route::get('hsware', 'App\Controllers\Backend\HswareController@index');    
+    Route::get('hsware/listall', 'App\Controllers\Backend\HswareController@listall');    
+    Route::get('hsware/dialog', 'App\Controllers\Backend\HswareController@dialog');
+    Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\Backend\HswareController@add'));
+    
     Route::get('hsware/group', 'App\Controllers\Backend\HswareController@group');
-    Route::get('hsware/group/listall', 'App\Controllers\Backend\HswareController@group_listall');
+    Route::get('hsware/group/listall', 'App\Controllers\Backend\HswareController@group_listall');    
     Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\Backend\HswareController@group_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/edit/{id}', array('uses' => 'App\Controllers\Backend\HswareController@group_edit'));
     Route::get('hsware/group/delete/{id}', 'App\Controllers\Backend\HswareController@group_delete');

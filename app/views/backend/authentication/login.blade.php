@@ -48,8 +48,8 @@
         });
     });
 
-    $("#form-signin input, password").keyup(function (event) {
-        if (event.keyCode === 13) {
+    $(document).keyup(function (e) {
+        if (e.keyCode == 13) {
             $.ajax({
                 type: "post",
                 url: base_url + index_page + "backend/login",
@@ -59,11 +59,11 @@
                         $('form .form-group').removeClass('has-error');
                         $('form .help-block').remove();
                         $.each(data.error.message, function (key, value) {
-                            $('#' + key).parent().addClass('has-error');
+                            $('#' + key).addClass('has-error');
                             $('#' + key).after('<p class="help-block">' + value + '</p>');
                         });
                     } else {
-                        base_url + index_page + "backend";
+                        window.location.href = base_url + index_page + "backend";
                     }
                 },
                 error: function (err) {
