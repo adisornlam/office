@@ -30,7 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/backend/hsware/dialog" class="btn btn-primary link_dialog" title="เลือกกลุ่มอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์</a>
+                        <a href="javascript:;" rel="mis/backend/hsware/dialog" class="btn btn-primary link_dialog" title="เลือกกลุ่มอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์ (F8)</a>
                         <a href="{{URL::to('mis/backend/hsware/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มอุปกรณ์</a>
                     </div>
                 </div>

@@ -53,7 +53,7 @@ class HswareController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="mis/backend/hsware/edit/{{$id}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/backend/hsware/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
         $link .= '<li><a href="javascript:;" rel="mis/backend/hsware/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
@@ -61,10 +61,10 @@ class HswareController extends \BaseController {
         return \Datatables::of($hsware_item)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
-                        ->edit_column('warranty_date', '@if($warranty_date) {{$warranty_date}} @else LT @endif')
+                        ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', '<a href="{{URL::to("mis/backend/hsware/view/$item_id")}}" title="คลิกดูรายละเอียด">{{$title}}</a>')
                         ->edit_column('created_user', '{{\User::find($created_user)->username}}')
-                        ->edit_column('updated_user', '{{($updated_user?\User::find($created_user)->username:"")}}')
+                        ->edit_column('updated_user', '{{($updated_user?\User::find($updated_user)->username:"")}}')
                         ->make(true);
     }
 
@@ -227,7 +227,7 @@ class HswareController extends \BaseController {
                 $photo4 = \Input::file('photo4');
                 $photo5 = \Input::file('photo5');
 
-                $destinationPath = 'uploads/hsware/';
+                $destinationPath = 'uploads/hsware/' . date('Ymd') . '/';
                 if ($photo1) {
                     $up = $this->upload_photo($photo1, $destinationPath);
                     $photo_1 = $up['full'];
@@ -307,7 +307,7 @@ class HswareController extends \BaseController {
                 $hsware_item->photo5 = $photo_5;
                 $hsware_item->desc = trim(\Input::get('desc'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
-                $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
+                $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
                 $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $hsware_item->created_user = \Auth::user()->id;
                 $hsware_item->save();
@@ -321,24 +321,175 @@ class HswareController extends \BaseController {
     }
 
     public function view($param) {
-        $group = \HswareGroup::lists('title', 'id');        
+        $group = \HswareGroup::lists('title', 'id');
+        $item = \HswareItem::find($param);
+        $option = \DB::table('hsware_item')
+                ->join('hsware_spec_label', 'hsware_item.group_id', '=', 'hsware_spec_label.group_id')
+                ->where('hsware_item.id', $param)
+                ->select('hsware_item.*', 'hsware_spec_label.title as title', 'hsware_spec_label.option_id as option_id', 'hsware_spec_label.name as name')
+                ->get();
         $data = array(
-            'title' => 'เพิ่มรายการอุปกรณ์',
+            'title' => 'รายละเอียด ' . $item->title,
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
                 'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
                 'รายการอุปกรณ์' => 'mis/backend/hsware',
-                'เพิ่มรายการอุปกรณ์' => '#'
+                $item->title => '#'
             ),
-            'item' => \HswareItem::find($param),
+            'item' => $item,
             'group' => $group,
             'company' => \Company::lists('title', 'id'),
             'spec_label' => \DB::table('hsware_spec_label')
                     ->where('group_id', \Input::get('group_id'))
-                    ->get()
+                    ->get(),
+            'option' => $option
         );
-        return \View::make('backend.mod_mis.hsware.admin.add', $data);
+        return \View::make('backend.mod_mis.hsware.admin.view', $data);
+    }
+
+    public function edit($param) {
+        if (!\Request::isMethod('post')) {
+            $group = \HswareGroup::lists('title', 'id');
+            $item = \HswareItem::find($param);
+            $option = \DB::table('hsware_item')
+                    ->join('hsware_spec_label', 'hsware_item.group_id', '=', 'hsware_spec_label.group_id')
+                    ->where('hsware_item.id', $param)
+                    ->select('hsware_item.*', 'hsware_spec_label.title as title', 'hsware_spec_label.option_id as option_id', 'hsware_spec_label.name as name')
+                    ->get();
+            $data = array(
+                'title' => 'แก้ไขรายการอุปกรณ์',
+                'breadcrumbs' => array(
+                    'ภาพรวมระบบ' => 'backend',
+                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
+                    'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                    'รายการอุปกรณ์' => 'mis/backend/hsware',
+                    'แก้ไข ' . $item->title => '#'
+                ),
+                'item' => $item,
+                'group' => $group,
+                'company' => \Company::lists('title', 'id'),
+                'spec_label' => \DB::table('hsware_spec_label')
+                        ->where('group_id', $item->group_id)
+                        ->get(),
+                'option' => $option
+            );
+            return \View::make('backend.mod_mis.hsware.admin.edit', $data);
+        } else {
+            $rules = array(
+                'group_id' => 'required',
+                'title' => 'required',
+                'photo1' => 'image|mimes:jpeg,png|max:512',
+                'photo2' => 'image|mimes:jpeg,png|max:512',
+                'photo3' => 'image|mimes:jpeg,png|max:512',
+                'photo4' => 'image|mimes:jpeg,png|max:512',
+                'photo5' => 'image|mimes:jpeg,png|max:512'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $photo1 = \Input::file('photo1');
+                $photo2 = \Input::file('photo2');
+                $photo3 = \Input::file('photo3');
+                $photo4 = \Input::file('photo4');
+                $photo5 = \Input::file('photo5');
+
+                $destinationPath = 'uploads/hsware/' . date('Ymd') . '/';
+                if ($photo1) {
+                    $up = $this->upload_photo($photo1, $destinationPath);
+                    $photo_1 = $up['full'];
+                } else {
+                    $photo_1 = \Input::get('photo1_hidden');
+                }
+
+                if ($photo2) {
+                    $up = $this->upload_photo($photo2, $destinationPath);
+                    $photo_2 = $up['full'];
+                } else {
+                    $photo_2 = \Input::get('photo2_hidden');
+                }
+
+                if ($photo3) {
+                    $up = $this->upload_photo($photo3, $destinationPath);
+                    $photo_3 = $up['full'];
+                } else {
+                    $photo_3 = \Input::get('photo3_hidden');
+                }
+
+                if ($photo4) {
+                    $up = $this->upload_photo($photo4, $destinationPath);
+                    $photo_4 = $up['full'];
+                } else {
+                    $photo_4 = \Input::get('photo4_hidden');
+                }
+
+                if ($photo5) {
+                    $up = $this->upload_photo($photo5, $destinationPath);
+                    $photo_5 = $up['full'];
+                } else {
+                    $photo_5 = \Input::get('photo5_hidden');
+                }
+
+                $hsware_item = \HswareItem::find($param);
+                $hsware_item->group_id = \Input::get('group_id');
+                $hsware_item->company_id = \Input::get('company_id');
+                $hsware_item->hsware_code = trim(\Input::get('hsware_code'));
+                $hsware_item->serial_no = trim(\Input::get('serial_no'));
+                $hsware_item->access_no = trim(\Input::get('access_no'));
+                $hsware_item->title = trim(\Input::get('title'));
+                $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
+                $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
+                $hsware_item->spec_value_3 = trim(\Input::get('spec_value_3'));
+                $hsware_item->spec_value_4 = trim(\Input::get('spec_value_4'));
+                $hsware_item->spec_value_5 = trim(\Input::get('spec_value_5'));
+                $hsware_item->spec_value_6 = trim(\Input::get('spec_value_6'));
+                $hsware_item->spec_value_7 = trim(\Input::get('spec_value_7'));
+                $hsware_item->spec_value_8 = trim(\Input::get('spec_value_8'));
+                $hsware_item->spec_value_9 = trim(\Input::get('spec_value_9'));
+                $hsware_item->spec_value_10 = trim(\Input::get('spec_value_10'));
+                $hsware_item->spec_value_11 = trim(\Input::get('spec_value_11'));
+                $hsware_item->spec_value_12 = trim(\Input::get('spec_value_12'));
+                $hsware_item->spec_value_13 = trim(\Input::get('spec_value_13'));
+                $hsware_item->spec_value_14 = trim(\Input::get('spec_value_14'));
+                $hsware_item->spec_value_15 = trim(\Input::get('spec_value_15'));
+                $hsware_item->spec_value_16 = trim(\Input::get('spec_value_16'));
+                $hsware_item->spec_value_17 = trim(\Input::get('spec_value_17'));
+                $hsware_item->spec_value_18 = trim(\Input::get('spec_value_18'));
+                $hsware_item->spec_value_19 = trim(\Input::get('spec_value_19'));
+                $hsware_item->spec_value_20 = trim(\Input::get('spec_value_20'));
+                $hsware_item->spec_value_21 = trim(\Input::get('spec_value_21'));
+                $hsware_item->spec_value_22 = trim(\Input::get('spec_value_22'));
+                $hsware_item->spec_value_23 = trim(\Input::get('spec_value_23'));
+                $hsware_item->spec_value_24 = trim(\Input::get('spec_value_24'));
+                $hsware_item->spec_value_25 = trim(\Input::get('spec_value_25'));
+                $hsware_item->spec_value_26 = trim(\Input::get('spec_value_26'));
+                $hsware_item->spec_value_27 = trim(\Input::get('spec_value_27'));
+                $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
+                $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
+                $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
+                $hsware_item->photo1 = $photo_1;
+                $hsware_item->photo2 = $photo_2;
+                $hsware_item->photo3 = $photo_3;
+                $hsware_item->photo4 = $photo_4;
+                $hsware_item->photo5 = $photo_5;
+                $hsware_item->desc = trim(\Input::get('desc'));
+                $hsware_item->register_date = trim(\Input::get('register_date'));
+                $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
+                $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
+                $hsware_item->updated_user = \Auth::user()->id;
+                $hsware_item->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
     }
 
     private function upload_photo($file, $path) {

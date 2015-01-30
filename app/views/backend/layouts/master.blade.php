@@ -10,7 +10,7 @@
         <title>ARF Office</title>
         {{HTML::style('css/bootstrap.min.css')}}
         {{HTML::style('css/bootstrap-reset.css')}}
-        {{HTML::style('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')}}
+        {{HTML::style('font-awesome/css/font-awesome.min.css')}}
         @yield('style')
         {{HTML::style('css/style.css')}}
         {{HTML::style('css/style-responsive.css')}}

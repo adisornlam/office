@@ -299,7 +299,4 @@ $(document).keyup(function (e) {
     if (e.keyCode == 120) {
 
     }
-    if (e.keyCode == 13) {
-        alert('Enter');
-    }
 });

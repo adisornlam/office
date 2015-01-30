@@ -25,6 +25,8 @@ Route::group(array('prefix' => 'mis/backend', 'before' => 'authen'), function() 
     Route::get('hsware/listall', 'App\Controllers\Backend\HswareController@listall');    
     Route::get('hsware/dialog', 'App\Controllers\Backend\HswareController@dialog');
     Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\Backend\HswareController@add'));
+    Route::match(array('GET', 'POST'), 'hsware/edit/{id}', array('uses' => 'App\Controllers\Backend\HswareController@edit'));
+    Route::get('hsware/view/{id}', 'App\Controllers\Backend\HswareController@view');
     
     Route::get('hsware/group', 'App\Controllers\Backend\HswareController@group');
     Route::get('hsware/group/listall', 'App\Controllers\Backend\HswareController@group_listall');    
