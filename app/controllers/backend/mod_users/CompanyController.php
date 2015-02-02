@@ -26,12 +26,12 @@ class CompanyController extends \BaseController {
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('backend.users.admin.company.index', $data);
+                return \View::make('backend.mod_users.admin.company.index', $data);
             } elseif ($check->is('employee')) {
                 
             }
         } else {
-            return \View::make('backend.users.guest.company', $data);
+            return \View::make('backend.mod_users.guest.company', $data);
         }
     }
 
@@ -65,7 +65,7 @@ class CompanyController extends \BaseController {
 
     public function add() {
         if (!\Request::isMethod('post')) {
-            return \View::make('backend.users.admin.company.add');
+            return \View::make('backend.mod_users.admin.company.add');
         } else {
             $rules = array(
                 'title' => 'required',
@@ -108,7 +108,7 @@ class CompanyController extends \BaseController {
             $data = array(
                 'item' => \Company::find($param),
             );
-            return \View::make('backend.users.admin.company.edit', $data);
+            return \View::make('backend.mod_users.admin.company.edit', $data);
         } else {
             $rules = array(
                 'title' => 'required',

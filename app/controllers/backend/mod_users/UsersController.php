@@ -22,12 +22,12 @@ class UsersController extends \BaseController {
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('backend.users.admin.index', $data);
+                return \View::make('backend.mod_users.admin.index', $data);
             } elseif ($check->is('employee')) {
                 
             }
         } else {
-            return \View::make('backend.users.guest.index', $data);
+            return \View::make('backend.mod_users.guest.index', $data);
         }
     }
 
@@ -66,12 +66,12 @@ class UsersController extends \BaseController {
             'item' => \User::find($param),
             'address' => \User::get_address($param)
         );
-        return \View::make('backend.users.user_view', $data);
+        return \View::make('backend.mod_users.user_view', $data);
     }
 
     public function add() {
         if (!\Request::isMethod('post')) {
-            return \View::make('backend.users.admin.user_add');
+            return \View::make('backend.mod_users.admin.user_add');
         } else {
             $rules = array(
                 'firstname' => 'required',
@@ -119,7 +119,7 @@ class UsersController extends \BaseController {
                 ),
                 'item' => \User::with('roles')->where('id', $param)->first(),
             );
-            return \View::make('backend.users.user_edit', $data);
+            return \View::make('backend.mod_users.user_edit', $data);
         } else {
             $rules = array(
                 'firstname' => 'required',

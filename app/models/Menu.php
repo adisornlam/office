@@ -16,4 +16,8 @@ class Menu extends Eloquent {
     protected $table = 'menu';
     protected $fillable = [];
 
+    public function roles() {
+        return $this->belongsToMany('Roles');
+    }
+
 }

@@ -26,12 +26,12 @@ class RolesController extends \BaseController {
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('backend.users.admin.role.index', $data);
+                return \View::make('backend.mod_users.admin.role.index', $data);
             } elseif ($check->is('employee')) {
                 
             }
         } else {
-            return \View::make('backend.users.guest.role', $data);
+            return \View::make('backend.mod_users.guest.role', $data);
         }
     }
 
@@ -63,7 +63,7 @@ class RolesController extends \BaseController {
             $data = array(
                 'result_menu' => \Menu::where('sub_id', 0)->orderBy('rank')->get()
             );
-            return \View::make('backend.users.admin.role.add', $data);
+            return \View::make('backend.mod_users.admin.role.add', $data);
         } else {
             $rules = array(
                 'name' => 'required',
@@ -82,12 +82,8 @@ class RolesController extends \BaseController {
                 $roles->description = trim(\Input::get('description'));
                 $roles->level = trim(\Input::get('level'));
                 $roles->save();
-                $roles_id = $roles->id;
-                foreach (\Input::get('menu_id') as $item) {
-                    $menu_role = new \Menurole();
-                    $menu_role->role_id = $roles_id;
-                    $menu_role->menu_id = $item;
-                    $menu_role->save();
+                if (\Input::get('menu_id') > 0) {
+                    $roles->menu()->sync(\Input::get('menu_id'));
                 }
                 return \Response::json(array(
                             'error' => array(
@@ -105,7 +101,7 @@ class RolesController extends \BaseController {
                 'result_menu' => \Menu::where('sub_id', 0)->orderBy('rank')->get(),
                 'result_menurole' => \Menurole::where('role_id', $param)->lists('menu_id')
             );
-            return \View::make('backend.users.admin.role.edit', $data);
+            return \View::make('backend.mod_users.admin.role.edit', $data);
         } else {
             $rules = array(
                 'name' => 'required',
@@ -124,13 +120,8 @@ class RolesController extends \BaseController {
                 $roles->description = trim(\Input::get('description'));
                 $roles->level = trim(\Input::get('level'));
                 $roles->save();
-                $roles_id = $roles->id;
-                \Menurole::find($roles_id)->delete();
-                foreach (\Input::get('menu_id') as $item) {
-                    $menu_role = new \Menurole();
-                    $menu_role->role_id = $roles_id;
-                    $menu_role->menu_id = $item;
-                    $menu_role->save();
+                if (\Input::get('menu_id') > 0) {
+                    $roles->menu()->sync(\Input::get('menu_id'));
                 }
                 return \Response::json(array(
                             'error' => array(

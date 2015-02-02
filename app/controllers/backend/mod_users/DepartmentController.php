@@ -22,12 +22,12 @@ class DepartmentController extends \BaseController {
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('backend.users.admin.department.index', $data);
+                return \View::make('backend.mod_users.admin.department.index', $data);
             } elseif ($check->is('employee')) {
                 
             }
         } else {
-            return \View::make('backend.users.guest.department', $data);
+            return \View::make('backend.mod_users.guest.department', $data);
         }
     }
 
@@ -41,7 +41,7 @@ class DepartmentController extends \BaseController {
             ),
             'sub_id' => ($segment > 0 ? $segment : 0)
         );
-        return \View::make('backend.users.admin.department.sub', $data);
+        return \View::make('backend.mod_users.admin.department.sub', $data);
     }
 
     public function listall() {
@@ -78,7 +78,7 @@ class DepartmentController extends \BaseController {
 
     public function add() {
         if (!\Request::isMethod('post')) {
-            return \View::make('backend.users.admin.department.add');
+            return \View::make('backend.mod_users.admin.department.add');
         } else {
             $rules = array(
                 'title' => 'required',
@@ -114,7 +114,7 @@ class DepartmentController extends \BaseController {
             $data = array(
                 'sub_id' => $segment
             );
-            return \View::make('backend.users.admin.department.sub_add', $data);
+            return \View::make('backend.mod_users.admin.department.sub_add', $data);
         } else {
             $rules = array(
                 'title' => 'required'
@@ -159,7 +159,7 @@ class DepartmentController extends \BaseController {
             $data = array(
                 'item' => \Department::find($param),
             );
-            return \View::make('backend.users.admin.department.edit', $data);
+            return \View::make('backend.mod_users.admin.department.edit', $data);
         } else {
             $rules = array(
                 'title' => 'required'
@@ -200,7 +200,7 @@ class DepartmentController extends \BaseController {
                 'item' => $dep,
                 'sub_id' => $dep->department_parent_id
             );
-            return \View::make('backend.users.admin.department.sub_edit', $data);
+            return \View::make('backend.mod_users.admin.department.sub_edit', $data);
         } else {
             $rules = array(
                 'title' => 'required'

@@ -27,9 +27,11 @@ class HomeController extends \BaseController {
         //view
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('backend.home.admin.index', $data);
+                return \View::make('backend.mod_home.admin.index', $data);
+            } elseif ($check->is('admin')) {
+                return \View::make('backend.mod_home.admin.index', $data);
             } elseif ($check->is('employee')) {
-                return \View::make('backend.home.employee.index', $data);
+                return \View::make('backend.mod_home.employee.index', $data);
             }
         } else {
             return \View::make('backend.home.guest.index', $data);
