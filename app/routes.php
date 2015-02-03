@@ -10,104 +10,109 @@
   | and give it the Closure to execute when that URI is requested.
   |
  */
-Route::get('/', 'App\Controllers\Backend\HomeController@index');
-Route::get('backend', 'App\Controllers\Backend\HomeController@index');
-Route::match(array('GET', 'POST'), 'backend/login', array('uses' => 'App\Controllers\Backend\AuthenticationController@login'));
-Route::get('backend/logout', array('uses' => 'App\Controllers\Backend\AuthenticationController@logout'));
+Route::get('/', 'App\Controllers\HomeController@index');
+Route::match(array('GET', 'POST'), 'login', array('uses' => 'App\Controllers\AuthenticationController@login'));
+Route::get('logout', array('uses' => 'App\Controllers\AuthenticationController@logout'));
 
 //Mod MIS
-Route::group(array('prefix' => 'mis/backend', 'before' => 'authen'), function() {
-    Route::get('', 'App\Controllers\Backend\MisController@index');
+Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\MisController@index');
 
-    Route::get('computer', 'App\Controllers\Backend\ComputerController@index');
+    Route::get('computer', 'App\Controllers\ComputerController@index');
 
-    Route::get('hsware', 'App\Controllers\Backend\HswareController@index');    
-    Route::get('hsware/listall', 'App\Controllers\Backend\HswareController@listall');    
-    Route::get('hsware/dialog', 'App\Controllers\Backend\HswareController@dialog');
-    Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\Backend\HswareController@add'));
-    Route::match(array('GET', 'POST'), 'hsware/edit/{id}', array('uses' => 'App\Controllers\Backend\HswareController@edit'));
-    Route::get('hsware/view/{id}', 'App\Controllers\Backend\HswareController@view');
-    
-    Route::get('hsware/group', 'App\Controllers\Backend\HswareController@group');
-    Route::get('hsware/group/listall', 'App\Controllers\Backend\HswareController@group_listall');    
-    Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\Backend\HswareController@group_add'));
-    Route::match(array('GET', 'POST'), 'hsware/group/edit/{id}', array('uses' => 'App\Controllers\Backend\HswareController@group_edit'));
-    Route::get('hsware/group/delete/{id}', 'App\Controllers\Backend\HswareController@group_delete');
+    Route::get('hsware', 'App\Controllers\HswareController@index');
+    Route::get('hsware/listall', 'App\Controllers\HswareController@listall');
+    Route::get('hsware/dialog', 'App\Controllers\HswareController@dialog');
+    Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\HswareController@add'));
+    Route::match(array('GET', 'POST'), 'hsware/edit/{id}', array('uses' => 'App\Controllers\HswareController@edit'));
+    Route::get('hsware/view/{id}', 'App\Controllers\HswareController@view');
+
+    Route::get('hsware/group', 'App\Controllers\HswareController@group');
+    Route::get('hsware/group/listall', 'App\Controllers\HswareController@group_listall');
+    Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\HswareController@group_add'));
+    Route::match(array('GET', 'POST'), 'hsware/group/edit/{id}', array('uses' => 'App\Controllers\HswareController@group_edit'));
+    Route::get('hsware/group/delete/{id}', 'App\Controllers\HswareController@group_delete');
+
+    //Testing
+    Route::get('testing', 'App\Controllers\TestingController@group');
+    Route::get('testing/group/listall', 'App\Controllers\TestingController@group_listall');
+    Route::match(array('GET', 'POST'), 'testing/group/add', array('uses' => 'App\Controllers\TestingController@group_add'));
+    Route::match(array('GET', 'POST'), 'testing/group/edit/{id}', array('uses' => 'App\Controllers\TestingController@group_edit'));
 });
 
 //users
-Route::group(array('prefix' => 'users/backend', 'before' => 'authen'), function() {
-    Route::get('', 'App\Controllers\Backend\UsersController@index');
-    Route::get('listall', 'App\Controllers\Backend\UsersController@listall');
-    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\Backend\UsersController@add'));
-    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\Backend\UsersController@edit'));
+Route::group(array('prefix' => 'users', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\UsersController@index');
+    Route::get('listall', 'App\Controllers\UsersController@listall');
+    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\UsersController@add'));
+    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\UsersController@edit'));
 
     //roles
-    Route::get('roles', 'App\Controllers\Backend\RolesController@index');
-    Route::get('roles/listall', 'App\Controllers\Backend\RolesController@listall');
-    Route::match(array('GET', 'POST'), 'roles/add', array('uses' => 'App\Controllers\Backend\RolesController@add'));
-    Route::match(array('GET', 'POST'), 'roles/edit/{id}', array('uses' => 'App\Controllers\Backend\RolesController@edit'));
+    Route::get('roles', 'App\Controllers\RolesController@index');
+    Route::get('roles/listall', 'App\Controllers\RolesController@listall');
+    Route::match(array('GET', 'POST'), 'roles/add', array('uses' => 'App\Controllers\RolesController@add'));
+    Route::match(array('GET', 'POST'), 'roles/edit/{id}', array('uses' => 'App\Controllers\RolesController@edit'));
 
     //department
-    Route::get('department', 'App\Controllers\Backend\DepartmentController@index');
-    Route::get('department/sub/{id}', 'App\Controllers\Backend\DepartmentController@sub');
-    Route::get('department/listall', 'App\Controllers\Backend\DepartmentController@listall');
-    Route::match(array('GET', 'POST'), 'department/add', array('uses' => 'App\Controllers\Backend\DepartmentController@add'));
-    Route::match(array('GET', 'POST'), 'department/edit/{id}', array('uses' => 'App\Controllers\Backend\DepartmentController@edit'));
-    Route::match(array('GET', 'POST'), 'department/sub/add/{id}', array('uses' => 'App\Controllers\Backend\DepartmentController@sub_add'));
-    Route::match(array('GET', 'POST'), 'department/sub/edit/{id}', array('uses' => 'App\Controllers\Backend\DepartmentController@sub_edit'));
+    Route::get('department', 'App\Controllers\DepartmentController@index');
+    Route::get('department/sub/{id}', 'App\Controllers\DepartmentController@sub');
+    Route::get('department/listall', 'App\Controllers\DepartmentController@listall');
+    Route::match(array('GET', 'POST'), 'department/add', array('uses' => 'App\Controllers\DepartmentController@add'));
+    Route::match(array('GET', 'POST'), 'department/edit/{id}', array('uses' => 'App\Controllers\DepartmentController@edit'));
+    Route::match(array('GET', 'POST'), 'department/sub/add/{id}', array('uses' => 'App\Controllers\DepartmentController@sub_add'));
+    Route::match(array('GET', 'POST'), 'department/sub/edit/{id}', array('uses' => 'App\Controllers\DepartmentController@sub_edit'));
 
     //company
-    Route::get('company', 'App\Controllers\Backend\CompanyController@index');
-    Route::get('company/listall', 'App\Controllers\Backend\CompanyController@listall');
-    Route::match(array('GET', 'POST'), 'company/add', array('uses' => 'App\Controllers\Backend\CompanyController@add'));
-    Route::match(array('GET', 'POST'), 'company/edit/{id}', array('uses' => 'App\Controllers\Backend\CompanyController@edit'));
+    Route::get('company', 'App\Controllers\CompanyController@index');
+    Route::get('company/listall', 'App\Controllers\CompanyController@listall');
+    Route::match(array('GET', 'POST'), 'company/add', array('uses' => 'App\Controllers\CompanyController@add'));
+    Route::match(array('GET', 'POST'), 'company/edit/{id}', array('uses' => 'App\Controllers\CompanyController@edit'));
 
-    Route::get('view/{id}', 'App\Controllers\Backend\UsersController@view');
-    Route::get('edit/{id}', 'App\Controllers\Backend\UsersController@edit');
+    Route::get('view/{id}', 'App\Controllers\UsersController@view');
+    Route::get('edit/{id}', 'App\Controllers\UsersController@edit');
 });
 
 
 //Domain
-Route::group(array('prefix' => 'domain/backend', 'before' => 'authen'), function() {
-    Route::get('', 'App\Controllers\Backend\DomainController@index');
-    Route::get('listall', 'App\Controllers\Backend\DomainController@listall');
-    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\Backend\DomainController@add'));
-    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\Backend\DomainController@edit'));
-    Route::get('delete/{id}', 'App\Controllers\Backend\DomainController@delete');
+Route::group(array('prefix' => 'domain', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\DomainController@index');
+    Route::get('listall', 'App\Controllers\DomainController@listall');
+    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\DomainController@add'));
+    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\DomainController@edit'));
+    Route::get('delete/{id}', 'App\Controllers\DomainController@delete');
 
-    Route::get('server', 'App\Controllers\Backend\ServerController@index');
-    Route::get('server/listall', 'App\Controllers\Backend\ServerController@listall');
-    Route::match(array('GET', 'POST'), 'server/add', array('uses' => 'App\Controllers\Backend\ServerController@add'));
-    Route::match(array('GET', 'POST'), 'server/edit/{id}', array('uses' => 'App\Controllers\Backend\ServerController@edit'));
-    Route::get('server/delete/{id}', 'App\Controllers\Backend\ServerController@delete');
+    Route::get('server', 'App\Controllers\ServerController@index');
+    Route::get('server/listall', 'App\Controllers\ServerController@listall');
+    Route::match(array('GET', 'POST'), 'server/add', array('uses' => 'App\Controllers\ServerController@add'));
+    Route::match(array('GET', 'POST'), 'server/edit/{id}', array('uses' => 'App\Controllers\ServerController@edit'));
+    Route::get('server/delete/{id}', 'App\Controllers\ServerController@delete');
 });
 
 //Contact
-Route::group(array('prefix' => 'contact/backend', 'before' => 'authen'), function() {
-    Route::get('', 'App\Controllers\Backend\ContactController@index');
-    Route::get('listall', 'App\Controllers\Backend\ContactController@listall');
-    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\Backend\ContactController@add'));
-    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\Backend\ContactController@edit'));
-    Route::get('delete/{id}', 'App\Controllers\Backend\ContactController@delete');
+Route::group(array('prefix' => 'contact', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\ContactController@index');
+    Route::get('listall', 'App\Controllers\ContactController@listall');
+    Route::match(array('GET', 'POST'), 'add', array('uses' => 'App\Controllers\ContactController@add'));
+    Route::match(array('GET', 'POST'), 'edit/{id}', array('uses' => 'App\Controllers\ContactController@edit'));
+    Route::get('delete/{id}', 'App\Controllers\ContactController@delete');
 
-    Route::get('group', 'App\Controllers\Backend\ContactController@group');
-    Route::get('group/listall', 'App\Controllers\Backend\ContactController@group_listall');
-    Route::match(array('GET', 'POST'), 'group/add', array('uses' => 'App\Controllers\Backend\ContactController@group_add'));
-    Route::match(array('GET', 'POST'), 'group/edit/{id}', array('uses' => 'App\Controllers\Backend\ContactController@group_edit'));
-    Route::get('group/delete/{id}', 'App\Controllers\Backend\ContactController@group_delete');
+    Route::get('group', 'App\Controllers\ContactController@group');
+    Route::get('group/listall', 'App\Controllers\ContactController@group_listall');
+    Route::match(array('GET', 'POST'), 'group/add', array('uses' => 'App\Controllers\ContactController@group_add'));
+    Route::match(array('GET', 'POST'), 'group/edit/{id}', array('uses' => 'App\Controllers\ContactController@group_edit'));
+    Route::get('group/delete/{id}', 'App\Controllers\ContactController@group_delete');
 });
 
 //Menu
-Route::group(array('prefix' => 'setting/backend', 'before' => 'authen'), function() {
-    Route::get('menu', 'App\Controllers\Backend\MenuController@index');
-    Route::get('menu/listall', 'App\Controllers\Backend\MenuController@listall');
-    Route::match(array('GET', 'POST'), 'menu/add/{id}', array('uses' => 'App\Controllers\Backend\MenuController@add'));
-    Route::match(array('GET', 'POST'), 'menu/edit/{id}', array('uses' => 'App\Controllers\Backend\MenuController@edit'));
-    Route::get('menu/delete/{id}', 'App\Controllers\Backend\MenuController@delete');
+Route::group(array('prefix' => 'setting', 'before' => 'authen'), function() {
+    Route::get('menu', 'App\Controllers\MenuController@index');
+    Route::get('menu/listall', 'App\Controllers\MenuController@listall');
+    Route::match(array('GET', 'POST'), 'menu/add/{id}', array('uses' => 'App\Controllers\MenuController@add'));
+    Route::match(array('GET', 'POST'), 'menu/edit/{id}', array('uses' => 'App\Controllers\MenuController@edit'));
+    Route::get('menu/delete/{id}', 'App\Controllers\MenuController@delete');
 
-    Route::get('menu/sub/{id}', 'App\Controllers\Backend\MenuController@sub');
-    Route::get('menu/sub/listall/{id}', 'App\Controllers\Backend\MenuController@listall');
+    Route::get('menu/sub/{id}', 'App\Controllers\MenuController@sub');
+    Route::get('menu/sub/listall/{id}', 'App\Controllers\MenuController@listall');
 });
 
 

@@ -36,7 +36,7 @@ Route::filter('auth', function() {
         if (Request::ajax()) {
             return Response::make('Unauthorized', 401);
         }
-        return Redirect::guest('backend/login');
+        return Redirect::guest('login');
     }
 });
 

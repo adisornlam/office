@@ -800,6 +800,10 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     background: #A2A1A3;
 }
 
+.state-overview .blue2 {
+    background: #2724E2;
+}
+
 /*main chart*/
 
 .border-head h3 {
