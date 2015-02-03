@@ -136,6 +136,19 @@
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block10">
+        <section class="panel">
+            <div class="symbol green2">
+                <i class="fa fa-bullhorn"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count4">
+                    0
+                </h1>
+                <p>แจ้งข่าวสาร / ประชาสัมพันธ์</p>
+            </div>
+        </section>
+    </div>
 </div>
 @stop
 
@@ -147,6 +160,9 @@
 
     $('#block9').click(function () {
         window.location.href = base_url + index_page + 'mis/testing';
+    });
+    $('#block10').click(function () {
+        window.location.href = base_url + index_page + 'post';
     });
 </script>
 @stop
