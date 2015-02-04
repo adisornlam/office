@@ -225,7 +225,6 @@
             $('form .form-group').removeClass('has-error');
             $('form .help-block').remove();
             $('#btnSave').removeAttr('disabled');
-            $('#spinner_loading').hide();
             $.each(response.error.message, function (key, value) {
                 $('#' + key).parent().parent().addClass('has-error');
                 $('#' + key).after('<p class="help-block">' + value + '</p>');

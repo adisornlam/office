@@ -22,7 +22,7 @@ class UsersController extends \BaseController {
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
-                return \View::make('mod_users.admin.index', $data);
+                return \View::make('mod_users.admin.users.index', $data);
             } elseif ($check->is('employee')) {
                 
             }
@@ -45,8 +45,8 @@ class UsersController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="' . \URL::to('users/backend/view/{{$id}}') . '" title="แสดงรายการ"><i class="fa fa-eye"></i> แสดงรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="users/backend/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="' . \URL::to('users/view/{{$id}}') . '" title="แสดงรายการ"><i class="fa fa-eye"></i> แสดงรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="users/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -60,26 +60,37 @@ class UsersController extends \BaseController {
         $data = array(
             'title' => 'ข้อมูลส่วนตัว',
             'breadcrumbs' => array(
-                'รายการผู้ใช้งาน' => 'users/backend',
+                'รายการผู้ใช้งาน' => 'users',
                 'ข้อมูลส่วนตัว' => '#'
             ),
             'item' => \User::find($param),
-            'address' => \User::get_address($param)
+            'address' => NULL
         );
-        return \View::make('mod_users.user_view', $data);
+        return \View::make('mod_users.admin.users.view', $data);
     }
 
     public function add() {
         if (!\Request::isMethod('post')) {
-            return \View::make('mod_users.admin.user_add');
+            return \View::make('mod_users.admin.users.add');
         } else {
+            $photo1 = \Input::file('avatar');
+            $destinationPath = 'uploads/users/' . date('Ymd') . '/';
+            if ($photo1) {
+                $up = $this->upload_photo($photo1, $destinationPath);
+                $photo_1 = $up['resize'];
+            } else {
+                $photo_1 = NULL;
+            }
             $rules = array(
+                'company_id' => 'required',
+                'department_id' => 'required',
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => 'required|email|unique:users',
                 'role_id' => 'required',
                 'username' => 'required|unique:users',
-                'password' => 'required|min:8'
+                'password' => 'required|min:8',
+                'avatar' => 'image|mimes:jpeg,png|max:512'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -90,6 +101,8 @@ class UsersController extends \BaseController {
                             ), 400));
             } else {
                 $user = new \User();
+                $user->company_id = \Input::get('company_id');
+                $user->department_id = \Input::get('department_id');
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
@@ -97,7 +110,8 @@ class UsersController extends \BaseController {
                 $user->username = trim(\Input::get('username'));
                 $user->password = trim(\Input::get('password'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
-                $user->verified = 1;
+                $user->verified = (\Input::has('verified') ? 1 : 0);
+                $user->avatar = $photo1;
                 $user->save();
                 $user->roles()->sync(array(\Input::get('role_id')));
                 return \Response::json(array(
@@ -117,14 +131,18 @@ class UsersController extends \BaseController {
                     'รายการผู้ใช้งาน' => 'users/backend',
                     'แก้ไขข้อมูลส่วนตัว' => '#'
                 ),
-                'item' => \User::with('roles')->where('id', $param)->first(),
+                'item' => \User::find($param)
             );
-            return \View::make('mod_users.user_edit', $data);
+            return \View::make('mod_users.admin.users.edit', $data);
         } else {
             $rules = array(
+                'company_id' => 'required',
+                'department_id' => 'required',
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'address1' => 'required'
+                'email' => 'required|email|unique:users',
+                'role_id' => 'required',
+                'avatar' => 'image|mimes:jpeg,png|max:512',
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -134,21 +152,26 @@ class UsersController extends \BaseController {
                                 'message' => $validator->errors()->toArray()
                             ), 400));
             } else {
-                $company = \User::find(\Input::get('id'));
-                $company->title = trim(\Input::get('title'));
-                $company->company_code = trim(\Input::get('company_code'));
-                $company->address1 = trim(\Input::get('address1'));
-                $company->address2 = trim(\Input::get('address2'));
-                $company->district = \Input::get('district');
-                $company->amphur = \Input::get('amphur');
-                $company->province = \Input::get('province');
-                $company->zipcode = \Input::get('zipcode');
-                $company->email = trim(\Input::get('email'));
-                $company->phone = trim(\Input::get('phone'));
-                $company->fax = trim(\Input::get('fax'));
-                $company->disabled = (\Input::has('disabled') ? 0 : 1);
-                $company->updated_user = \Auth::user()->id;
-                $company->save();
+                $photo1 = \Input::file('avatar');
+                $destinationPath = 'uploads/users/' . date('Ymd') . '/';
+                if ($photo1) {
+                    $up = $this->upload_photo($photo1, $destinationPath);
+                    $photo_1 = $up['resize'];
+                } else {
+                    $photo_1 = NULL;
+                }
+                $user = \User::find($param);
+                $user->company_id = \Input::get('company_id');
+                $user->department_id = \Input::get('department_id');
+                $user->firstname = trim(\Input::get('firstname'));
+                $user->lastname = trim(\Input::get('lastname'));
+                $user->email = trim(\Input::get('email'));
+                $user->mobile = trim(\Input::get('mobile'));
+                $user->disabled = (\Input::has('disabled') ? 0 : 1);
+                $user->verified = (\Input::has('verified') ? 1 : 0);
+                $user->avatar = $photo1;
+                $user->save();
+                $user->roles()->sync(array(\Input::get('role_id')));
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
@@ -156,6 +179,20 @@ class UsersController extends \BaseController {
                             ), 200));
             }
         }
+    }
+
+    private function upload_photo($file, $path) {
+        $extension = $file->getClientOriginalExtension();
+        $filename = str_random(32) . '.' . $extension;
+        $smallfile = 'resize_' . $filename;
+        $file->move($path, $filename);
+        $img = \Image::make($path . $filename);
+        $img->resize(250, null)->save($path . $smallfile);
+        $photo = array(
+            'full' => $path . $filename,
+            'resize' => $path . $smallfile
+        );
+        return $photo;
     }
 
 }

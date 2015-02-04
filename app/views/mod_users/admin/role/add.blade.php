@@ -44,7 +44,7 @@
     $('#btnSave').click(function() {
         $.ajax({
             type: "post",
-            url: base_url + index_page +"users/backend/roles/add",
+            url: base_url + index_page +"users/roles/add",
             data: $('#form-add input:not(#btnSave)').serializeArray(),
             success: function(data) {
                 if (data.error.status == false) {
@@ -55,7 +55,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page +"users/backend/roles";
+                    window.location.href = base_url + index_page +"users/roles";
                 }
             }
         });

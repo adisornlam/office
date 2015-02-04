@@ -15,6 +15,10 @@ namespace App\Controllers;
  */
 class DepartmentController extends \BaseController {
 
+    public function __construct() {
+        $this->beforeFilter('auth', array('except' => 'login'));
+    }
+
     public function index() {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
@@ -31,15 +35,15 @@ class DepartmentController extends \BaseController {
         }
     }
 
-    public function sub() {
-        $segment = \Request::segment(5);
+    public function sub($param) {
+        $dep = \Department::find($param);
         $data = array(
             'title' => 'รายการฝ่าย/แผนก',
             'breadcrumbs' => array(
-                'รายการฝ่าย/แผนก' => 'users/backend/department',
-                'รายการแผนก' => '#'
+                'รายการฝ่าย/แผนก' => 'users/department',
+                $dep->title => '#'
             ),
-            'sub_id' => ($segment > 0 ? $segment : 0)
+            'sub_id' => $param
         );
         return \View::make('mod_users.admin.department.sub', $data);
     }
@@ -61,17 +65,17 @@ class DepartmentController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         if ($id <= 0) {
-            $link .= '<li><a href="javascript:;" rel="users/backend/department/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+            $link .= '<li><a href="javascript:;" rel="users/department/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
         } else {
-            $link .= '<li><a href="javascript:;" rel="users/backend/department/sub/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+            $link .= '<li><a href="javascript:;" rel="users/department/sub/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
         }
-        $link .= '<li><a href="javascript:;" rel="users/backend/department/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="users/department/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
         return \Datatables::of($department)
                         ->edit_column('id', $link)
-                        ->edit_column('title', '<a href="' . \URL::to('users/backend/department/sub/{{$did}}') . '">{{$title}}</a>')
+                        ->edit_column('title', '<a href="' . \URL::to('users/department/sub/{{$did}}') . '">{{$title}}</a>')
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);
     }

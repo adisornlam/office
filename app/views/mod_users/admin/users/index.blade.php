@@ -28,7 +28,7 @@
     <div class="col-lg-12">
         <section class="panel">
             <div class="panel-body">
-                <a href="javascript:;" rel="users/company/add" class="btn btn-primary link_dialog" title="เพิ่มบริษัท" role="button"><i class="fa fa-plus"></i> เพิ่มบริษัท</a>
+                <a href="javascript:;" rel="users/add" class="btn btn-primary link_dialog" title="เพิ่มผู้ใช้งาน" role="button"><i class="fa fa-plus"></i> เพิ่มผู้ใช้งาน (F8)</a>
             </div>
         </section>
     </div>
@@ -41,7 +41,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="company-list" class="table table-striped table-bordered"></table>
+                    <table id="users-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -59,27 +59,25 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#company-list").dataTable({
+        $("#users-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "users/company/listall",
+            "ajax": base_url + index_page + "users/listall",
+            "order": [[6, 'desc']],
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "company_code", "title": "รหัส", "width": "5%", "orderable": false, "searchable": true},
-                {"data": "title", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
-                {"data": "email", "title": "อีเมล์", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "phone", "title": "เบอร์ติดต่อ", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "fax", "title": "แฟกซ์", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "created_at", "title": "วันที่สร้าง", "sClass": "text-center", "width": "12%", "orderable": true, "searchable": true},
-                {"data": "updated_at", "title": "วันที่แก้ไข", "sClass": "text-center", "width": "12%", "orderable": true, "searchable": true}
+                {"data": "username", "title": "ชื่อผู้ใช้", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "fullname", "title": "ชื่อ-นามสกุล", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "email", "title": "อีเมล์", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "mobile", "title": "เบอร์ติดต่อ", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "disabled", "title": "สถานะ", "width": "3%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "created_at", "title": "วันที่สร้าง", "width": "15%", "orderable": true, "searchable": true}
             ]
         });
     });
-
 </script>
 @stop

@@ -35,7 +35,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page +"users/backend/department/edit/{{$item->id}}",
+            url: base_url + index_page +"users/department/edit/{{$item->id}}",
             data: $('#form-add input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
@@ -46,7 +46,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page +"users/backend/department";
+                    window.location.href = base_url + index_page +"users/department";
                 }
             }
         });

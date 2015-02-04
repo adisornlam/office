@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 
 @section('style')
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
@@ -28,7 +28,7 @@
     <div class="col-lg-12">
         <section class="panel">
             <div class="panel-body">
-                <a href="javascript:;" class="btn btn-primary link_dialog" rel="users/backend/roles/add" role="button" title="เพิ่มสิทธิ์การใช้งาน"><i class="fa fa-plus"></i> เพิ่มสิทธิ์การใช้งาน</a> 
+                <a href="javascript:;" class="btn btn-primary link_dialog" rel="users/roles/add" role="button" title="เพิ่มสิทธิ์การใช้งาน"><i class="fa fa-plus"></i> เพิ่มสิทธิ์การใช้งาน</a> 
             </div>
         </section>
     </div>
@@ -62,7 +62,7 @@
         $("#role-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "users/backend/roles/listall",
+            "ajax": base_url + index_page + "users/roles/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

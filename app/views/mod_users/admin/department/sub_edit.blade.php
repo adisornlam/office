@@ -29,7 +29,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "users/backend/department/sub/edit/{{$sub_id}}",
+            url: base_url + index_page + "users/department/sub/edit/{{$sub_id}}",
             data: $('#form-add input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
@@ -40,7 +40,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "users/backend/department/sub/{{$sub_id}}";
+                    window.location.href = base_url + index_page + "users/department/sub/{{$sub_id}}";
                 }
             }
         });

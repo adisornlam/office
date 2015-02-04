@@ -38,6 +38,9 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('testing/group/listall', 'App\Controllers\TestingController@group_listall');
     Route::match(array('GET', 'POST'), 'testing/group/add', array('uses' => 'App\Controllers\TestingController@group_add'));
     Route::match(array('GET', 'POST'), 'testing/group/edit/{id}', array('uses' => 'App\Controllers\TestingController@group_edit'));
+
+    Route::get('testing/view/{id}', 'App\Controllers\TestingController@view');
+    Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
 });
 
 //users
@@ -133,3 +136,8 @@ Route::get('get/zipcode', function() {
     $amphur_postcode = \DB::table('amphur_postcode')->where('amphur_id', $input);
     return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
 });
+
+// Display all SQL executed in Eloquent
+//Event::listen('illuminate.query', function($query) {
+//    var_dump($query);
+//});

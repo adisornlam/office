@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 
 @section('style')
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
@@ -36,7 +36,7 @@
         $("#department-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "users/backend/department/listall",
+            "ajax": base_url + index_page + "users/department/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

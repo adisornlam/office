@@ -112,7 +112,7 @@
     $('#btnSave').click(function () {
         $.ajax({
             type: "post",
-            url: base_url + index_page + "users/backend/company/edit/<?php echo $item->id; ?>",
+            url: base_url + index_page + "users/company/edit/<?php echo $item->id; ?>",
             data: $('#form-add, select input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
@@ -123,7 +123,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "users/backend/company";
+                    window.location.href = base_url + index_page + "users/company";
                 }
             }
         });

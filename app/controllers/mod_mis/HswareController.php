@@ -53,8 +53,8 @@ class HswareController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="{{\URL::to("mis/backend/hsware/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="mis/backend/hsware/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/hsware/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -62,7 +62,7 @@ class HswareController extends \BaseController {
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
-                        ->edit_column('title', '<a href="{{URL::to("mis/backend/hsware/view/$item_id")}}" title="คลิกดูรายละเอียด">{{$title}}</a>')
+                        ->edit_column('title', '<a href="{{URL::to("mis/hsware/view/$item_id")}}" title="คลิกดูรายละเอียด">{{$title}}</a>')
                         ->edit_column('created_user', '{{\User::find($created_user)->username}}')
                         ->edit_column('updated_user', '{{($updated_user?\User::find($updated_user)->username:"")}}')
                         ->make(true);
@@ -75,7 +75,7 @@ class HswareController extends \BaseController {
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
                 'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
-                'รายการอุปกรณ์' => 'mis/backend/hsware',
+                'รายการอุปกรณ์' => 'mis/hsware',
                 'รายการกลุ่มอุปกรณ์' => '#'
             )
         );
@@ -88,8 +88,8 @@ class HswareController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;" rel="mis/backend/hsware/group/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="mis/backend/hsware/group/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -169,7 +169,7 @@ class HswareController extends \BaseController {
                         'error' => array(
                             'status' => true,
                             'message' => 'ลบรายการสำเร็จ',
-                            'redirect' => 'mis/backend/hsware/group'
+                            'redirect' => 'mis/hsware/group'
                         ), 200));
         } catch (\Exception $e) {
             throw $e;
@@ -193,7 +193,7 @@ class HswareController extends \BaseController {
                     'ภาพรวมระบบ' => 'backend',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
                     'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
-                    'รายการอุปกรณ์' => 'mis/backend/hsware',
+                    'รายการอุปกรณ์' => 'mis/hsware',
                     'เพิ่มรายการอุปกรณ์' => '#'
                 ),
                 'group' => $group,
@@ -334,7 +334,7 @@ class HswareController extends \BaseController {
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
                 'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
-                'รายการอุปกรณ์' => 'mis/backend/hsware',
+                'รายการอุปกรณ์' => 'mis/hsware',
                 $item->title => '#'
             ),
             'item' => $item,
@@ -363,7 +363,7 @@ class HswareController extends \BaseController {
                     'ภาพรวมระบบ' => 'backend',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
                     'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
-                    'รายการอุปกรณ์' => 'mis/backend/hsware',
+                    'รายการอุปกรณ์' => 'mis/hsware',
                     'แก้ไข ' . $item->title => '#'
                 ),
                 'item' => $item,
