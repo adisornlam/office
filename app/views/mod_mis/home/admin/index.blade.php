@@ -129,7 +129,7 @@
 @section('script_code')
 <script type="text/javascript">
     $('#block1').click(function () {
-        window.location.href = base_url + index_page + 'mis/backend/computer';
+        window.location.href = base_url + index_page + 'mis/computer';
     });
 </script>
 @stop

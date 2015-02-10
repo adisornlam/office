@@ -30,7 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/testing/add" class="btn btn-primary link_dialog" title="บันทึกคะแนนสอบ" role="button"><i class="fa fa-plus"></i> บันทึกคะแนนสอบ (F8)</a
+                        <a href="javascript:;" rel="mis/hsware/group/add" class="btn btn-primary link_dialog" title="เพิ่มกลุ่ม" role="button"><i class="fa fa-plus"></i> เพิ่มกลุ่ม (F8)</a
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="testing-list" class="table table-striped table-bordered"></table>
+                    <table id="group-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -64,22 +64,20 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#testing-list").dataTable({
+        $("#group-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "mis/testing/view/listall/{{$id}}",
+            "ajax": base_url + index_page + "mis/hsware/group/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "fullname", "title": "ชื่อ - นามสกุล", "width": "30%", "orderable": false, "searchable": true},
-                {"data": "department", "title": "ฝ่าย/แผนก", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "typing_th", "title": "พิมพ์ดีดไทย พิมพ์ได้", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "typing_th_wrong", "title": "พิมพ์ดีดไทย พิมพ์ผิด", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "typing_en", "title": "พิมพ์ดีดอังกฤษ พิมพ์ได้", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "typing_en_wrong", "title": "พิมพ์ดีดอังกฤษ พิมพ์ผิด", "width": "15%", "orderable": false, "searchable": true}
+                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
+                {"data": "remark", "title": "คำอธิบาย", "width": "30%", "orderable": false, "searchable": true},
+                {"data": "limit_stock", "title": "Limit", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });
     });

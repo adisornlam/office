@@ -25,9 +25,9 @@ class MisController extends \BaseController {
             )
         );
         if ($check->is('administrator')) {
-            return \View::make('mod_mis.admin.index', $data);
+            return \View::make('mod_mis.home.admin.index', $data);
         } elseif ($check->is('admin')) {
-            return \View::make('mod_mis.admin.index', $data);
+            return \View::make('mod_mis.home.admin.index', $data);
         } elseif ($check->is('employee')) {
             return \View::make('mod_mis.employee.index', $data);
         } elseif ($check->is('mis')) {

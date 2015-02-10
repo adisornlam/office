@@ -43,7 +43,7 @@ a, a:hover, a:focus {
 /*login page*/
 
 .login-body {
-    background: #FFF url("../img/bg_mis.jpg") no-repeat fixed center; 
+    background: #FFF url("../img/bg_login.jpg") no-repeat fixed center; 
 }
 
 .form-signin {

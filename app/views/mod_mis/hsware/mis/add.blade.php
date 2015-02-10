@@ -64,12 +64,12 @@
                                     {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
-                                                            <div class="col-sm-3">
-                                                                {{Form::text('hsware_code', NULL,array('class'=>'form-control','id'=>'hsware_code'))}}
-                                                            </div>
-                                                        </div>-->
+                            <div class="form-group">
+                                {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('hsware_code', NULL,array('class'=>'form-control','id'=>'hsware_code'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
@@ -82,18 +82,18 @@
                                     {{Form::text('serial_no', NULL,array('class'=>'form-control','id'=>'serial_no'))}}
                                 </div>
                             </div>
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
-                                                            <div class="col-sm-5">
-                                                                {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
-                                                            </div>
-                                                        </div>                                -->
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
-                                                            <div class="col-sm-5">
-                                                                {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc'))}}
-                                                            </div>
-                                                        </div>-->
+                            <div class="form-group">
+                                {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
+                                <div class="col-sm-5">
+                                    {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
+                                </div>
+                            </div>                                
+                            <div class="form-group">
+                                {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-5">
+                                    {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
@@ -121,7 +121,7 @@
                                 {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     <label>
-                                        {{Form::checkbox('disabled', 1,TRUE)}} เปิดใช้งาน
+                                        {{Form::checkbox('disabled', 1)}} เปิดใช้งาน
                                     </label>
                                 </div>
                             </div>

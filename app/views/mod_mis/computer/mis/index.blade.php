@@ -30,7 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="domain/backend/add" class="btn btn-primary link_dialog" title="เพิ่ม Domain" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
+                        <a href="javascript:;" rel="domain/add" class="btn btn-primary link_dialog" title="เพิ่ม Domain" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
                         <a href="{{URL::to('mis/hsware')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการอุปกรณ์</a>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
 //            "processing": true,
 //            "serverSide": true,
 //            "ajax": {
-//                "url": base_url + index_page + "mis/backend/computer/listall",
+//                "url": base_url + index_page + "mis/computer/listall",
 //                "data": function (d) {
 //                    d.category_id = $('#category_id').val();
 //                    d.txtSearch = $('#txtSearch').val();

@@ -1,14 +1,14 @@
 @extends('layouts.login')
 @section('content')
 {{Form::open(array('id'=>'form-signin','class'=>'form-signin','role'=>'form','method' => 'post'))}}
-<h2 class="form-signin-heading">sign in now</h2>
+<h2 class="form-signin-heading">MIS OFFICE V1.0</h2>
 <div class="login-wrap">
     {{Form::text('username',null,array('id'=>'username','class'=>'form-control','placeholder'=>'อีเมล์ / ชื่อผู้ใช้งาน'))}}
     {{Form::password('password',array('class'=>'form-control','placeholder'=>'รหัสผ่าน','id'=>'password'))}}
     <label class="checkbox">
-        {{Form::checkbox('remember', 1)}}  Remember me
+        {{Form::checkbox('remember', 1)}}  จำการเข้าระบบต่อไป
         <span class="pull-right">
-            <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
+            <a data-toggle="modal" href="#myModal"> ลืมรหัสผ่าน</a>
         </span>
     </label>
     <a href="javascript:;" class="btn btn-lg btn-login btn-block" id="btnLogin"> เข้าสู่ระบบ </a>

@@ -26,6 +26,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    {{Form::label('codes', 'รหัสพนักงาน', array('class' => 'col-sm-3 control-label req'))}}
+                    <div class="col-sm-4">
+                        {{Form::text('codes', NULL,array('class'=>'form-control','id'=>'codes'))}}
+                    </div>
+                </div>
+                <div class="form-group">
                     {{Form::label('email', 'อีเมล์', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-8">
                         {{Form::text('email', NULL,array('class'=>'form-control','id'=>'email'))}}

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('backend.layouts.master')
 @section('style')
 {{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 @stop
@@ -55,50 +55,50 @@
                             <div class="form-group">
                                 {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label req'));}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('group_id', $group, \Input::get('group_id'), array('class' => 'form-control', 'id' => 'group_id')); }}
+                                    {{ \Form::select('group_id', $group, $item->group_id, array('class' => 'form-control', 'id' => 'group_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                                    {{ \Form::select('company_id', $company, $item->company_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
-                                                            <div class="col-sm-3">
-                                                                {{Form::text('hsware_code', NULL,array('class'=>'form-control','id'=>'hsware_code'))}}
-                                                            </div>
-                                                        </div>-->
+                            <div class="form-group">
+                                {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('hsware_code', $item->hsware_code,array('class'=>'form-control','id'=>'hsware_code'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
-                                    {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
+                                    {{Form::text('access_no', $item->access_no,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
-                                    {{Form::text('serial_no', NULL,array('class'=>'form-control','id'=>'serial_no'))}}
+                                    {{Form::text('serial_no', $item->serial_no,array('class'=>'form-control','id'=>'serial_no'))}}
                                 </div>
                             </div>
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
-                                                            <div class="col-sm-5">
-                                                                {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
-                                                            </div>
-                                                        </div>                                -->
-                            <!--                            <div class="form-group">
-                                                            {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
-                                                            <div class="col-sm-5">
-                                                                {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc'))}}
-                                                            </div>
-                                                        </div>-->
+                            <div class="form-group">
+                                {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
+                                <div class="col-sm-5">
+                                    {{Form::text('title', $item->title,array('class'=>'form-control','id'=>'title'))}}
+                                </div>
+                            </div>                                
+                            <div class="form-group">
+                                {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-5">
+                                    {{Form::textarea('desc', $item->desc,array('class'=>'form-control','id'=>'desc'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('warranty_date', NULL,array('class'=>'form-control datepicker','id'=>'warranty_date'))}}
+                                        {{Form::text('warranty_date', $item->warranty_date,array('class'=>'form-control datepicker','id'=>'warranty_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
@@ -110,7 +110,7 @@
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('register_date', NULL,array('class'=>'form-control datepicker','id'=>'register_date'))}}
+                                        {{Form::text('register_date',  $item->register_date,array('class'=>'form-control datepicker','id'=>'register_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
@@ -121,7 +121,7 @@
                                 {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     <label>
-                                        {{Form::checkbox('disabled', 1,TRUE)}} เปิดใช้งาน
+                                        {{Form::checkbox('disabled', 1,($item->disabled==0?TRUE:FALSE))}} เปิดใช้งาน
                                     </label>
                                 </div>
                             </div>
@@ -138,6 +138,9 @@
                             <div class="form-group">
                                 {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">   
+                                    <?php
+                                    $val = $item->{$item_label->name};
+                                    ?>
                                     @if($item_label->option_id>0)
                                     {{Form::select($item_label->name,
                                                 \DB::table('hsware_spec_option')
@@ -145,9 +148,10 @@
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
                                                 ->lists('title','id'),
-                                                NULL,array('class'=>'form-control'))}}
+                                                $val,array('class'=>'form-control'))}}
                                     @else
-                                    {{Form::text($item_label->name,null,array('class'=>'form-control'))}}
+
+                                    {{Form::text($item_label->name,$val,array('class'=>'form-control'))}}
                                     @endif
                                 </div>
                             </div>
@@ -159,31 +163,41 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">รูปภาพประกอบที่ 1</label>
                                 <div class="col-md-4">
+                                    {{($item->photo1?HTML::image($item->photo1,$item->title,array('width'=>200)):'')}}
                                     <input type="file" class="default" name="photo1" />
+                                    <input type="hidden" name="photo1_hidden" value="{{$item->photo1}}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">รูปภาพประกอบที่ 2</label>
                                 <div class="col-md-4">
+                                    {{($item->photo2?HTML::image($item->photo2,$item->title,array('width'=>200)):'')}}
                                     <input type="file" class="default" name="photo2" />
+                                    <input type="hidden" name="photo2_hidden" value="{{$item->photo2}}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">รูปภาพประกอบที่ 3</label>
                                 <div class="col-md-4">
+                                    {{($item->photo3?HTML::image($item->photo3,$item->title,array('width'=>200)):'')}}
                                     <input type="file" class="default" name="photo3" />
+                                    <input type="hidden" name="photo3_hidden" value="{{$item->photo3}}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">รูปภาพประกอบที่ 4</label>
                                 <div class="col-md-4">
+                                    {{($item->photo4?HTML::image($item->photo4,$item->title,array('width'=>200)):'')}}
                                     <input type="file" class="default" name="photo4" />
+                                    <input type="hidden" name="photo4_hidden" value="{{$item->photo4}}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">รูปภาพประกอบที่ 5</label>
                                 <div class="col-md-4">
+                                    {{($item->photo5?HTML::image($item->photo5,$item->title,array('width'=>200)):'')}}
                                     <input type="file" class="default" name="photo5" />
+                                    <input type="hidden" name="photo5_hidden" value="{{$item->photo5}}" />
                                 </div>
                             </div>
                         </div>
@@ -212,7 +226,7 @@
     });
     $(function () {
         var options = {
-            url: base_url + index_page + "mis/hsware/add",
+            url: base_url + index_page + "mis/hsware/edit/{{$item->id}}",
             success: showResponse
         };
         $('#btnSave').click(function () {
@@ -225,6 +239,7 @@
             $('form .form-group').removeClass('has-error');
             $('form .help-block').remove();
             $('#btnSave').removeAttr('disabled');
+            $('#spinner_loading').hide();
             $.each(response.error.message, function (key, value) {
                 $('#' + key).parent().parent().addClass('has-error');
                 $('#' + key).after('<p class="help-block">' + value + '</p>');

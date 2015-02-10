@@ -6,7 +6,6 @@
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">ข้อมูลทั่วไป</a></li>
         <li role="presentation"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">ข้อมูลเข้าระบบ</a></li>
-        <li role="presentation"><a href="#avatar" aria-controls="avatar" role="tab" data-toggle="tab">รูปโปรไฟล์</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -23,6 +22,12 @@
                     {{Form::label('lastname', 'นามสกุล', array('class' => 'col-sm-3 control-label req'))}}
                     <div class="col-sm-9">
                         {{Form::text('lastname', NULL,array('class'=>'form-control','id'=>'lastname'))}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('codes', 'รหัสพนักงาน', array('class' => 'col-sm-3 control-label req'))}}
+                    <div class="col-sm-4">
+                        {{Form::text('codes', NULL,array('class'=>'form-control','id'=>'codes'))}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -51,7 +56,6 @@
                                 {{Form::selectRange('yeas', date('Y')-60, date('Y')-18,null,array('class' => 'form-control', 'id' => 'yeas'))}}
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="form-group">
@@ -107,34 +111,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="avatar">
-            <div class="panel-body">
-                <div class="form-group last">
-                    <label class="control-label col-md-3">รูปโปรไฟล์</label>
-                    <div class="col-md-9">
-                        <div class="fileupload fileupload-new" data-provides="fileupload">
-                            <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
-                            </div>
-                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                            <div>
-                                <span class="btn btn-white btn-file">
-                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select image</span>
-                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                                    <input type="file" class="default" name="avatar" />
-                                </span>
-                                <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> Remove</a>
-                            </div>
-                        </div>
-                        <span class="label label-danger">NOTE!</span>
-                        <span>
-                            ขนาดรูปโปรไฟล์ไม่เกิน 512 KB นะค่ะ
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>      
     </div>
 
 </div>

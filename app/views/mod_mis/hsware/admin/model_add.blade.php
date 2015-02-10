@@ -6,15 +6,9 @@
     </div>
 </div>
 <div class="form-group">
-    {{Form::label('limit_stock', 'Limit', array('class' => 'col-sm-3 control-label'))}}
-    <div class="col-sm-2">
-        {{Form::text('limit_stock', NULL,array('class'=>'form-control','id'=>'limit_stock'))}}
-    </div>
-</div>
-<div class="form-group">
-    {{Form::label('remark', 'หมายเหตุ', array('class' => 'col-sm-3 control-label'))}}
-    <div class="col-sm-8">
-        {{Form::text('remark', NULL,array('class'=>'form-control','id'=>'remark'))}}
+    {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label req'));}}
+    <div class="col-sm-3">
+        {{ \Form::select('group_id',array('' => 'เลือกกลุ่ม') +  \HswareGroup::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'group_id')); }}
     </div>
 </div>
 <div class="form-group">
@@ -37,8 +31,8 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "mis/hsware/group/add",
-            data: $('#form-add input:not(#btnSave)').serializeArray(),
+            url: base_url + index_page + "mis/hsware/group/model/add",
+            data: $('#form-add select input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
                     $('#btnSave').removeAttr('disabled');
@@ -49,7 +43,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "mis/hsware/group";
+                    window.location.href = base_url + index_page + "mis/hsware/group/model";
                 }
             }
         });

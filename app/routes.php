@@ -26,12 +26,19 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\HswareController@add'));
     Route::match(array('GET', 'POST'), 'hsware/edit/{id}', array('uses' => 'App\Controllers\HswareController@edit'));
     Route::get('hsware/view/{id}', 'App\Controllers\HswareController@view');
+    Route::get('hsware/delete/{id}', 'App\Controllers\HswareController@delete');
 
     Route::get('hsware/group', 'App\Controllers\HswareController@group');
     Route::get('hsware/group/listall', 'App\Controllers\HswareController@group_listall');
     Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\HswareController@group_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/edit/{id}', array('uses' => 'App\Controllers\HswareController@group_edit'));
     Route::get('hsware/group/delete/{id}', 'App\Controllers\HswareController@group_delete');
+    
+    Route::get('hsware/group/model', 'App\Controllers\HswareController@model');
+    Route::get('hsware/group/model/listall', 'App\Controllers\HswareController@model_listall');
+    Route::match(array('GET', 'POST'), 'hsware/group/model/add', array('uses' => 'App\Controllers\HswareController@model_add'));
+    Route::match(array('GET', 'POST'), 'hsware/group/model/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_edit'));
+    Route::get('hsware/group/model/delete/{id}', 'App\Controllers\HswareController@model_delete');
 
     //Testing
     Route::get('testing', 'App\Controllers\TestingController@group');
@@ -41,6 +48,8 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
 
     Route::get('testing/view/{id}', 'App\Controllers\TestingController@view');
     Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
+    
+    Route::match(array('GET', 'POST'), 'testing/add', array('uses' => 'App\Controllers\TestingController@add'));
 });
 
 //users
@@ -134,6 +143,12 @@ Route::get('get/district', function() {
 Route::get('get/zipcode', function() {
     $input = Input::get('option');
     $amphur_postcode = \DB::table('amphur_postcode')->where('amphur_id', $input);
+    return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
+});
+
+Route::get('get/found_user_code', function() {
+    $input = Input::get('user_code');
+    $amphur_postcode = \DB::table('users')->where('title', 'LIKE', '%'.$input.'%');
     return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
 });
 

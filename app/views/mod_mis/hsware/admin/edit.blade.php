@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 @section('style')
 {{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 @stop
@@ -226,7 +226,7 @@
     });
     $(function () {
         var options = {
-            url: base_url + index_page + "mis/backend/hsware/edit/{{$item->id}}",
+            url: base_url + index_page + "mis/hsware/edit/{{$item->id}}",
             success: showResponse
         };
         $('#btnSave').click(function () {
@@ -245,7 +245,7 @@
                 $('#' + key).after('<p class="help-block">' + value + '</p>');
             });
         } else {
-            window.location.href = base_url + index_page + "mis/backend/hsware";
+            window.location.href = base_url + index_page + "mis/hsware";
         }
     }
 </script>

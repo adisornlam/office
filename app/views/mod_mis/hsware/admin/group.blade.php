@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 
 @section('style')
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
@@ -30,7 +30,8 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/backend/hsware/group/add" class="btn btn-primary link_dialog" title="เพิ่มกลุ่ม" role="button"><i class="fa fa-plus"></i> เพิ่มกลุ่ม (F8)</a
+                        <a href="javascript:;" rel="mis/hsware/group/add" class="btn btn-primary link_dialog" title="เพิ่มกลุ่ม" role="button"><i class="fa fa-plus"></i> เพิ่มกลุ่ม (F8)</a>
+                        <a href="{{URL::to('mis/hsware/group/model')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> ยี่ห้อ/รุ่น</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +68,7 @@
         $("#group-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "mis/backend/hsware/group/listall",
+            "ajax": base_url + index_page + "mis/hsware/group/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

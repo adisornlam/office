@@ -119,13 +119,14 @@ class TestingController extends \BaseController {
 
     public function view($param) {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
-
+        $group = \TestingGroup::find($param);
         $data = array(
-            'title' => 'กลุ่มทดสอบภาคปฏิบัติการใช้งานโปรแกรมคอมพิวเตอร์',
+            'title' => $group->title,
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'รายการทดสอบภาคปฏิบัติการใช้งานโปรแกรมคอมพิวเตอร์' => '#'
+                'รายการทดสอบภาคปฏิบัติการใช้งานโปรแกรมคอมพิวเตอร์' => 'mis/testing',
+                $group->title => '#'
             ),
             'id' => $param
         );
@@ -142,14 +143,14 @@ class TestingController extends \BaseController {
 
     public function view_listall($param = 0) {
         $testing_item = \DB::table('testing_item')
-//                ->join('users', 'testing_item.user_id', '=', 'users.id')
-//                ->join('department', 'users.department_id', '=', 'department.id')
-//                ->where('testing_item.group_id', $param)
+                ->join('users', 'testing_item.user_id', '=', 'users.id')
+                ->join('department', 'users.department_id', '=', 'department.id')
+                ->where('testing_item.group_id', $param)
                 ->select(
                 array(
                     'testing_item.id as id',
-                   // \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
-                    //'department.codes as department',
+                    \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                    'department.codes as department',
                     'testing_item.typing_th as typing_th',
                     'testing_item.typing_th_wrong as typing_th_wrong',
                     'testing_item.typing_en as typing_en',
@@ -169,6 +170,36 @@ class TestingController extends \BaseController {
         return \Datatables::of($testing_item)
                         ->edit_column('id', $link)
                         ->make(true);
+    }
+
+    public function add() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_mis.testing.mis.add');
+        } else {
+            $rules = array(
+                'title' => 'required',
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $testing_group = new \TestingGroup();
+                $testing_group->title = trim(\Input::get('title'));
+                $testing_group->desc = trim(\Input::get('desc'));
+                $testing_group->disabled = (\Input::has('disabled') ? 0 : 1);
+                $testing_group->created_user = \Auth::user()->id;
+                $testing_group->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
     }
 
 }

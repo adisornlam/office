@@ -16,16 +16,16 @@ namespace App\Controllers;
 class HswareController extends \BaseController {
 
     public function __construct() {
-        $this->beforeFilter('auth', array('except' => 'backend/login'));
+        $this->beforeFilter('auth', array('except' => '/login'));
     }
 
     public function index() {
         $data = array(
             'title' => 'รายการอุปกรณ์',
             'breadcrumbs' => array(
-                'ภาพรวมระบบ' => 'backend',
-                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
-                'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการอุปกรณ์' => '#'
             )
         );
@@ -73,17 +73,51 @@ class HswareController extends \BaseController {
             'title' => 'รายการกลุ่มอุปกรณ์',
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
-                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
-                'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการอุปกรณ์' => 'mis/hsware',
                 'รายการกลุ่มอุปกรณ์' => '#'
             )
         );
+
         return \View::make('mod_mis.hsware.admin.group', $data);
     }
 
     public function group_listall() {
         $hsware_group = \HswareGroup::select(array('id', 'title', 'limit_stock', 'remark', 'disabled'));
+
+        $link = '<div class="dropdown">';
+        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
+        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '</ul>';
+        $link .= '</div>';
+
+        return \Datatables::of($hsware_group)
+                        ->edit_column('id', $link)
+                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->make(true);
+    }
+
+    public function model() {
+        $data = array(
+            'title' => 'รายการยี่ห้อ/รุ่น',
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => 'backend',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
+                'รายการอุปกรณ์' => 'mis/hsware',
+                'รายการกลุ่มอุปกรณ์' => 'mis/hsware/group',
+                'รายการยี่ห้อ/รุ่น' => '#'
+            )
+        );
+
+        return \View::make('mod_mis.hsware.admin.model', $data);
+    }
+
+    public function model_listall() {
+        $hsware_group = \HswareModel::select(array('id', 'title', 'disabled'));
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -175,6 +209,34 @@ class HswareController extends \BaseController {
             throw $e;
         }
     }
+    
+    public function model_add() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_mis.hsware.admin.model_add');
+        } else {
+            $rules = array(
+                'title' => 'required',
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $hsware_group = new \HswareModel();
+                $hsware_group->title = trim(\Input::get('title'));
+                $hsware_group->disabled = (\Input::has('disabled') ? 0 : 1);
+                $hsware_group->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
 
     public function dialog() {
         $group = \HswareGroup::lists('title', 'id');
@@ -191,8 +253,8 @@ class HswareController extends \BaseController {
                 'title' => 'เพิ่มรายการอุปกรณ์',
                 'breadcrumbs' => array(
                     'ภาพรวมระบบ' => 'backend',
-                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
-                    'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'รายการอุปกรณ์' => 'mis/hsware',
                     'เพิ่มรายการอุปกรณ์' => '#'
                 ),
@@ -202,6 +264,7 @@ class HswareController extends \BaseController {
                         ->where('group_id', \Input::get('group_id'))
                         ->get()
             );
+
             return \View::make('mod_mis.hsware.admin.add', $data);
         } else {
             $rules = array(
@@ -332,8 +395,8 @@ class HswareController extends \BaseController {
             'title' => 'รายละเอียด ' . $item->title,
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
-                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
-                'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการอุปกรณ์' => 'mis/hsware',
                 $item->title => '#'
             ),
@@ -361,8 +424,8 @@ class HswareController extends \BaseController {
                 'title' => 'แก้ไขรายการอุปกรณ์',
                 'breadcrumbs' => array(
                     'ภาพรวมระบบ' => 'backend',
-                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis/backend',
-                    'ระเบียนคอมพิวเตอร์' => 'mis/backend/computer',
+                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'รายการอุปกรณ์' => 'mis/hsware',
                     'แก้ไข ' . $item->title => '#'
                 ),
@@ -492,6 +555,37 @@ class HswareController extends \BaseController {
         }
     }
 
+    public function delete($param) {
+        try {
+
+            $item = \HswareItem::find($param);
+            if ($item->photo1 != NULL || $item->photo1 != '') {
+                \File::delete($item->photo1);
+            }
+            if ($item->photo2 != NULL || $item->photo2 != '') {
+                \File::delete($item->photo2);
+            }
+            if ($item->photo3 != NULL || $item->photo3 != '') {
+                \File::delete($item->photo3);
+            }
+            if ($item->photo4 != NULL || $item->photo4 != '') {
+                \File::delete($item->photo4);
+            }
+            if ($item->photo5 != NULL || $item->photo5 != '') {
+                \File::delete($item->photo5);
+            }
+            \HswareItem::find($param)->delete();
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => true,
+                            'message' => 'ลบรายการสำเร็จ',
+                            'redirect' => 'mis/hsware'
+                        ), 200));
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     private function upload_photo($file, $path) {
         $extension = $file->getClientOriginalExtension();
         $filename = str_random(32) . '.' . $extension;
@@ -501,7 +595,7 @@ class HswareController extends \BaseController {
         $img->resize(250, null)->save($path . $smallfile);
         $photo = array(
             'full' => $path . $filename,
-            'cover' => $path . $smallfile
+            'resize' => $path . $smallfile
         );
         return $photo;
     }

@@ -6,7 +6,7 @@
     </button>
 
     <!--logo start-->
-    <a href="{{URL::to('backend')}}" class="logo" >MIS <span>OFFICE 1.0</span></a>
+    <a href="{{URL::to('/')}}" class="logo" >MIS <span>OFFICE 1.0</span></a>
     <!--logo end-->
     <div class="horizontal-menu navbar-collapse collapse ">
         <ul class="nav navbar-nav">            

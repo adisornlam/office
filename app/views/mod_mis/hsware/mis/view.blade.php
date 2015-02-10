@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('backend.layouts.master')
 @section('style')
 {{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 {{HTML::style('assets/fancybox/source/jquery.fancybox.css')}}

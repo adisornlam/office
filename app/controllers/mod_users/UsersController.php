@@ -73,14 +73,6 @@ class UsersController extends \BaseController {
         if (!\Request::isMethod('post')) {
             return \View::make('mod_users.admin.users.add');
         } else {
-            $photo1 = \Input::file('avatar');
-            $destinationPath = 'uploads/users/' . date('Ymd') . '/';
-            if ($photo1) {
-                $up = $this->upload_photo($photo1, $destinationPath);
-                $photo_1 = $up['resize'];
-            } else {
-                $photo_1 = NULL;
-            }
             $rules = array(
                 'company_id' => 'required',
                 'department_id' => 'required',
@@ -90,7 +82,7 @@ class UsersController extends \BaseController {
                 'role_id' => 'required',
                 'username' => 'required|unique:users',
                 'password' => 'required|min:8',
-                'avatar' => 'image|mimes:jpeg,png|max:512'
+                'avatar' => 'dummimes:jpeg,png|max:512'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -103,6 +95,7 @@ class UsersController extends \BaseController {
                 $user = new \User();
                 $user->company_id = \Input::get('company_id');
                 $user->department_id = \Input::get('department_id');
+                $user->codes = trim(\Input::get('codes'));
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
@@ -111,7 +104,6 @@ class UsersController extends \BaseController {
                 $user->password = trim(\Input::get('password'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
                 $user->verified = (\Input::has('verified') ? 1 : 0);
-                $user->avatar = $photo1;
                 $user->save();
                 $user->roles()->sync(array(\Input::get('role_id')));
                 return \Response::json(array(
@@ -163,6 +155,7 @@ class UsersController extends \BaseController {
                 $user = \User::find($param);
                 $user->company_id = \Input::get('company_id');
                 $user->department_id = \Input::get('department_id');
+                $user->codes = trim(\Input::get('codes'));
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
@@ -187,7 +180,8 @@ class UsersController extends \BaseController {
         $smallfile = 'resize_' . $filename;
         $file->move($path, $filename);
         $img = \Image::make($path . $filename);
-        $img->resize(250, null)->save($path . $smallfile);
+        $img->resize(250, 270)->save($path . $smallfile);
+        
         $photo = array(
             'full' => $path . $filename,
             'resize' => $path . $smallfile
