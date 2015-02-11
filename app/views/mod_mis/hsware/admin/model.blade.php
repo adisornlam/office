@@ -74,7 +74,8 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "80%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "60%", "orderable": false, "searchable": true},
+                {"data": "group", "title": "กลุ่ม", "width": "30%", "orderable": false, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });

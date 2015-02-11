@@ -64,6 +64,12 @@
                                     {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                                <div class="col-sm-3">
+                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',\Input::get('group_id'))->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                </div>
+                            </div>
                             <!--                            <div class="form-group">
                                                             {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
                                                             <div class="col-sm-3">
@@ -116,7 +122,13 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>         
+                            <div class="form-group">
+                                {{Form::label('count', 'จำนวนรายการ', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-1">
+                                    {{Form::text('count', 1,array('class'=>'form-control','id'=>'count'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">

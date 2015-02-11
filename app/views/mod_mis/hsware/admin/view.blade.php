@@ -56,19 +56,13 @@
                                 <div class="form-group">
                                     {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label'));}}
                                     <div class="col-sm-10">
-                                        <p class="form-control-static"></p>
+                                        <p class="form-control-static">{{$test}}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                     <div class="col-sm-10">
                                         <p class="form-control-static"></p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
-                                    <div class="col-sm-10">                                    
-                                        <p class="form-control-static">{{$item->hsware_code}}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -82,19 +76,7 @@
                                     <div class="col-sm-10">                                    
                                         <p class="form-control-static">{{$item->serial_no}}</p>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
-                                    <div class="col-sm-5">                                    
-                                        <p class="form-control-static">{{$item->title}}</p>
-                                    </div>
-                                </div>                                
-                                <div class="form-group">
-                                    {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
-                                    <div class="col-sm-5">                                    
-                                        {{$item->desc}}
-                                    </div>
-                                </div>
+                                </div>                         
                                 <div class="form-group">
                                     {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                     <div class="col-sm-2">

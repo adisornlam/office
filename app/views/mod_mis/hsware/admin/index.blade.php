@@ -74,9 +74,9 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "access_no", "title": "ACC NO", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
-                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
+                {"data": "company", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "created_user", "title": "ผู้บันทึก", "width": "10%", "orderable": false, "searchable": true},
