@@ -18,7 +18,14 @@ Route::get('logout', array('uses' => 'App\Controllers\AuthenticationController@l
 Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('', 'App\Controllers\MisController@index');
 
+    //computer
     Route::get('computer', 'App\Controllers\ComputerController@index');
+    Route::get('computer/listall', 'App\Controllers\ComputerController@listall');
+    Route::get('computer/dialog', 'App\Controllers\ComputerController@dialog');
+    Route::match(array('GET', 'POST'), 'computer/add', array('uses' => 'App\Controllers\ComputerController@add'));
+    Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
+    Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
+    Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
 
     Route::get('hsware', 'App\Controllers\HswareController@index');
     Route::get('hsware/listall', 'App\Controllers\HswareController@listall');
@@ -33,7 +40,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\HswareController@group_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/edit/{id}', array('uses' => 'App\Controllers\HswareController@group_edit'));
     Route::get('hsware/group/delete/{id}', 'App\Controllers\HswareController@group_delete');
-    
+
     Route::get('hsware/group/model', 'App\Controllers\HswareController@model');
     Route::get('hsware/group/model/listall', 'App\Controllers\HswareController@model_listall');
     Route::match(array('GET', 'POST'), 'hsware/group/model/add', array('uses' => 'App\Controllers\HswareController@model_add'));
@@ -48,7 +55,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
 
     Route::get('testing/view/{id}', 'App\Controllers\TestingController@view');
     Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
-    
+
     Route::match(array('GET', 'POST'), 'testing/add', array('uses' => 'App\Controllers\TestingController@add'));
 });
 
@@ -148,7 +155,7 @@ Route::get('get/zipcode', function() {
 
 Route::get('get/found_user_code', function() {
     $input = Input::get('user_code');
-    $amphur_postcode = \DB::table('users')->where('title', 'LIKE', '%'.$input.'%');
+    $amphur_postcode = \DB::table('users')->where('title', 'LIKE', '%' . $input . '%');
     return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
 });
 

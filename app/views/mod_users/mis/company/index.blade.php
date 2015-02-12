@@ -13,7 +13,7 @@
         <ul class="breadcrumb">
             @foreach ($breadcrumbs as $key => $val)
             @if ($val === reset($breadcrumbs))
-            <li><a href="{{URL::to($val)}}"><i class="fa fa-home"></i> {{$key}}</a></li>
+            <li><a href="{{URL::to($val)}}"><i class="icon-home"></i> {{$key}}</a></li>
             @elseif ($val === end($breadcrumbs))
             <li class="active">{{$key}}</li>
             @else
@@ -26,16 +26,11 @@
 @endif
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel">
+        <section class="panel">
             <div class="panel-body">
-                <div class="pull-left">
-                    <div class="btn-group">
-                        <a href="javascript:;" rel="mis/computer/dialog" class="btn btn-primary link_dialog" title="เพิ่ม Computer" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
-                        <a href="{{URL::to('mis/hsware')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการอุปกรณ์</a>
-                    </div>
-                </div>
+                <a href="javascript:;" rel="users/company/add" class="btn btn-primary link_dialog" title="เพิ่มบริษัท" role="button"><i class="fa fa-plus"></i> เพิ่มบริษัท</a>
             </div>
-        </div>
+        </section>
     </div>
 </div>
 <div class="row">
@@ -46,7 +41,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="computer-list" class="table table-striped table-bordered"></table>
+                    <table id="company-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -64,22 +59,27 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#computer-list").dataTable({
+        $("#company-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "mis/computer/listall",
+            "ajax": base_url + index_page + "users/company/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "ชื่อเครื่อง", "width": "40%", "orderable": false, "searchable": true},
-                {"data": "fullname", "title": "เจ้าของเครื่อง", "width": "20%", "orderable": false, "searchable": true},
-                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "company_code", "title": "รหัส", "width": "5%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "email", "title": "อีเมล์", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "phone", "title": "เบอร์ติดต่อ", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "fax", "title": "แฟกซ์", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "disabled", "title": "สถานะ", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "created_at", "title": "วันที่สร้าง", "sClass": "text-center", "width": "12%", "orderable": true, "searchable": true},
+                {"data": "updated_at", "title": "วันที่แก้ไข", "sClass": "text-center", "width": "12%", "orderable": true, "searchable": true}
             ]
         });
     });
+
 </script>
 @stop

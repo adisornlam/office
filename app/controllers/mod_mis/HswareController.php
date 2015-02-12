@@ -64,7 +64,6 @@ class HswareController extends \BaseController {
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
-//->edit_column('title', '<a href="{{URL::to("mis/hsware/view/$item_id")}}" title="คลิกดูรายละเอียด">{{$title}} {{\HswareItem::option_item($item_id)}}</a>')
                         ->edit_column('title', function($result_obj) {
                             $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->option_item($result_obj->item_id) . '</a>';
                             return $str;

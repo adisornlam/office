@@ -157,7 +157,9 @@
     $('#block1').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });
-
+    $('#block5').click(function () {
+        window.location.href = base_url + index_page + 'users';
+    });
     $('#block9').click(function () {
         window.location.href = base_url + index_page + 'mis/testing';
     });

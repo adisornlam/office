@@ -23,8 +23,8 @@ class UsersController extends \BaseController {
         if (\Auth::check()) {
             if ($check->is('administrator')) {
                 return \View::make('mod_users.admin.users.index', $data);
-            } elseif ($check->is('employee')) {
-                
+            } elseif ($check->is('mis')) {
+                return \View::make('mod_users.mis.users.index', $data);
             }
         } else {
             return \View::make('mod_users.guest.index', $data);
@@ -32,14 +32,19 @@ class UsersController extends \BaseController {
     }
 
     public function listall() {
-        $users = \User::select(array(
-                    'users.id as id',
-                    'users.username as username',
-                    \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
-                    'users.email as email',
-                    'users.mobile as mobile',
-                    'users.disabled',
-                    'users.created_at as created_at'
+        $users = \DB::table('users')
+                ->join('company', 'users.company_id', '=', 'company.id')
+                ->join('department', 'users.department_id', '=', 'department.id')
+                ->select(array(
+            'users.id as id',
+            'users.username as username',
+            \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+            'company.title as company',
+            'department.title as department',
+            'users.email as email',
+            'users.mobile as mobile',
+            'users.disabled',
+            'users.created_at as created_at'
         ));
 
         $link = '<div class="dropdown">';
@@ -81,8 +86,7 @@ class UsersController extends \BaseController {
                 'email' => 'required|email|unique:users',
                 'role_id' => 'required',
                 'username' => 'required|unique:users',
-                'password' => 'required|min:8',
-                'avatar' => 'dummimes:jpeg,png|max:512'
+                'password' => 'required|min:8'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -181,7 +185,7 @@ class UsersController extends \BaseController {
         $file->move($path, $filename);
         $img = \Image::make($path . $filename);
         $img->resize(250, 270)->save($path . $smallfile);
-        
+
         $photo = array(
             'full' => $path . $filename,
             'resize' => $path . $smallfile
