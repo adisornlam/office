@@ -18,7 +18,12 @@ class UsersController extends \BaseController {
     public function index() {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
-            'title' => 'รายการผู้ใช้งาน'
+            'title' => 'รายการผู้ใช้งาน',
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'รายการผู้ใช้งาน' => '#'
+            )
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {

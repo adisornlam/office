@@ -38,6 +38,28 @@
         </div>
     </div>
 </div>
+{{Form::open(array('name'=>'form-search','id'=>'form-search','method' => 'POST','role'=>'form','class'=>'form-inline'))}}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="pull-left">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            {{ \Form::select('group_id', $group, NULL, array('class' => 'form-control', 'id' => 'group_id')); }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ Form::close() }}
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
@@ -67,6 +89,7 @@
         $("#hsware-list").dataTable({
             "processing": true,
             "serverSide": true,
+            "pageLength": 25,
             "ajax": base_url + index_page + "mis/hsware/listall",
             "columnDefs": [{
                     "targets": "_all",
@@ -74,13 +97,11 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "50%", "orderable": false, "searchable": true},
                 {"data": "company", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
-                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "created_user", "title": "ผู้บันทึก", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "update_user", "title": "ผู้แก้ไข", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });

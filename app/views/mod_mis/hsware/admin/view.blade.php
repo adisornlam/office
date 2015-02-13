@@ -52,17 +52,11 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div id="info" class="tab-pane active">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label'));}}
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">{{$test}}</p>
-                                    </div>
-                                </div>
+                            <div class="panel-body">                                
                                 <div class="form-group">
                                     {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                     <div class="col-sm-10">
-                                        <p class="form-control-static"></p>
+                                        <p class="form-control-static">{{$company->title}}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -80,7 +74,15 @@
                                 <div class="form-group">
                                     {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                     <div class="col-sm-2">
-                                        <p class="form-control-static">{{$item->warranty_date}}</p>                                                                   
+                                        <p class="form-control-static">
+                                            @if($item->warranty_date=="0000-00-00") 
+                                            LT 
+                                            @elseif($item->warranty_date) 
+                                            {{$item->warranty_date}} 
+                                            @else 
+                                            LT 
+                                            @endif
+                                        </p>                                                                   
                                     </div>
                                 </div>
                                 <div class="form-group">

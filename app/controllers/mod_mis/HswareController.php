@@ -27,7 +27,9 @@ class HswareController extends \BaseController {
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                 'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการอุปกรณ์' => '#'
-            )
+            ),
+            'company' => \Company::lists('title', 'id'),
+            'group' => \HswareGroup::lists('title', 'id')
         );
         return \View::make('mod_mis.hsware.admin.index', $data);
     }
@@ -443,15 +445,15 @@ class HswareController extends \BaseController {
     }
 
     public function view($param) {
-        $group = \HswareGroup::lists('title', 'id');
         $item = \HswareItem::find($param);
+        $group_item = \HswareGroup::find($item->group_id);
         $option = \DB::table('hsware_item')
                 ->join('hsware_spec_label', 'hsware_item.group_id', '=', 'hsware_spec_label.group_id')
                 ->where('hsware_item.id', $param)
                 ->select('hsware_item.*', 'hsware_spec_label.title as title', 'hsware_spec_label.option_id as option_id', 'hsware_spec_label.name as name')
                 ->get();
         $data = array(
-            'title' => 'รายละเอียด ' . $item->title,
+            'title' => 'รายละเอียด ' . $group_item->title . ' ' . \HswareItem::get_hsware($param),
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
@@ -460,8 +462,7 @@ class HswareController extends \BaseController {
                 $item->title => '#'
             ),
             'item' => $item,
-            'group' => $group,
-            'company' => \Company::lists('title', 'id'),
+            'company' => \Company::find($item->company_id),
             'spec_label' => \DB::table('hsware_spec_label')
                     ->where('group_id', \Input::get('group_id'))
                     ->get(),
