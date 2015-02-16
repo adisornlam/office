@@ -86,24 +86,39 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#hsware-list").dataTable({
+        var oTable = $("#hsware-list").dataTable({
             "processing": true,
             "serverSide": true,
             "pageLength": 25,
-            "ajax": base_url + index_page + "mis/hsware/listall",
+            "ajax": {
+                "url": base_url + index_page + "mis/hsware/listall",
+                "data": function (d) {
+                    d.group_id = $('#group_id').val();
+                }
+            },
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "50%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
                 {"data": "company", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
+        });
+
+        $('#group_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
         });
     });
 </script>

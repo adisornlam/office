@@ -67,7 +67,7 @@ return array(
       | will not be safe. Please do this before deploying an application!
       |
      */
-    'key' => 'ironman',
+    'key' => 'G6EpoINF6MDP5Z5gsgJ3112LRgWJ48qc',
     'cipher' => MCRYPT_RIJNDAEL_128,
     /*
       |--------------------------------------------------------------------------

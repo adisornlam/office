@@ -26,7 +26,8 @@ class ComputerController extends \BaseController {
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                 'ระเบียนคอมพิวเตอร์' => '#'
-            )
+            ),
+            'company' => \Company::lists('title', 'id')
         );
 
         return \View::make('mod_mis.computer.admin.index', $data);
@@ -34,8 +35,8 @@ class ComputerController extends \BaseController {
 
     public function listall() {
         $hsware_item = \DB::table('computer_item')
-                ->join('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
-                ->join('users', 'users.id', '=', 'computer_user.user_id')
+                ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
                 ->join('computer_type', 'computer_item.type_id', '=', 'computer_type.id')
                 ->join('company', 'computer_item.company_id', '=', 'company.id')
                 ->select(array(
@@ -58,10 +59,6 @@ class ComputerController extends \BaseController {
         return \Datatables::of($hsware_item)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
-                        ->edit_column('title', function($result_obj) {
-                            $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->option_item($result_obj->item_id) . '</a>';
-                            return $str;
-                        })
                         ->make(true);
     }
 
@@ -111,7 +108,20 @@ class ComputerController extends \BaseController {
                 $computer_item->created_user = \Auth::user()->id;
                 $computer_item->save();
                 $computer_id = $computer_item->id;
-                
+                if (\Input::get('hsware_item') > 0) {
+                    $computer_item->hsware()->sync(\Input::get('hsware_item'));
+                    foreach (\Input::get('hsware_item') as $item) {
+                        $hsware_item = \HswareItem::find($item);
+                        $hsware_item->status = 1;
+                        $hsware_item->save();
+
+                        $hslog = new \HswareComputerLog();
+                        $hslog->hsware_id = $item;
+                        $hslog->computer_id = $computer_id;
+                        $hslog->created_user = \Auth::user()->id;
+                        $hslog->save();
+                    }
+                }
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,

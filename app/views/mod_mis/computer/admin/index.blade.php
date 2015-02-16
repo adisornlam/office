@@ -38,6 +38,23 @@
         </div>
     </div>
 </div>
+{{Form::open(array('name'=>'form-search','id'=>'form-search','method' => 'POST','role'=>'form','class'=>'form-inline'))}}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="pull-left">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            {{ \Form::select('company_id', array('' => 'เลือกบริษัท') +$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ Form::close() }}
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">

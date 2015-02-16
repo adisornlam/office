@@ -6,7 +6,7 @@ class ComputerItem extends \Eloquent {
     protected $fillable = [];
 
     public function hsware() {
-        return $this->belongsToMany('HswareItem');
+        return $this->belongsToMany('HswareItem', 'computer_hsware', 'computer_id', 'hsware_id')->withTimestamps();
     }
 
 }

@@ -35,11 +35,13 @@ class HswareController extends \BaseController {
     }
 
     public function listall() {
+        $group_id = (\Input::has('group_id') ? \Input::get('group_id') : 0);
         $hsware_item = \DB::table('hsware_item')
                 ->leftJoin('hsware_type', 'hsware_item.type_id', '=', 'hsware_type.id')
                 ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
                 ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
                 ->join('company', 'hsware_item.company_id', '=', 'company.id')
+                ->where('hsware_item.group_id', $group_id)
                 ->select(array(
             'hsware_item.id as id',
             'hsware_item.id as item_id',
@@ -64,7 +66,7 @@ class HswareController extends \BaseController {
 
         return \Datatables::of($hsware_item)
                         ->edit_column('id', $link)
-                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->edit_column('status', '@if($status==1) <span class="label label-success">Active</span> @else <span class="label label-warning">Inactive</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', function($result_obj) {
                             $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->option_item($result_obj->item_id) . '</a>';

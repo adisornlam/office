@@ -65,13 +65,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                {{Form::label('computer_type', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
+                                {{Form::label('type_id', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-5">
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="computer_type" value="1" checked=""> PC
+                                        <input type="radio" name="type_id" value="1" checked=""> PC
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="computer_type" value="2"> Notebook
+                                        <input type="radio" name="type_id" value="2"> Notebook
                                     </label>
                                 </div>
                             </div>
