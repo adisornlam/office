@@ -159,6 +159,12 @@ Route::get('get/found_user_code', function() {
     return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
 });
 
+Route::get('get/position', function() {
+    $input = Input::get('option');
+    $amphur = \DB::table('position_item')->where('company_id', $input)->orderBy('title');
+    return Response::json($amphur->select(array('id', 'title'))->get());
+});
+
 // Display all SQL executed in Eloquent
 //Event::listen('illuminate.query', function($query) {
 //    var_dump($query);

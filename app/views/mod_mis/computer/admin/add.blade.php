@@ -65,6 +65,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('computer_type', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-5">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="computer_type" value="1" checked=""> PC
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="computer_type" value="2"> Notebook
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('title', 'ชื่อคอมพิวเตอร์', array('class' => 'col-sm-2 control-label req'))}}
                                 <div class="col-sm-5">
                                     {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}

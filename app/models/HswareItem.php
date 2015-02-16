@@ -5,6 +5,10 @@ class HswareItem extends \Eloquent {
     protected $table = 'hsware_item';
     protected $fillable = [];
 
+    public function computer() {
+        return $this->belongsToMany('ComputerItem', 'computer_hsware', 'computer_id', 'hsware_id')->withTimestamps();
+    }
+
     protected function get_hsware($param) {
         $option = \DB::table('hsware_item')
                 ->join('hsware_spec_label', 'hsware_item.group_id', '=', 'hsware_spec_label.group_id')

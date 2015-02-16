@@ -39,13 +39,13 @@ class UsersController extends \BaseController {
     public function listall() {
         $users = \DB::table('users')
                 ->join('company', 'users.company_id', '=', 'company.id')
-                ->join('department', 'users.department_id', '=', 'department.id')
+                ->leftJoin('position_item', 'users.position_id', '=', 'position_item.id')
                 ->select(array(
             'users.id as id',
             'users.username as username',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
             'company.title as company',
-            'department.title as department',
+            'position_item.title as position',
             'users.email as email',
             'users.mobile as mobile',
             'users.disabled',
@@ -85,10 +85,9 @@ class UsersController extends \BaseController {
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'department_id' => 'required',
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'email' => 'required|email|unique:users',
+                'email' => 'email|unique:users',
                 'role_id' => 'required',
                 'username' => 'required|unique:users',
                 'password' => 'required|min:8'
@@ -103,7 +102,7 @@ class UsersController extends \BaseController {
             } else {
                 $user = new \User();
                 $user->company_id = \Input::get('company_id');
-                $user->department_id = \Input::get('department_id');
+                $user->position_id = \Input::get('position_id');
                 $user->codes = trim(\Input::get('codes'));
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
@@ -129,7 +128,7 @@ class UsersController extends \BaseController {
             $data = array(
                 'title' => 'แก้ไขข้อมูลส่วนตัว',
                 'breadcrumbs' => array(
-                    'รายการผู้ใช้งาน' => 'users/backend',
+                    'รายการผู้ใช้งาน' => 'users',
                     'แก้ไขข้อมูลส่วนตัว' => '#'
                 ),
                 'item' => \User::find($param)

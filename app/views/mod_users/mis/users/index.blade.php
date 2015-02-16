@@ -62,6 +62,7 @@
         $("#users-list").dataTable({
             "processing": true,
             "serverSide": true,
+            "pageLength": 25,
             "ajax": base_url + index_page + "users/listall",
             "order": [[6, 'desc']],
             "columnDefs": [{
@@ -71,10 +72,9 @@
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "username", "title": "ชื่อผู้ใช้", "width": "8%", "orderable": false, "searchable": true},
-                {"data": "fullname", "title": "ชื่อ-นามสกุล", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "department", "title": "ฝ่าย/แผนก", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "company", "title": "บริษัท", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "email", "title": "อีเมล์", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "fullname", "title": "ชื่อ-นามสกุล", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "position", "title": "ตำแหน่ง", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "mobile", "title": "เบอร์ติดต่อ", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "3%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "created_at", "title": "วันที่สร้าง", "width": "15%", "orderable": true, "searchable": true}
