@@ -62,7 +62,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "domain/backend/server/add",
+            url: base_url + index_page + "domain/server/add",
             data: $('#form-add, select input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
@@ -74,7 +74,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "domain/backend/server";
+                    window.location.href = base_url + index_page + "domain/server";
                 }
             }
         });

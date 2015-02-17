@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 
 @section('style')
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
@@ -13,8 +13,8 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="domain/backend/add" class="btn btn-primary link_dialog" title="เพิ่ม Domain" role="button"><i class="fa fa-plus"></i> เพิ่ม Domain</a>
-                        <a href="{{URL::to('domain/backend/server')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Server</a>
+                        <a href="javascript:;" rel="domain/add" class="btn btn-primary link_dialog" title="เพิ่ม Domain" role="button"><i class="fa fa-plus"></i> เพิ่ม Domain</a>
+                        <a href="{{URL::to('domain/server')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Server</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         $("#domain-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "domain/backend/listall",
+            "ajax": base_url + index_page + "domain/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

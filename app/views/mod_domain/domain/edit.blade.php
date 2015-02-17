@@ -75,7 +75,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "domain/backend/edit/{{$item->id}}",
+            url: base_url + index_page + "domain/edit/{{$item->id}}",
             data: $('#form-add, select input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {

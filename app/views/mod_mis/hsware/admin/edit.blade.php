@@ -65,9 +65,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                {{Form::label('hsware_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
                                 <div class="col-sm-3">
-                                    {{Form::text('hsware_code', $item->hsware_code,array('class'=>'form-control','id'=>'hsware_code'))}}
+                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',$item->group_id)->lists('title', 'id'), $item->model_id, array('class' => 'form-control', 'id' => 'model_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -81,19 +81,7 @@
                                 <div class="col-sm-3">
                                     {{Form::text('serial_no', $item->serial_no,array('class'=>'form-control','id'=>'serial_no'))}}
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                {{Form::label('title', 'ชื่ออุปกรณ์', array('class' => 'col-sm-2 control-label req'))}}
-                                <div class="col-sm-5">
-                                    {{Form::text('title', $item->title,array('class'=>'form-control','id'=>'title'))}}
-                                </div>
-                            </div>                                
-                            <div class="form-group">
-                                {{Form::label('desc', 'คำอธิบาย', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-5">
-                                    {{Form::textarea('desc', $item->desc,array('class'=>'form-control','id'=>'desc'))}}
-                                </div>
-                            </div>
+                            </div>                            
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">

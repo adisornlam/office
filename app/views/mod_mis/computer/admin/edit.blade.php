@@ -55,37 +55,37 @@
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, \Input::get('company_id'), array('class' => 'form-control', 'id' => 'company_id')); }}
+                                    {{ \Form::select('company_id', $company, $item->group_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
-                                    {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
+                                    {{Form::text('access_no', $item->access_no,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{Form::label('type_id', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-5">
-                                    <label class="checkbox-inline">
-                                        <input type="radio" name="type_id" value="1" checked=""> PC
+                                    <label class="checkbox-inline">     
+                                        {{Form::radio('type_id', 1,($item->type_id==1?TRUE:FALSE))}} PC
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="type_id" value="2"> Notebook
+                                        {{Form::radio('type_id', 2,($item->type_id==2?TRUE:FALSE))}} Notebook
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 {{Form::label('title', 'ชื่อคอมพิวเตอร์', array('class' => 'col-sm-2 control-label req'))}}
                                 <div class="col-sm-5">
-                                    {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
+                                    {{Form::text('title', $item->title,array('class'=>'form-control','id'=>'title'))}}
                                 </div>
                             </div>                                                            
                             <div class="form-group">
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('register_date', NULL,array('class'=>'form-control datepicker','id'=>'register_date'))}}
+                                        {{Form::text('register_date', $item->register_date,array('class'=>'form-control datepicker','id'=>'register_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
@@ -96,7 +96,7 @@
                                 {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     <label>
-                                        {{Form::checkbox('disabled', 1,TRUE)}} เปิดใช้งาน
+                                        {{Form::checkbox('disabled', 1,($item->disabled==0?TRUE:FALSE))}} เปิดใช้งาน
                                     </label>
                                 </div>
                             </div>
@@ -126,19 +126,20 @@
                                                 ->leftJoin('hsware_type', 'hsware_item.type_id', '=', 'hsware_type.id')
                                                 ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
                                                 ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
-                                                ->where('hsware_item.company_id', \Input::get('company_id'))
+                                                ->where('hsware_item.company_id', $item->company_id)
                                                 ->where('hsware_item.group_id', $group_item->id)
                                                 ->where('hsware_item.disabled', 0)
                                                 ->where('hsware_item.status', 0)
                                                 ->select(array(
                                                     'hsware_item.id as id',
-                                                    'hsware_model.title as title'
+                                                    'hsware_model.title as title',
+                                                    'hsware_item.status as status',
                                                 ))
                                                 ->get() as $hs_item) {
                                             ?>
                                             <div class="checkbox">
                                                 <label>
-                                                    {{Form::checkbox('hsware_item[]', $hs_item->id)}}
+                                                    {{Form::checkbox('hsware_item[]', $hs_item->id,($hs_item->status==1?TRUE:FALSE))}}
                                                     {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
                                                 </label>
                                             </div>

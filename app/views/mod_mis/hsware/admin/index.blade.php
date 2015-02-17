@@ -46,12 +46,12 @@
                 <div class="pull-left">
                     <div class="form-group">
                         <div class="col-sm-8">
-                            {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                            {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-8">
-                            {{ \Form::select('group_id', $group, NULL, array('class' => 'form-control', 'id' => 'group_id')); }}
+                            {{ \Form::select('group_id', array(''=>'เลือกกลุ่มอุปกรณ์')+$group, NULL, array('class' => 'form-control', 'id' => 'group_id')); }}
                         </div>
                     </div>
                 </div>
@@ -94,6 +94,7 @@
                 "url": base_url + index_page + "mis/hsware/listall",
                 "data": function (d) {
                     d.group_id = $('#group_id').val();
+                    d.company_id = $('#company_id').val();
                 }
             },
             "columnDefs": [{
@@ -112,6 +113,15 @@
         });
 
         $('#group_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#company_id').on('change', function () {
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();

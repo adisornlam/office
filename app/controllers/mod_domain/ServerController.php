@@ -34,8 +34,8 @@ class ServerController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;" rel="mis/backend/domain/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="mis/backend/domain/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/domain/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/domain/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -44,7 +44,7 @@ class ServerController extends \BaseController {
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->edit_column('server_expire', '{{ \Carbon::createFromTimeStamp(strtotime($server_expire))->diffInDays() }}')
                         ->add_column('server_expire_date', '{{$server_expire}}')
-                        ->edit_column('contact_name', '<a href="javascript:;" ref="contact/backend/view/{{$contact_id}}" class="link_dialog">{{$contact_name}}</a>')
+                        ->edit_column('contact_name', '<a href="javascript:;" ref="contact/view/{{$contact_id}}" class="link_dialog">{{$contact_name}}</a>')
                         ->make(true);
     }
 
@@ -134,7 +134,7 @@ class ServerController extends \BaseController {
                         'error' => array(
                             'status' => true,
                             'message' => 'ลบรายการสำเร็จ',
-                            'redirect' => 'mis/backend/hardware/category'
+                            'redirect' => 'mis/hardware/category'
                         ), 200));
         } catch (\Exception $e) {
             throw $e;

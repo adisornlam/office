@@ -35,14 +35,19 @@ class HswareController extends \BaseController {
     }
 
     public function listall() {
-        $group_id = (\Input::has('group_id') ? \Input::get('group_id') : 0);
         $hsware_item = \DB::table('hsware_item')
                 ->leftJoin('hsware_type', 'hsware_item.type_id', '=', 'hsware_type.id')
                 ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
                 ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
-                ->join('company', 'hsware_item.company_id', '=', 'company.id')
-                ->where('hsware_item.group_id', $group_id)
-                ->select(array(
+                ->join('company', 'hsware_item.company_id', '=', 'company.id');
+
+        if (\Input::has('group_id')) {
+            $hsware_item->where('hsware_item.group_id', \Input::get('group_id'));
+        }
+        if (\Input::has('company_id')) {
+            $hsware_item->where('hsware_item.company_id', \Input::get('company_id'));
+        }
+        $hsware_item->select(array(
             'hsware_item.id as id',
             'hsware_item.id as item_id',
             'hsware_model.title as title',
@@ -329,7 +334,6 @@ class HswareController extends \BaseController {
         } else {
             $rules = array(
                 'group_id' => 'required',
-//                'title' => 'required',
                 'photo1' => 'image|mimes:jpeg,png|max:512',
                 'photo2' => 'image|mimes:jpeg,png|max:512',
                 'photo3' => 'image|mimes:jpeg,png|max:512',
@@ -390,7 +394,6 @@ class HswareController extends \BaseController {
                     $hsware_item = new \HswareItem();
                     $hsware_item->group_id = \Input::get('group_id');
                     $hsware_item->company_id = \Input::get('company_id');
-                    $hsware_item->hsware_code = trim(\Input::get('hsware_code'));
                     $hsware_item->serial_no = trim(\Input::get('serial_no'));
                     $hsware_item->access_no = trim(\Input::get('access_no'));
                     $hsware_item->model_id = \Input::get('model_id');
@@ -430,7 +433,6 @@ class HswareController extends \BaseController {
                     $hsware_item->photo3 = $photo_3;
                     $hsware_item->photo4 = $photo_4;
                     $hsware_item->photo5 = $photo_5;
-                    $hsware_item->desc = trim(\Input::get('desc'));
                     $hsware_item->register_date = trim(\Input::get('register_date'));
                     $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
                     $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
@@ -503,7 +505,6 @@ class HswareController extends \BaseController {
         } else {
             $rules = array(
                 'group_id' => 'required',
-                'title' => 'required',
                 'photo1' => 'image|mimes:jpeg,png|max:512',
                 'photo2' => 'image|mimes:jpeg,png|max:512',
                 'photo3' => 'image|mimes:jpeg,png|max:512',
@@ -563,9 +564,9 @@ class HswareController extends \BaseController {
                 $hsware_item = \HswareItem::find($param);
                 $hsware_item->group_id = \Input::get('group_id');
                 $hsware_item->company_id = \Input::get('company_id');
-                $hsware_item->hsware_code = trim(\Input::get('hsware_code'));
                 $hsware_item->serial_no = trim(\Input::get('serial_no'));
                 $hsware_item->access_no = trim(\Input::get('access_no'));
+                $hsware_item->model_id = \Input::get('model_id');
                 $hsware_item->title = trim(\Input::get('title'));
                 $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
                 $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
@@ -602,7 +603,6 @@ class HswareController extends \BaseController {
                 $hsware_item->photo3 = $photo_3;
                 $hsware_item->photo4 = $photo_4;
                 $hsware_item->photo5 = $photo_5;
-                $hsware_item->desc = trim(\Input::get('desc'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
                 $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);

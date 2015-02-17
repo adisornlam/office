@@ -131,4 +131,67 @@ class ComputerController extends \BaseController {
         }
     }
 
+    public function edit($param) {
+        if (!\Request::isMethod('post')) {
+            $item = \ComputerItem::find($param);
+            $data = array(
+                'title' => 'แก่ไข Computer ' . $item->title,
+                'breadcrumbs' => array(
+                    'ภาพรวมระบบ' => 'backend',
+                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
+                    'แก่ไข Computer ' . $item->title => '#'
+                ),
+                'item' => $item,
+                'company' => \Company::lists('title', 'id')
+            );
+
+            return \View::make('mod_mis.computer.admin.edit', $data);
+        } else {
+            $rules = array(
+                'company_id' => 'required',
+                'title' => 'required'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+
+                $computer_item = \ComputerItem::find($param);
+                $computer_item->company_id = \Input::get('company_id');
+                $computer_item->type_id = \Input::get('type_id');
+                $computer_item->access_no = trim(\Input::get('access_no'));
+                $computer_item->title = trim(\Input::get('title'));
+                $computer_item->register_date = trim(\Input::get('register_date'));
+                $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
+                $computer_item->updated_user = \Auth::user()->id;
+                $computer_item->save();
+                $computer_id = $computer_item->id;
+                if (\Input::get('hsware_item') > 0) {
+                    $computer_item->hsware()->sync(\Input::get('hsware_item'));
+                    foreach (\Input::get('hsware_item') as $item) {
+                        $hsware_item = \HswareItem::find($item);
+                        $hsware_item->status = 1;
+                        $hsware_item->save();
+
+                        $hslog = new \HswareComputerLog();
+                        $hslog->hsware_id = $item;
+                        $hslog->computer_id = $computer_id;
+                        $hslog->updated_user = \Auth::user()->id;
+                        $hslog->save();
+                    }
+                }
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
 }
