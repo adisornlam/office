@@ -35,11 +35,6 @@
                         <a href="{{URL::to('mis/hsware/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มอุปกรณ์</a>
                     </div>
                 </div>
-                <!--                <div class="pull-right">
-                                    <div class="btn-group">
-                                        <a href="{{URL::to('mis/hsware/export')}}" class="btn btn-primary" title="Download" role="button"><i class="fa fa-cloud-download"></i> ดาวน์โหลดไฟล์</a>
-                                    </div>
-                                </div>-->
             </div>
         </div>
     </div>
@@ -62,7 +57,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('status', array(''=>'เลือกกลุ่มสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'status')); }}
+                            {{ \Form::select('status', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'status')); }}
                         </div>
                     </div>
                 </div>
@@ -117,14 +112,14 @@
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
-                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": true, "searchable": true},
+                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "ผู้ใช้งาน", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false}
             ],
-            dom: 'T<"clear">lfrtip',
+            "dom": 'T<"clear">lfrtip',
             "tableTools": {
                 "sSwfPath": "../assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [

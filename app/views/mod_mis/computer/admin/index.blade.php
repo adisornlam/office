@@ -52,7 +52,7 @@
                     </div>      
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('disabled', array(''=>'เลือกกลุ่มสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'disabled')); }}
+                            {{ \Form::select('disabled', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'disabled')); }}
                         </div>
                     </div>
                 </div>

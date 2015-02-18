@@ -23,7 +23,8 @@ class UsersController extends \BaseController {
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                 'รายการผู้ใช้งาน' => '#'
-            )
+            ),
+            'company' => \Company::lists('title', 'id')
         );
         if (\Auth::check()) {
             if ($check->is('administrator')) {
@@ -39,12 +40,17 @@ class UsersController extends \BaseController {
     public function listall() {
         $users = \DB::table('users')
                 ->join('company', 'users.company_id', '=', 'company.id')
-                ->leftJoin('position_item', 'users.position_id', '=', 'position_item.id')
-                ->select(array(
+                ->leftJoin('position_item', 'users.position_id', '=', 'position_item.id');
+        if (\Input::has('company_id')) {
+            $users->where('users.company_id', \Input::get('company_id'));
+        }
+        if (\Input::has('disabled')) {
+            $users->where('users.disabled', \Input::get('disabled'));
+        }
+        $users->select(array(
             'users.id as id',
             'users.username as username',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
-            'company.title as company',
             'position_item.title as position',
             'users.email as email',
             'users.mobile as mobile',

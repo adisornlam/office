@@ -158,7 +158,8 @@ class ComputerController extends \BaseController {
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'title' => 'required'
+                'title' => 'required',
+                'ip_address' => 'ip'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -168,11 +169,11 @@ class ComputerController extends \BaseController {
                                 'message' => $validator->errors()->toArray()
                             ), 400));
             } else {
-
                 $computer_item = \ComputerItem::find($param);
                 $computer_item->company_id = \Input::get('company_id');
                 $computer_item->type_id = \Input::get('type_id');
                 $computer_item->access_no = trim(\Input::get('access_no'));
+                $computer_item->ip_address = trim(\Input::get('ip_address'));
                 $computer_item->title = trim(\Input::get('title'));
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
@@ -180,6 +181,10 @@ class ComputerController extends \BaseController {
                 $computer_item->save();
                 $computer_id = $computer_item->id;
                 if (\Input::get('hsware_item') > 0) {
+                    \DB::table('hsware_item')
+                            ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                            ->where('computer_hsware.computer_id', $param)
+                            ->update(array('status' => 0));
                     $computer_item->hsware()->sync(\Input::get('hsware_item'));
                     foreach (\Input::get('hsware_item') as $item) {
                         $hsware_item = \HswareItem::find($item);

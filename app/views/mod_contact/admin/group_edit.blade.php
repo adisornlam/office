@@ -68,7 +68,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "contact/backend/group/edit/{{$item->id}}",
+            url: base_url + index_page + "contact/group/edit/{{$item->id}}",
             data: $('#form-add, select input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {
@@ -80,7 +80,7 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "contact/backend/group";
+                    window.location.href = base_url + index_page + "contact/group";
                 }
             }
         });

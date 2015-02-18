@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, $item->group_id, array('class' => 'form-control', 'id' => 'company_id')); }}
+                                    {{ \Form::select('company_id', $company, $item->company_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -80,7 +80,13 @@
                                 <div class="col-sm-5">
                                     {{Form::text('title', $item->title,array('class'=>'form-control','id'=>'title'))}}
                                 </div>
-                            </div>                                                            
+                            </div>
+                            <div class="form-group">
+                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('ip_address', $item->ip_address,array('class'=>'form-control','id'=>'ip_address'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
@@ -109,45 +115,94 @@
                     </div>
                     <div id="option1" class="tab-pane">
                         <div class="panel-body">
-
-                            <?php
-                            foreach (\DB::table('hsware_group')
-                                    ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
-                                    ->where('hsware_group.disabled', 0)
-                                    ->select(array('hsware_group.id', 'hsware_group.title'))
-                                    ->distinct()
-                                    ->get() as $group_item) {
-                                ?>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label col-lg-2" for="inputSuccess">{{$group_item->title}}</label>
-                                    <div class="col-lg-4">
-                                        <?php
-                                        foreach (\DB::table('hsware_item')
-                                                ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
-                                                ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                                                ->where('hsware_item.company_id', $item->company_id)
-                                                ->where('hsware_item.group_id', $group_item->id)
-                                                ->where('hsware_item.disabled', 0)
-                                                ->where('hsware_item.status', 1)
-                                                //->where('hsware_item.id', $item->id)
-                                                ->select(array(
-                                                    'hsware_item.id as id',
-                                                    'hsware_model.title as title',
-                                                    'hsware_item.status as status',
-                                                ))
-                                                ->get() as $hs_item) {
-                                            ?>
-                                            <div class="checkbox">
-                                                <label>
-                                                    {{Form::checkbox('hsware_item[]', $hs_item->id,($hs_item->status==1?TRUE:FALSE))}}
-                                                    {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
-                                                </label>
-                                            </div>
-                                        <?php }
-                                        ?>
+                            <div role="tabpanel">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">อุปกรณ์ที่เลือก</a></li>
+                                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">เลือกเพิ่มเติม</a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="home">
+                                        <div class="panel-body">
+                                            <?php
+                                            foreach (\DB::table('hsware_group')
+                                                    ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
+                                                    ->where('hsware_group.disabled', 0)
+                                                    ->select(array('hsware_group.id', 'hsware_group.title'))
+                                                    ->distinct()
+                                                    ->get() as $group_item) {
+                                                ?>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label col-lg-2" for="hsware_item">{{$group_item->title}}</label>
+                                                    <div class="col-lg-6">
+                                                        <?php
+                                                        foreach (\DB::table('computer_hsware')
+                                                                ->leftJoin('hsware_item', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                                                                ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
+                                                                ->where('hsware_item.group_id', $group_item->id)
+                                                                ->where('computer_hsware.computer_id', $item->id)
+                                                                ->select(array(
+                                                                    'hsware_item.id as id',
+                                                                    'hsware_model.title as title',
+                                                                    'hsware_item.status as status',
+                                                                ))
+                                                                ->get() as $hs_item) {
+                                                            ?>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    {{Form::checkbox('hsware_item[]', $hs_item->id,($hs_item->status==1?TRUE:FALSE))}}
+                                                                    {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
+                                                                </label>
+                                                            </div>
+                                                        <?php }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="profile">
+                                        <div class="panel-body">
+                                            <?php
+                                            foreach (\DB::table('hsware_group')
+                                                    ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
+                                                    ->where('hsware_group.disabled', 0)
+                                                    ->select(array('hsware_group.id', 'hsware_group.title'))
+                                                    ->distinct()
+                                                    ->get() as $group_item2) {
+                                                ?>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label col-lg-2" for="hsware_item">{{$group_item2->title}}</label>
+                                                    <div class="col-lg-6">
+                                                        <?php
+                                                        foreach (\DB::table('hsware_item')
+                                                                ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
+                                                                ->where('hsware_item.group_id', $group_item2->id)
+                                                                ->where('hsware_item.status', 0)
+                                                                ->select(array(
+                                                                    'hsware_item.id as id',
+                                                                    'hsware_model.title as title',
+                                                                    'hsware_item.status as status',
+                                                                ))
+                                                                ->get() as $hs_item2) {
+                                                            ?>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    {{Form::checkbox('hsware_item[]', $hs_item2->id,($hs_item2->status==1?TRUE:FALSE))}}
+                                                                    {{$hs_item2->title}} {{\HswareItem::get_hsware($hs_item2->id)}}
+                                                                </label>
+                                                            </div>
+                                                        <?php }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
-                            <?php } ?>
+
+                            </div>
                         </div>
                     </div>
                     <div id="gallery" class="tab-pane">
@@ -179,7 +234,7 @@
     });
     $(function () {
         var options = {
-            url: base_url + index_page + "mis/computer/add",
+            url: base_url + index_page + "mis/computer/edit/{{$item->id}}",
             success: showResponse
         };
         $('#btnSave').click(function () {

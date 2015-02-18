@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 
 @section('style')
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
@@ -13,8 +13,8 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="contact/backend/add" class="btn btn-primary link_dialog" title="เพิ่มหมวดหมู่" role="button"><i class="fa fa-plus"></i> เพิ่มผู้ติดต่อ</a>
-                        <a href="{{URL::to('contact/backend/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มผู้ติดต่อ</a>
+                        <a href="javascript:;" rel="contact/add" class="btn btn-primary link_dialog" title="เพิ่มหมวดหมู่" role="button"><i class="fa fa-plus"></i> เพิ่มผู้ติดต่อ</a>
+                        <a href="{{URL::to('contact/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มผู้ติดต่อ</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         $("#contact-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "contact/backend/listall",
+            "ajax": base_url + index_page + "contact/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

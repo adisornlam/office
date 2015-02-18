@@ -23,7 +23,7 @@ return array(
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => 'http://150.128.128.239/office/',
+    'url' => 'http://localhost/office/',
     /*
       |--------------------------------------------------------------------------
       | Application Timezone

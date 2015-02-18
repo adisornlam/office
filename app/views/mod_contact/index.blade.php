@@ -13,8 +13,8 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/backend/hardware/category/add" class="btn btn-primary link_dialog" title="เพิ่มหมวดหมู่" role="button"><i class="fa fa-plus"></i> เพิ่ม Domain</a>
-                        <a href="{{URL::to('mis/backend/hardware/label')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Server</a>
+                        <a href="javascript:;" rel="mis/hardware/category/add" class="btn btn-primary link_dialog" title="เพิ่มหมวดหมู่" role="button"><i class="fa fa-plus"></i> เพิ่ม Domain</a>
+                        <a href="{{URL::to('mis/hardware/label')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Server</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         $("#domain-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "domain/backend/listall",
+            "ajax": base_url + index_page + "domain/listall",
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""

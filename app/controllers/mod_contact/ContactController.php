@@ -30,15 +30,15 @@ class ContactController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;" rel="contact/backend/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="contact/backend/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="contact/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="contact/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
         return \Datatables::of($contact)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
-                        ->edit_column('list_title', '<a href="javascript:;" ref="contact/backend/view/{{$list_id}}" class="link_dialog">{{$list_title}}</a>')
+                        ->edit_column('list_title', '<a href="javascript:;" ref="contact/view/{{$list_id}}" class="link_dialog">{{$list_title}}</a>')
                         ->make(true);
     }
 
@@ -148,8 +148,8 @@ class ContactController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;" rel="contact/backend/group/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="contact/backend/group/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="contact/group/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="contact/group/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -241,7 +241,7 @@ class ContactController extends \BaseController {
                         'error' => array(
                             'status' => true,
                             'message' => 'ลบรายการสำเร็จ',
-                            'redirect' => 'contact/backend/group'
+                            'redirect' => 'contact/group'
                         ), 200));
         } catch (\Exception $e) {
             throw $e;
