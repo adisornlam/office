@@ -68,6 +68,7 @@
         $("#group-list").dataTable({
             "processing": true,
             "serverSide": true,
+            "pageLength": 25,
             "ajax": base_url + index_page + "mis/hsware/group/listall",
             "columnDefs": [{
                     "targets": "_all",

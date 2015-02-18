@@ -4,6 +4,7 @@
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
 {{HTML::style('assets/advanced-datatable/media/css/demo_table.css')}}
 {{HTML::style('assets/data-tables/DT_bootstrap.css')}}
+{{HTML::style('assets/datatables/extensions/TableTools/css/dataTables.tableTools.min.css')}}
 @stop
 
 @section('content')
@@ -48,7 +49,12 @@
                         <div class="col-sm-8">
                             {{ \Form::select('company_id', array('' => 'เลือกบริษัท') +$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
-                    </div>                    
+                    </div>      
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {{ \Form::select('disabled', array(''=>'เลือกกลุ่มสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'disabled')); }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,16 +81,24 @@
 {{HTML::script('assets/datatables/1.10.4/js/jquery.dataTables.min.js')}}
 {{HTML::script('assets/datatables/1.10.4/js/dataTables.bootstrap.js')}}
 {{HTML::script('assets/data-tables/DT_bootstrap.js')}}
+{{HTML::script('assets/datatables/extensions/TableTools/js/dataTables.tableTools.min.js')}}
 @stop
 
 @section('script_code')
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#computer-list").dataTable({
+        var oTable = $("#computer-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "mis/computer/listall",
+            "pageLength": 25,
+            "ajax": {
+                "url": base_url + index_page + "mis/computer/listall",
+                "data": function (d) {
+                    d.company_id = $('#company_id').val();
+                    d.status = $('#disabled').val();
+                }
+            },
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
@@ -93,9 +107,42 @@
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "title", "title": "ชื่อเครื่อง", "width": "40%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "เจ้าของเครื่อง", "width": "20%", "orderable": false, "searchable": true},
-                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "ip_address", "title": "IP Address", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
-            ]
+            ],
+            dom: 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "../assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "mColumns": [1, 2, 3, 4]
+                    },
+                    {
+                        "sExtends": "xls",
+                        "mColumns": [1, 2, 3, 4],
+                        "sFileName": "export_computer_" + $.now() + ".csv"
+                    }
+                ]
+            }
+        });
+        $('#company_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#disabled').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
         });
     });
 </script>

@@ -4,6 +4,7 @@
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
 {{HTML::style('assets/advanced-datatable/media/css/demo_table.css')}}
 {{HTML::style('assets/data-tables/DT_bootstrap.css')}}
+{{HTML::style('assets/datatables/extensions/TableTools/css/dataTables.tableTools.min.css')}}
 @stop
 
 @section('content')
@@ -34,6 +35,11 @@
                         <a href="{{URL::to('mis/hsware/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มอุปกรณ์</a>
                     </div>
                 </div>
+                <!--                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <a href="{{URL::to('mis/hsware/export')}}" class="btn btn-primary" title="Download" role="button"><i class="fa fa-cloud-download"></i> ดาวน์โหลดไฟล์</a>
+                                    </div>
+                                </div>-->
             </div>
         </div>
     </div>
@@ -43,15 +49,20 @@
     <div class="col-lg-12">
         <div class="panel">
             <div class="panel-body">
-                <div class="pull-left">
+                <div class="pull-left">                    
                     <div class="form-group">
                         <div class="col-sm-8">
                             {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-8">
+                        <div class="col-sm-5">
                             {{ \Form::select('group_id', array(''=>'เลือกกลุ่มอุปกรณ์')+$group, NULL, array('class' => 'form-control', 'id' => 'group_id')); }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {{ \Form::select('status', array(''=>'เลือกกลุ่มสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'status')); }}
                         </div>
                     </div>
                 </div>
@@ -77,9 +88,10 @@
 @stop
 
 @section('script')
-{{HTML::script('assets/datatables/1.10.4/js/jquery.dataTables.min.js')}}
+{{HTML::script('assets/datatables/1.10.5/js/jquery.dataTables.min.js')}}
 {{HTML::script('assets/datatables/1.10.4/js/dataTables.bootstrap.js')}}
 {{HTML::script('assets/data-tables/DT_bootstrap.js')}}
+{{HTML::script('assets/datatables/extensions/TableTools/js/dataTables.tableTools.min.js')}}
 @stop
 
 @section('script_code')
@@ -95,6 +107,7 @@
                 "data": function (d) {
                     d.group_id = $('#group_id').val();
                     d.company_id = $('#company_id').val();
+                    d.status = $('#status').val();
                 }
             },
             "columnDefs": [{
@@ -103,13 +116,29 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
-                {"data": "company", "title": "บริษัท", "width": "20%", "orderable": false, "searchable": true},
-                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
-            ]
+                {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
+                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": true, "searchable": true},
+                {"data": "fullname", "title": "ผู้ใช้งาน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
+                {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
+                {"data": "register_date", "title": "วันลงทะเบียน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
+                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false}
+            ],
+            dom: 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "../assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7]
+                    },
+                    {
+                        "sExtends": "xls",
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7],
+                        "sFileName": "export_hardware-software_" + $.now() + ".csv"
+                    }
+                ]
+            }
         });
 
         $('#group_id').on('change', function () {
@@ -122,6 +151,15 @@
             }
         });
         $('#company_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#status').on('change', function () {
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();

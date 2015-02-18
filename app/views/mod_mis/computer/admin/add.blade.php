@@ -80,7 +80,13 @@
                                 <div class="col-sm-5">
                                     {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
                                 </div>
-                            </div>                                                            
+                            </div>   
+                            <div class="form-group">
+                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-5">
+                                    {{Form::text('ip_address', NULL,array('class'=>'form-control','id'=>'ip_address'))}}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">

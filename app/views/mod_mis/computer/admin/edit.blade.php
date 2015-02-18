@@ -123,13 +123,13 @@
                                     <div class="col-lg-4">
                                         <?php
                                         foreach (\DB::table('hsware_item')
-                                                ->leftJoin('hsware_type', 'hsware_item.type_id', '=', 'hsware_type.id')
-                                                ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
                                                 ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
+                                                ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
                                                 ->where('hsware_item.company_id', $item->company_id)
                                                 ->where('hsware_item.group_id', $group_item->id)
                                                 ->where('hsware_item.disabled', 0)
-                                                ->where('hsware_item.status', 0)
+                                                ->where('hsware_item.status', 1)
+                                                //->where('hsware_item.id', $item->id)
                                                 ->select(array(
                                                     'hsware_item.id as id',
                                                     'hsware_model.title as title',
@@ -143,7 +143,8 @@
                                                     {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
                                                 </label>
                                             </div>
-                                        <?php } ?>
+                                        <?php }
+                                        ?>
                                     </div>
                                 </div>
                             <?php } ?>

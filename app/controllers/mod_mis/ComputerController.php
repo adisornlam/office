@@ -34,7 +34,7 @@ class ComputerController extends \BaseController {
     }
 
     public function listall() {
-        $hsware_item = \DB::table('computer_item')
+        $computer_item = \DB::table('computer_item')
                 ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
                 ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
                 ->join('computer_type', 'computer_item.type_id', '=', 'computer_type.id')
@@ -44,9 +44,17 @@ class ComputerController extends \BaseController {
             'computer_item.id as item_id',
             'computer_item.title as title',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+            'computer_item.ip_address as ip_address',
             'company.title as company',
             'computer_item.disabled as disabled'
         ));
+
+        if (\Input::has('company_id')) {
+            $computer_item->where('computer_item.company_id', \Input::get('company_id'));
+        }
+        if (\Input::has('status')) {
+            $computer_item->where('computer_item.disabled', \Input::get('disabled'));
+        }
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -56,7 +64,7 @@ class ComputerController extends \BaseController {
         $link .= '</ul>';
         $link .= '</div>';
 
-        return \Datatables::of($hsware_item)
+        return \Datatables::of($computer_item)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);
