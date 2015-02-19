@@ -207,7 +207,52 @@
                     </div>
                     <div id="gallery" class="tab-pane">
                         <div class="panel-body">
+                            <div role="tabpanel">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">ผู้ใช้งาน</a></li>
+                                    <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">เปลี่ยนผู้ใช้งาน</a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="home1">
+                                        <div class="panel-body">
+                                            <p>{{$item->fullname}} {{$item->position}}</p>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="profile1">
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label col-lg-2" for="hsware_item">เลือกผู้ใช้งาน</label>
+                                                <div class="col-lg-6">
+                                                    <?php
+                                                    foreach (\DB::table('users')
+                                                            ->join('position_item', 'users.position_id', '=', 'position_item.id')
+                                                            ->where('users.company_id', $item->company_id)
+                                                            ->where('users.computer_status', 0)
+                                                            ->select(array(
+                                                                'users.id as id',
+                                                                \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                                                                'position_item.title as position',
+                                                                'users.computer_status as status'
+                                                            ))
+                                                            ->get() as $user_item) {
+                                                        ?>
+                                                        <div class="radio">
+                                                            <label>
+                                                                {{Form::radio('user_item[]', $user_item->id)}}
+                                                                {{$user_item->fullname}} <strong>ตำแหน่ง</strong> {{$user_item->position}}
+                                                            </label>
+                                                        </div>
+                                                    <?php }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>

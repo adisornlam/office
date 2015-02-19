@@ -45,6 +45,12 @@
                             ผู้ใช้งาน
                         </a>
                     </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#software">
+                            <i class="fa fa-cubes"></i>
+                            ติดตั้งโปรแกรม
+                        </a>
+                    </li>
                 </ul>
                 <span class="hidden-sm wht-color">{{$title}}</span>
             </header>
@@ -156,7 +162,36 @@
                     </div>
                     <div id="gallery" class="tab-pane">
                         <div class="panel-body">
-
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label col-lg-2" for="hsware_item">เลือกผู้ใช้งาน</label>
+                                <div class="col-lg-6">
+                                    <?php
+                                    foreach (\DB::table('users')
+                                            ->join('position_item', 'users.position_id', '=', 'position_item.id')
+                                            ->where('users.company_id', \Input::get('company_id'))
+                                            ->where('users.computer_status', 0)
+                                            ->select(array(
+                                                'users.id as id',
+                                                \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                                                'position_item.title as position'
+                                            ))
+                                            ->get() as $user_item) {
+                                        ?>
+                                        <div class="radio">
+                                            <label>
+                                                {{Form::radio('user_item[]', $user_item->id)}}
+                                                {{$user_item->fullname}} <strong>ตำแหน่ง</strong> {{$user_item->position}}
+                                            </label>
+                                        </div>
+                                    <?php }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="software" class="tab-pane active">
+                        <div class="panel-body">
+                            
                         </div>
                     </div>
                 </div>

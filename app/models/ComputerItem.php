@@ -8,5 +8,9 @@ class ComputerItem extends \Eloquent {
     public function hsware() {
         return $this->belongsToMany('HswareItem', 'computer_hsware', 'computer_id', 'hsware_id')->withTimestamps();
     }
+    
+    public function users() {
+        return $this->belongsToMany('User', 'computer_user', 'computer_id', 'user_id')->withTimestamps();
+    }
 
 }

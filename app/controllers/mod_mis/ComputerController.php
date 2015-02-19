@@ -52,6 +52,7 @@ class ComputerController extends \BaseController {
         if (\Input::has('company_id')) {
             $computer_item->where('computer_item.company_id', \Input::get('company_id'));
         }
+
         if (\Input::has('status')) {
             $computer_item->where('computer_item.disabled', \Input::get('disabled'));
         }
@@ -60,6 +61,7 @@ class ComputerController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         $link .= '<li><a href="{{\URL::to("mis/computer/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/computer/export/$id")}}" title="แก้ไขรายการ"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
         $link .= '<li><a href="javascript:;" rel="mis/computer/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
@@ -83,7 +85,7 @@ class ComputerController extends \BaseController {
             $data = array(
                 'title' => 'เพิ่ม Computer',
                 'breadcrumbs' => array(
-                    'ภาพรวมระบบ' => 'backend',
+                    'ภาพรวมระบบ' => '',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                     'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'เพิ่ม Computer' => '#'
@@ -116,6 +118,14 @@ class ComputerController extends \BaseController {
                 $computer_item->created_user = \Auth::user()->id;
                 $computer_item->save();
                 $computer_id = $computer_item->id;
+                if (\Input::has('user_item')) {
+                    $computer_item->users()->sync(\Input::get('user_item'));
+                    foreach (\Input::get('user_item') as $uitem) {
+                        $hsware_item = \User::find($uitem);
+                        $hsware_item->computer_status = 1;
+                        $hsware_item->save();
+                    }
+                }
                 if (\Input::get('hsware_item') > 0) {
                     $computer_item->hsware()->sync(\Input::get('hsware_item'));
                     foreach (\Input::get('hsware_item') as $item) {
@@ -141,11 +151,28 @@ class ComputerController extends \BaseController {
 
     public function edit($param) {
         if (!\Request::isMethod('post')) {
-            $item = \ComputerItem::find($param);
+            $item = \DB::table('computer_item')
+                    ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                    ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                    ->leftJoin('position_item', 'position_item.id', '=', 'users.position_id')
+                    ->where('computer_item.id', $param)
+                    ->select(array(
+                        'computer_item.id as id',
+                        'computer_item.title as title',
+                        'computer_item.company_id as company_id',
+                        'computer_item.access_no as access_no',
+                        'computer_item.type_id as type_id',
+                        'computer_item.ip_address as ip_address',
+                        'computer_item.register_date as register_date',
+                        'computer_item.disabled as disabled',
+                        \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                        'position_item.title as position'
+                    ))
+                    ->first();
             $data = array(
                 'title' => 'แก่ไข Computer ' . $item->title,
                 'breadcrumbs' => array(
-                    'ภาพรวมระบบ' => 'backend',
+                    'ภาพรวมระบบ' => '',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                     'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'แก่ไข Computer ' . $item->title => '#'
@@ -180,11 +207,23 @@ class ComputerController extends \BaseController {
                 $computer_item->updated_user = \Auth::user()->id;
                 $computer_item->save();
                 $computer_id = $computer_item->id;
+                if (\Input::has('user_item')) {
+                    \DB::table('users')
+                            ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                            ->where('computer_user.computer_id', $param)
+                            ->update(array('users.computer_status' => 0));
+                    $computer_item->users()->sync(\Input::get('user_item'));
+                    foreach (\Input::get('user_item') as $uitem) {
+                        $hsware_item = \User::find($uitem);
+                        $hsware_item->computer_status = 1;
+                        $hsware_item->save();
+                    }
+                }
                 if (\Input::get('hsware_item') > 0) {
                     \DB::table('hsware_item')
                             ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
                             ->where('computer_hsware.computer_id', $param)
-                            ->update(array('status' => 0));
+                            ->update(array('hsware_item.status' => 0));
                     $computer_item->hsware()->sync(\Input::get('hsware_item'));
                     foreach (\Input::get('hsware_item') as $item) {
                         $hsware_item = \HswareItem::find($item);
@@ -205,6 +244,14 @@ class ComputerController extends \BaseController {
                             ), 200));
             }
         }
+    }
+
+    public function export($param) {
+        $data = array(
+            'title' => 'ระเบียนคอมพิวเตอร์'
+        );
+
+        return \View::make('mod_mis.computer.admin.export', $data);
     }
 
 }

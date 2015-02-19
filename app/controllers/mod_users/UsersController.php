@@ -91,8 +91,8 @@ class UsersController extends \BaseController {
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'firstname' => 'required',
-                'lastname' => 'required',
+                'firstname' => 'required|unique:users',
+                'lastname' => 'required|unique:users',
                 'email' => 'email|unique:users',
                 'role_id' => 'required',
                 'username' => 'required|unique:users',

@@ -26,6 +26,8 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
     Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
     Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
+    
+    Route::get('computer/export/{id}', 'App\Controllers\ComputerController@export');
 
     Route::get('hsware', 'App\Controllers\HswareController@index');
     Route::get('hsware/listall', 'App\Controllers\HswareController@listall');

@@ -1,4 +1,3 @@
-{{HTML::style('assets/bootstrap-fileupload/bootstrap-fileupload.css')}}
 {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal'))}}
 <div role="tabpanel">
 
@@ -116,7 +115,6 @@
 
 </div>
 {{ Form::close() }}
-{{HTML::script('assets/bootstrap-fileupload/bootstrap-fileupload.js')}}
 {{HTML::script('js/jquery.form.min.js')}}
 <script type="text/javascript">
     $('body').on('shown.bs.modal', '.modal', function () {
