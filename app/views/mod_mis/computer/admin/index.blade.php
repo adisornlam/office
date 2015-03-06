@@ -32,7 +32,8 @@
                 <div class="pull-left">
                     <div class="btn-group">
                         <a href="javascript:;" rel="mis/computer/dialog" class="btn btn-primary link_dialog" title="เพิ่ม Computer" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
-                        <a href="{{URL::to('mis/hsware')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการอุปกรณ์</a>
+                        <a href="{{URL::to('mis/hsware')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Hardware</a>
+                        <a href="{{URL::to('mis/software')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ Software</a>
                         <a href="{{URL::to('mis/license')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการ License</a>
                     </div>
                 </div>
@@ -106,8 +107,10 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "ชื่อเครื่อง", "width": "40%", "orderable": false, "searchable": true},
+                {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "เจ้าของเครื่อง", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "ip_address", "title": "IP Address", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ],

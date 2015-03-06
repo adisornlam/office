@@ -26,7 +26,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
     Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
     Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
-    
+
     Route::get('computer/export/{id}', 'App\Controllers\ComputerController@export');
 
     Route::get('hsware', 'App\Controllers\HswareController@index');
@@ -35,7 +35,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/add', array('uses' => 'App\Controllers\HswareController@add'));
     Route::match(array('GET', 'POST'), 'hsware/edit/{id}', array('uses' => 'App\Controllers\HswareController@edit'));
     Route::get('hsware/view/{id}', 'App\Controllers\HswareController@view');
-    Route::get('hsware/delete/{id}', 'App\Controllers\HswareController@delete');    
+    Route::get('hsware/delete/{id}', 'App\Controllers\HswareController@delete');
 
     Route::get('hsware/group', 'App\Controllers\HswareController@group');
     Route::get('hsware/group/listall', 'App\Controllers\HswareController@group_listall');
@@ -48,7 +48,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/group/model/add', array('uses' => 'App\Controllers\HswareController@model_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_edit'));
     Route::get('hsware/group/model/delete/{id}', 'App\Controllers\HswareController@model_delete');
-    
+
     Route::get('hsware/export', 'App\Controllers\HswareController@export');
 
     //Testing
@@ -61,6 +61,12 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
 
     Route::match(array('GET', 'POST'), 'testing/add', array('uses' => 'App\Controllers\TestingController@add'));
+});
+
+//WHS
+Route::group(array('prefix' => 'whs', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\WarehouseController@index');
+    Route::get('listall', 'App\Controllers\WarehouseController@listall');
 });
 
 //users
@@ -163,10 +169,16 @@ Route::get('get/found_user_code', function() {
     return Response::json($amphur_postcode->select(array('post_code', 'post_code'))->get());
 });
 
+Route::get('get/department', function() {
+    $input = Input::get('option');
+    $department_id = \DB::table('department_item')->where('company_id', $input)->orderBy('title');
+    return Response::json($department_id->select(array('id', 'title'))->get());
+});
+
 Route::get('get/position', function() {
     $input = Input::get('option');
-    $amphur = \DB::table('position_item')->where('company_id', $input)->orderBy('title');
-    return Response::json($amphur->select(array('id', 'title'))->get());
+    $position_id = \DB::table('position_item')->where('department_id', $input)->orderBy('title');
+    return Response::json($position_id->select(array('id', 'title'))->get());
 });
 
 // Display all SQL executed in Eloquent

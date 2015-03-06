@@ -60,7 +60,13 @@
                 <div class="form-group">
                     {{Form::label('company_id', 'บริษัท', array('class' => 'col-sm-3 control-label req'));}}
                     <div class="col-sm-7">
-                        {{ \Form::select('company_id', array('' => 'เลือกบริษัท') + \Company::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'company_id')); }}
+                        {{ \Form::select('company_id', array('' => 'กรุณาเลือกบริษัท') + \Company::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'company_id')); }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('department_id', 'ฝ่าย/แผนก', array('class' => 'col-sm-3 control-label'));}}
+                    <div class="col-sm-7">
+                        {{ \Form::select('department_id', array('' =>'กรุณาเลือกฝ่าย/แผนก'), null, array('class' => 'form-control', 'id' => 'department_id'));}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,7 +84,7 @@
                 <div class="form-group">
                     {{Form::label('verified', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('verified', 1)}} Verified
+                        {{Form::checkbox('verified', 1)}} ตรวจสอบ
                     </div>
                 </div>
                 <div class="form-group">
@@ -121,16 +127,30 @@
         $('#firstname').focus();
     });
 
-    $('#company_id').change(function () {
-        $.get("{{ url('get/position')}}",
+    $('#form-add #company_id').change(function () {
+        $.get("{{ url('get/department')}}",
                 {option: $(this).val()},
         function (data) {
-            var position = $('#position_id');
-            position.empty();
-            position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+            var department = $('#department_id');
+            department.empty();
+            department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
             $.each(data, function (index, element) {
-                position.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                department.append("<option value='" + element.id + "'>" + element.title + "</option>");
             });
+
+            $('#department_id').change(function () {
+                $.get("{{ url('get/position')}}",
+                        {option: $(this).val()},
+                function (data) {
+                    var position = $('#position_id');
+                    position.empty();
+                    position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+                    $.each(data, function (index, element) {
+                        position.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                    });
+                });
+            });
+
         });
     });
 

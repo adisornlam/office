@@ -50,24 +50,29 @@ class UsersController extends \BaseController {
         $users->select(array(
             'users.id as id',
             'users.username as username',
+            'users.codes as codes',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
             'position_item.title as position',
             'users.email as email',
             'users.mobile as mobile',
-            'users.disabled',
-            'users.created_at as created_at'
+            'company.title as company',
+            'users.disabled'
         ));
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="' . \URL::to('users/view/{{$id}}') . '" title="แสดงรายการ"><i class="fa fa-eye"></i> แสดงรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="users/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
         $link .= '<li><a href="javascript:;" rel="users/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
         return \Datatables::of($users)
                         ->edit_column('id', $link)
+                        ->edit_column('username', function($result_obj) {
+                            $str = '<a href="' . \URL::to('users/view/' . $result_obj->id . '') . '">' . $result_obj->username . '</a>';
+                            return $str;
+                        })
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);
     }
@@ -108,6 +113,7 @@ class UsersController extends \BaseController {
             } else {
                 $user = new \User();
                 $user->company_id = \Input::get('company_id');
+                $user->department_id = \Input::get('department_id');
                 $user->position_id = \Input::get('position_id');
                 $user->codes = trim(\Input::get('codes'));
                 $user->firstname = trim(\Input::get('firstname'));
@@ -131,24 +137,26 @@ class UsersController extends \BaseController {
 
     public function edit($param) {
         if (!\Request::isMethod('post')) {
+            $item = \User::find($param);
+            $role = \DB::table('role_user')->where('user_id', $param)->first();
             $data = array(
                 'title' => 'แก้ไขข้อมูลส่วนตัว',
                 'breadcrumbs' => array(
                     'รายการผู้ใช้งาน' => 'users',
                     'แก้ไขข้อมูลส่วนตัว' => '#'
                 ),
-                'item' => \User::find($param)
+                'item' => $item,
+                'role_id' => ($role->role_id)
             );
             return \View::make('mod_users.admin.users.edit', $data);
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'department_id' => 'required',
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'email' => 'required|email|unique:users',
-                'role_id' => 'required',
-                'avatar' => 'image|mimes:jpeg,png|max:512',
+                'email' => 'email|unique:users',
+                'role_id' => 'required'
+                    // 'avatar' => 'image|mimes:jpeg,png|max:512',
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -158,17 +166,18 @@ class UsersController extends \BaseController {
                                 'message' => $validator->errors()->toArray()
                             ), 400));
             } else {
-                $photo1 = \Input::file('avatar');
-                $destinationPath = 'uploads/users/' . date('Ymd') . '/';
-                if ($photo1) {
-                    $up = $this->upload_photo($photo1, $destinationPath);
-                    $photo_1 = $up['resize'];
-                } else {
-                    $photo_1 = NULL;
-                }
+//                $photo1 = \Input::file('avatar');
+//                $destinationPath = 'uploads/users/' . date('Ymd') . '/';
+//                if ($photo1) {
+//                    $up = $this->upload_photo($photo1, $destinationPath);
+//                    $photo_1 = $up['resize'];
+//                } else {
+//                    $photo_1 = NULL;
+//                }
                 $user = \User::find($param);
                 $user->company_id = \Input::get('company_id');
                 $user->department_id = \Input::get('department_id');
+                $user->position_id = \Input::get('position_id');
                 $user->codes = trim(\Input::get('codes'));
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
@@ -176,9 +185,11 @@ class UsersController extends \BaseController {
                 $user->mobile = trim(\Input::get('mobile'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
                 $user->verified = (\Input::has('verified') ? 1 : 0);
-                $user->avatar = $photo1;
+                //$user->avatar = $photo1;
                 $user->save();
+
                 $user->roles()->sync(array(\Input::get('role_id')));
+
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,

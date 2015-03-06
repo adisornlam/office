@@ -22,7 +22,9 @@ class MisController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => '#'
-            )
+            ),
+            'compouter_count' => \ComputerItem::where('disabled', '=', 0)->count(),
+            'users_count' => \User::where('disabled', '=', 0)->count()
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);

@@ -59,6 +59,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('serial_code', $item->serial_code,array('class'=>'form-control','id'=>'serial_code'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('access_no', $item->access_no,array('class'=>'form-control','id'=>'access_no'))}}
@@ -87,6 +93,12 @@
                                     {{Form::text('ip_address', $item->ip_address,array('class'=>'form-control','id'=>'ip_address'))}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('locations', $item->locations,array('class'=>'form-control','id'=>'locations'))}}
+                                </div>
+                            </div>   
                             <div class="form-group">
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">

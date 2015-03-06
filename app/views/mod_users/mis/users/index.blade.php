@@ -102,10 +102,11 @@
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "username", "title": "ชื่อผู้ใช้", "width": "8%", "orderable": false, "searchable": true},
+                {"data": "codes", "title": "รหัสพนักงาน", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "ชื่อ-นามสกุล", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "position", "title": "ตำแหน่ง", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "mobile", "title": "เบอร์ติดต่อ", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
-                {"data": "created_at", "title": "วันที่สร้าง", "width": "15%", "orderable": true, "searchable": true},
+                {"data": "mobile", "title": "เบอร์ติดต่อ", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": true, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "3%", "sClass": "text-center", "orderable": false, "searchable": false}
             ],
             "dom": 'T<"clear">lfrtip',

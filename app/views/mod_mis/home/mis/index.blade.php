@@ -26,7 +26,7 @@
             </div>
             <div class="value">
                 <h1 class="count">
-                    0
+                    {{$compouter_count}}
                 </h1>
                 <p>ระเบียนคอมพิวเตอร์</p>
             </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="value">
                 <h1 class=" count4">
-                    0
+                    {{$users_count}}
                 </h1>
                 <p>ผู้ใช้งานระบบ</p>
             </div>

@@ -42,8 +42,9 @@ class ComputerController extends \BaseController {
                 ->select(array(
             'computer_item.id as id',
             'computer_item.id as item_id',
+            'computer_item.serial_code as serial_code',
             'computer_item.title as title',
-            \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+            \DB::raw('CONCAT(users.codes," ",users.firstname," ",users.lastname) as fullname'),
             'computer_item.ip_address as ip_address',
             'company.title as company',
             'computer_item.disabled as disabled'
@@ -68,6 +69,10 @@ class ComputerController extends \BaseController {
 
         return \Datatables::of($computer_item)
                         ->edit_column('id', $link)
+                        ->edit_column('serial_code', function($result_obj) {
+                            $str = '<a href="' . \URL::to('computer/view/' . $result_obj->item_id . '') . '" title="ดูรายละเอียด เลขระเบียน ' . $result_obj->serial_code . '">' . $result_obj->serial_code . '</a>';
+                            return $str;
+                        })
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);
     }
@@ -111,8 +116,11 @@ class ComputerController extends \BaseController {
                 $computer_item = new \ComputerItem();
                 $computer_item->company_id = \Input::get('company_id');
                 $computer_item->type_id = \Input::get('type_id');
+                $computer_item->serial_code = trim(\Input::get('serial_code'));
                 $computer_item->access_no = trim(\Input::get('access_no'));
                 $computer_item->title = trim(\Input::get('title'));
+                $computer_item->ip_address = trim(\Input::get('ip_address'));
+                $computer_item->locations = trim(\Input::get('locations'));
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->created_user = \Auth::user()->id;
@@ -160,8 +168,10 @@ class ComputerController extends \BaseController {
                         'computer_item.id as id',
                         'computer_item.title as title',
                         'computer_item.company_id as company_id',
+                        'computer_item.serial_code as serial_code',
                         'computer_item.access_no as access_no',
                         'computer_item.type_id as type_id',
+                        'computer_item.locations as locations',
                         'computer_item.ip_address as ip_address',
                         'computer_item.register_date as register_date',
                         'computer_item.disabled as disabled',
@@ -199,9 +209,12 @@ class ComputerController extends \BaseController {
                 $computer_item = \ComputerItem::find($param);
                 $computer_item->company_id = \Input::get('company_id');
                 $computer_item->type_id = \Input::get('type_id');
+                $computer_item->serial_code = trim(\Input::get('serial_code'));
                 $computer_item->access_no = trim(\Input::get('access_no'));
                 $computer_item->ip_address = trim(\Input::get('ip_address'));
                 $computer_item->title = trim(\Input::get('title'));
+                $computer_item->ip_address = trim(\Input::get('ip_address'));
+                $computer_item->locations = trim(\Input::get('locations'));
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->updated_user = \Auth::user()->id;

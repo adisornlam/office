@@ -65,6 +65,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
@@ -83,7 +89,7 @@
                             </div>
                             <div class="form-group">
                                 {{Form::label('title', 'ชื่อคอมพิวเตอร์', array('class' => 'col-sm-2 control-label req'))}}
-                                <div class="col-sm-5">
+                                <div class="col-sm-3">
                                     {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
                                 </div>
                             </div>   
@@ -93,6 +99,12 @@
                                     {{Form::text('ip_address', NULL,array('class'=>'form-control','id'=>'ip_address'))}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('locations', NULL,array('class'=>'form-control','id'=>'locations'))}}
+                                </div>
+                            </div>   
                             <div class="form-group">
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
@@ -170,6 +182,7 @@
                                             ->join('position_item', 'users.position_id', '=', 'position_item.id')
                                             ->where('users.company_id', \Input::get('company_id'))
                                             ->where('users.computer_status', 0)
+                                            ->orderBy('users.firstname', 'asc')
                                             ->select(array(
                                                 'users.id as id',
                                                 \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
@@ -191,7 +204,7 @@
                     </div>
                     <div id="software" class="tab-pane active">
                         <div class="panel-body">
-                            
+
                         </div>
                     </div>
                 </div>

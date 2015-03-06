@@ -21,12 +21,12 @@ class HswareController extends \BaseController {
 
     public function index() {
         $data = array(
-            'title' => 'รายการอุปกรณ์',
+            'title' => 'รายการ Hardware & Software',
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
                 'ระเบียนคอมพิวเตอร์' => 'mis/computer',
-                'รายการอุปกรณ์' => '#'
+                'รายการ Hardware & Software' => '#'
             ),
             'company' => \Company::lists('title', 'id'),
             'group' => \HswareGroup::lists('title', 'id')
@@ -56,6 +56,7 @@ class HswareController extends \BaseController {
         $hsware_item->select(array(
             'hsware_item.id as id',
             'hsware_item.id as item_id',
+            'hsware_item.serial_code as serial_code',
             'hsware_model.title as title',
             'computer_item.title as computer_title',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
@@ -65,6 +66,7 @@ class HswareController extends \BaseController {
             'hsware_item.register_date as register_date',
             'hsware_item.created_user as created_user',
             'hsware_item.updated_user as updated_user',
+            'hsware_item.locations as locations',
             'hsware_item.disabled as disabled',
             'hsware_item.status as status'
         ));
@@ -402,6 +404,7 @@ class HswareController extends \BaseController {
                     $hsware_item = new \HswareItem();
                     $hsware_item->group_id = \Input::get('group_id');
                     $hsware_item->company_id = \Input::get('company_id');
+                    $hsware_item->serial_code = trim(\Input::get('serial_code'));
                     $hsware_item->serial_no = trim(\Input::get('serial_no'));
                     $hsware_item->access_no = trim(\Input::get('access_no'));
                     $hsware_item->model_id = \Input::get('model_id');
@@ -436,11 +439,17 @@ class HswareController extends \BaseController {
                     $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
                     $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
                     $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
+                    $hsware_item->spec_value_31 = trim(\Input::get('spec_value_31'));
+                    $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
+                    $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
+                    $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
                     $hsware_item->photo1 = $photo_1;
                     $hsware_item->photo2 = $photo_2;
                     $hsware_item->photo3 = $photo_3;
                     $hsware_item->photo4 = $photo_4;
                     $hsware_item->photo5 = $photo_5;
+                    $hsware_item->ip_address = trim(\Input::get('ip_address'));
+                    $hsware_item->locations = trim(\Input::get('locations'));
                     $hsware_item->register_date = trim(\Input::get('register_date'));
                     $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
                     $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
@@ -572,6 +581,7 @@ class HswareController extends \BaseController {
                 $hsware_item = \HswareItem::find($param);
                 $hsware_item->group_id = \Input::get('group_id');
                 $hsware_item->company_id = \Input::get('company_id');
+                $hsware_item->serial_code = trim(\Input::get('serial_code'));
                 $hsware_item->serial_no = trim(\Input::get('serial_no'));
                 $hsware_item->access_no = trim(\Input::get('access_no'));
                 $hsware_item->model_id = \Input::get('model_id');
@@ -606,11 +616,17 @@ class HswareController extends \BaseController {
                 $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
                 $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
                 $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
+                $hsware_item->spec_value_31 = trim(\Input::get('spec_value_31'));
+                $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
+                $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
+                $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
                 $hsware_item->photo1 = $photo_1;
                 $hsware_item->photo2 = $photo_2;
                 $hsware_item->photo3 = $photo_3;
                 $hsware_item->photo4 = $photo_4;
                 $hsware_item->photo5 = $photo_5;
+                $hsware_item->ip_address = trim(\Input::get('ip_address'));
+                $hsware_item->locations = trim(\Input::get('locations'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
                 $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);

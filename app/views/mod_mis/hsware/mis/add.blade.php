@@ -137,7 +137,7 @@
                             @foreach($spec_label as $item_label)
                             <div class="form-group">
                                 {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">   
+                                <div class="col-sm-3">                                    
                                     @if($item_label->option_id>0)
                                     {{Form::select($item_label->name,
                                                 \DB::table('hsware_spec_option')

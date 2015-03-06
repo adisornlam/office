@@ -71,6 +71,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
@@ -80,6 +86,18 @@
                                 {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('serial_no', NULL,array('class'=>'form-control','id'=>'serial_no'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('ip_address', NULL,array('class'=>'form-control','id'=>'ip_address'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('locations', NULL,array('class'=>'form-control','id'=>'locations'))}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -131,7 +149,7 @@
                             @foreach($spec_label as $item_label)
                             <div class="form-group">
                                 {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">   
+                                <div class="col-sm-3">              
                                     @if($item_label->option_id>0)
                                     {{Form::select($item_label->name,
                                                 \DB::table('hsware_spec_option')
