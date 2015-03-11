@@ -259,6 +259,28 @@ class ComputerController extends \BaseController {
         }
     }
 
+    public function delete($param) {
+        $computer_item = \ComputerItem::find($param);
+        \DB::table('users')
+                ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                ->where('computer_user.computer_id', $param)
+                ->update(array('users.computer_status' => 0));
+        $computer_item->users()->restore();
+
+        \DB::table('hsware_item')
+                ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                ->where('computer_hsware.computer_id', $param)
+                ->update(array('hsware_item.status' => 0));
+        $computer_item->hsware()->restore();
+        $computer_item->delete();
+        return \Response::json(array(
+                    'error' => array(
+                        'status' => true,
+                        'message' => 'ลบรายการสำเร็จ',
+                        'redirect' => 'mis/backend'
+                    ), 200));
+    }
+
     public function export($param) {
         $data = array(
             'title' => 'ระเบียนคอมพิวเตอร์'

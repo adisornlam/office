@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('backend.layouts.master')
 
 @section('content')
 @if(isset($breadcrumbs))
@@ -18,9 +18,6 @@
     </div>
 </div>
 @endif
-<div class="page-header">
-    <h1>ระเบียนคอมพิวเตอร์ <small>จัดการระบบระเบียนคอมพิวเตอร์</small></h1>
-</div>
 <div class="row state-overview">
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block1">
         <section class="panel">
@@ -29,30 +26,12 @@
             </div>
             <div class="value">
                 <h1 class="count">
-                    {{$compouter_count}}
+                    0
                 </h1>
                 <p>ระเบียนคอมพิวเตอร์</p>
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block11">
-        <section class="panel">
-            <div class="symbol terques">
-                <i class="fa fa-list"></i>
-            </div>
-            <div class="value">
-                <h1 class=" count2">
-                    0
-                </h1>
-                <p>รายการ Hardware</p>
-            </div>
-        </section>
-    </div>    
-</div>
-<div class="page-header">
-    <h1>Monitoring <small>ตรวจสอบและติดตามข้อมูลทั้งหมด</small></h1>
-</div>
-<div class="row state-overview">
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block2">
         <section class="panel">
             <div class="symbol red">
@@ -99,7 +78,7 @@
             </div>
             <div class="value">
                 <h1 class=" count4">
-                    {{$users_count}}
+                    0
                 </h1>
                 <p>ผู้ใช้งานระบบ</p>
             </div>
@@ -144,51 +123,13 @@
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block9">
-        <section class="panel">
-            <div class="symbol blue2">
-                <i class="fa fa-check-square-o"></i>
-            </div>
-            <div class="value">
-                <h1 class=" count4">
-                    0
-                </h1>
-                <p>ข้อสอบภาพปฏิบัติ</p>
-            </div>
-        </section>
-    </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block10">
-        <section class="panel">
-            <div class="symbol green2">
-                <i class="fa fa-bullhorn"></i>
-            </div>
-            <div class="value">
-                <h1 class=" count4">
-                    0
-                </h1>
-                <p>แจ้งข่าวสาร / ประชาสัมพันธ์</p>
-            </div>
-        </section>
-    </div>
 </div>
 @stop
 
 @section('script_code')
 <script type="text/javascript">
     $('#block1').click(function () {
-        window.location.href = base_url + index_page + 'mis/computer';
-    });
-    $('#block11').click(function () {
-        window.location.href = base_url + index_page + 'mis/hsware';
-    });
-    $('#block5').click(function () {
-        window.location.href = base_url + index_page + 'users';
-    });
-    $('#block9').click(function () {
-        window.location.href = base_url + index_page + 'mis/testing';
-    });
-    $('#block10').click(function () {
-        window.location.href = base_url + index_page + 'post';
+        window.location.href = base_url + index_page + 'mis/backend/computer';
     });
 </script>
 @stop
