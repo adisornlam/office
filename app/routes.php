@@ -61,6 +61,21 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
 
     Route::match(array('GET', 'POST'), 'testing/add', array('uses' => 'App\Controllers\TestingController@add'));
+    
+    //supplier
+    Route::get('supplier', 'App\Controllers\SupplierController@index');
+    Route::get('supplier/listall', 'App\Controllers\SupplierController@listall');
+    Route::match(array('GET', 'POST'), 'supplier/add', array('uses' => 'App\Controllers\SupplierController@add'));
+    Route::match(array('GET', 'POST'), 'supplier/edit/{id}', array('uses' => 'App\Controllers\SupplierController@edit'));
+    Route::get('supplier/delete/{id}', 'App\Controllers\SupplierController@delete');
+    
+    //pr
+    Route::get('purchaserequest', 'App\Controllers\PurchaseRequestController@index');
+    Route::get('purchaserequest/listall', 'App\Controllers\PurchaseRequestController@listall');
+    Route::match(array('GET', 'POST'), 'purchaserequest/add', array('uses' => 'App\Controllers\PurchaseRequestController@add'));
+    Route::match(array('GET', 'POST'), 'purchaserequest/edit/{id}', array('uses' => 'App\Controllers\PurchaseRequestController@edit'));
+    Route::get('purchaserequest/delete/{id}', 'App\Controllers\PurchaseRequestController@delete');
+    Route::get('purchaserequest/tmp/add', 'App\Controllers\PurchaseRequestController@tmp_add');
 });
 
 //WHS

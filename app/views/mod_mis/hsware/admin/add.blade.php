@@ -52,16 +52,22 @@
                 <div class="tab-content">
                     <div id="info" class="tab-pane active">
                         <div class="panel-body">
+                            @if(!\Input::has('spare'))
+                            <div class="form-group">
+                                {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    <label>
+                                        {{Form::checkbox('spare', 1)}} อะไหล่
+                                    </label>
+                                </div>
+                            </div>
+                            @else
+                            {{ (\Input::has('spare')?Form::hidden('spare',1):null)}}
+                            @endif
                             <div class="form-group">
                                 {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label req'));}}
                                 <div class="col-sm-3">
                                     {{ \Form::select('group_id', $group, \Input::get('group_id'), array('class' => 'form-control', 'id' => 'group_id')); }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -71,35 +77,35 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
+                                <div class="col-sm-3">
+                                    {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                                </div>
+                            </div>
+                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
+                            <div class="form-group">
                                 {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
                                 </div>
                             </div>
+                            @endif
+                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
-                            <div class="form-group">
-                                {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('serial_no', NULL,array('class'=>'form-control','id'=>'serial_no'))}}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-2">
-                                    {{Form::text('ip_address', NULL,array('class'=>'form-control','id'=>'ip_address'))}}
-                                </div>
-                            </div>
+                            @endif       
+                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('locations', NULL,array('class'=>'form-control','id'=>'locations'))}}
                                 </div>
                             </div>
+                            @endif 
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">

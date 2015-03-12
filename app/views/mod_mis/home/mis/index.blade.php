@@ -22,7 +22,7 @@
     <h1>ระเบียนคอมพิวเตอร์ <small>จัดการระบบระเบียนคอมพิวเตอร์</small></h1>
 </div>
 <div class="row state-overview">
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block1">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
         <section class="panel">
             <div class="symbol terques">
                 <i class="fa fa-desktop"></i>
@@ -35,7 +35,7 @@
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block11">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_list">
         <section class="panel">
             <div class="symbol terques">
                 <i class="fa fa-list"></i>
@@ -47,10 +47,110 @@
                 <p>รายการ Hardware</p>
             </div>
         </section>
-    </div>    
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_add_spare">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มรายการอะไหล่</p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>Supplier <small>รายการรับมอบอุปกรณ์จากตัวแทนจำหน่าย</small></h1>
+</div>
+<div class="row state-overview">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="deliver_list">
+        <section class="panel">
+            <div class="symbol yellow">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class="count">
+                    0
+                </h1>
+                <p>รายการรับมอบอุปกรณ์</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="deliver_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มรายการรับมอบอุปกรณ์</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="supplier_list">
+        <section class="panel">
+            <div class="symbol yellow">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class="count">
+                    0
+                </h1>
+                <p>รายการตัวแทนจำหน่าย</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="supplier_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มตัวแทนจำหน่าย</p>
+            </div>
+        </section>
+    </div>
+
 </div>
 <div class="page-header">
-    <h1>Monitoring <small>ตรวจสอบและติดตามข้อมูลทั้งหมด</small></h1>
+    <h1>แบบฟอร์ม <small>รายการแบบฟอร์มเอกสารออนไลน์ต่างๆ</small></h1>
+</div>
+<div class="row state-overview">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="purchase_request_list">
+        <section class="panel">
+            <div class="symbol orage">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class="count">
+                    0
+                </h1>
+                <p>รายการขอซื้อ</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="purchase_request_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มรายการขอซื้อ</p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>Monitoring <small>ตรวจสอบและติดตามข้อมูล</small></h1>
 </div>
 <div class="row state-overview">
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block2">
@@ -175,11 +275,36 @@
 
 @section('script_code')
 <script type="text/javascript">
-    $('#block1').click(function () {
+    $('#computer_list').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });
-    $('#block11').click(function () {
+    $('#hsware_list').click(function () {
         window.location.href = base_url + index_page + 'mis/hsware';
+    });
+    $('#hsware_add_spare').click(function () {
+        window.location.href = base_url + index_page + 'mis/hsware/add?group_id=2&spare=1';
+    });
+    $('#deliver_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/deliver';
+    });
+    $('#deliver_add').click(function () {
+        window.location.href = base_url + index_page + 'mis/deliver/add';
+    });
+    $('#supplier_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/supplier';
+    });
+    $('#supplier_add').click(function () {
+        var data = {
+            url: 'mis/supplier/add',
+            title: 'เพิ่ม Supplier'
+        };
+        genModal(data);
+    });
+    $('#purchase_request_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/purchaserequest';
+    });
+    $('#purchase_request_add').click(function () {
+        window.location.href = base_url + index_page + 'mis/purchaserequest/add';
     });
     $('#block5').click(function () {
         window.location.href = base_url + index_page + 'users';

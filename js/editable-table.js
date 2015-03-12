@@ -1,7 +1,6 @@
 var EditableTable = function () {
 
     return {
-
         //main function to initiate the module
         init: function () {
             function restoreRow(oTable, nRow) {
@@ -18,12 +17,13 @@ var EditableTable = function () {
             function editRow(oTable, nRow) {
                 var aData = oTable.fnGetData(nRow);
                 var jqTds = $('>td', nRow);
-                jqTds[0].innerHTML = '<input type="text" class="form-control small" value="' + aData[0] + '">';
-                jqTds[1].innerHTML = '<input type="text" class="form-control small" value="' + aData[1] + '">';
-                jqTds[2].innerHTML = '<input type="text" class="form-control small" value="' + aData[2] + '">';
-                jqTds[3].innerHTML = '<input type="text" class="form-control small" value="' + aData[3] + '">';
-                jqTds[4].innerHTML = '<a class="edit" href="">Save</a>';
-                jqTds[5].innerHTML = '<a class="cancel" href="">Cancel</a>';
+                jqTds[0].innerHTML = '<input type="text" name="title" class="form-control small" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" name="reason" class="form-control small" value="' + aData[1] + '">';
+                jqTds[2].innerHTML = '<input type="text" name="quantity" class="form-control small" value="' + aData[2] + '">';
+                jqTds[3].innerHTML = '<input type="text" name="unitprice" class="form-control small" value="' + aData[3] + '">';
+                jqTds[4].innerHTML = '';
+                jqTds[5].innerHTML = '<a class="edit" href="">Save</a>';
+                jqTds[6].innerHTML = '<a class="cancel" href="">Cancel</a>';
             }
 
             function saveRow(oTable, nRow) {
@@ -32,8 +32,8 @@ var EditableTable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4, false);
-                oTable.fnUpdate('<a class="delete" href="">Delete</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="delete" href="">Delete</a>', nRow, 6, false);
                 oTable.fnDraw();
             }
 
@@ -48,21 +48,8 @@ var EditableTable = function () {
             }
 
             var oTable = $('#editable-sample').dataTable({
-                "aLengthMenu": [
-                    [5, 15, 20, -1],
-                    [5, 15, 20, "All"] // change per page values here
-                ],
-                // set the initial value
-                "iDisplayLength": 5,
-                "sDom": "<'row'<'col-lg-6'l><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
-                "sPaginationType": "bootstrap",
-                "oLanguage": {
-                    "sLengthMenu": "_MENU_ records per page",
-                    "oPaginate": {
-                        "sPrevious": "Prev",
-                        "sNext": "Next"
-                    }
-                },
+                "bPaginate": false,
+                bFilter: false,
                 "aoColumnDefs": [{
                         'bSortable': false,
                         'aTargets': [0]
@@ -70,15 +57,12 @@ var EditableTable = function () {
                 ]
             });
 
-            jQuery('#editable-sample_wrapper .dataTables_filter input').addClass("form-control medium"); // modify table search input
-            jQuery('#editable-sample_wrapper .dataTables_length select').addClass("form-control xsmall"); // modify table per page dropdown
-
             var nEditing = null;
 
             $('#editable-sample_new').click(function (e) {
                 e.preventDefault();
-                var aiNew = oTable.fnAddData(['', '', '', '',
-                        '<a class="edit" href="">Edit</a>', '<a class="cancel" data-mode="new" href="">Cancel</a>'
+                var aiNew = oTable.fnAddData(['', '', '', '', '',
+                    '<a class="edit" href="">Edit</a>', '<a class="cancel" data-mode="new" href="">Cancel</a>'
                 ]);
                 var nRow = oTable.fnGetNodes(aiNew[0]);
                 editRow(oTable, nRow);
@@ -122,8 +106,25 @@ var EditableTable = function () {
                 } else if (nEditing == nRow && this.innerHTML == "Save") {
                     /* Editing this row and want to save it */
                     saveRow(oTable, nEditing);
-                    nEditing = null;
-                    alert("Updated! Do not forget to do some ajax to sync with backend :)");
+                    //nEditing = null;
+                    //alert("Updated! Do not forget to do some ajax to sync with backend :)");
+//                    $.ajax({
+//                        type: "get",
+//                        url: base_url + index_page + 'mis/purchaserequest/tmp/add',
+//                        data: nEditing,
+//                        cache: false,
+//                        dataType: 'html',
+//                        success: function (result) {
+//                            try {
+//                                console.log(result);
+//                            } catch (e) {
+//                                alert('Exception while request..');
+//                            }
+//                        },
+//                        error: function (e) {
+//                            alert('Error while request..');
+//                        }
+//                    });
                 } else {
                     /* No edit in progress - let's start one */
                     editRow(oTable, nRow);
