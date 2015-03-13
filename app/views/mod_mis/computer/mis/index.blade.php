@@ -30,7 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="domain/add" class="btn btn-primary link_dialog" title="เพิ่ม Domain" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
+                        <a href="javascript:;" rel="domain/add" class="btn btn-primary link_dialog" title="เพิ่ม Computer" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>
                         <a href="{{URL::to('mis/hsware')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> รายการอุปกรณ์</a>
                     </div>
                 </div>

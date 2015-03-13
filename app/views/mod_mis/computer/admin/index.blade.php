@@ -31,7 +31,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/computer/dialog" class="btn btn-primary link_dialog" title="เพิ่ม Computer" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer</a>                        
+                        <a href="javascript:;" rel="mis/computer/dialog" class="btn btn-primary link_dialog" title="เพิ่ม Computer" role="button"><i class="fa fa-plus"></i> เพิ่ม Computer (F8)</a>                        
                     </div>
                 </div>
             </div>

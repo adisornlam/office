@@ -95,7 +95,8 @@ class ComputerController extends \BaseController {
                     'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'เพิ่ม Computer' => '#'
                 ),
-                'company' => \Company::lists('title', 'id')
+                'company' => \Company::lists('title', 'id'),
+                'place' => \Place::lists('title', 'id')
             );
 
             return \View::make('mod_mis.computer.admin.add', $data);

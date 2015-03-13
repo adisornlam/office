@@ -60,8 +60,15 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, \Input::get('company_id'), array('class' => 'form-control', 'id' => 'company_id')); }}
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            {{ \Form::select('company_id', $company, \Input::get('company_id'), array('class' => 'form-control', 'id' => 'company_id')); }}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="button" class="btn btn-primary" id="btnCompany">เพิ่มบริษัท</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -100,9 +107,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('mac_lan', 'Mac Address Lan Local', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('mac_lan', NULL,array('class'=>'form-control','id'=>'mac_lan'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{Form::label('mac_wireless', 'Mac Address Wireless', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('mac_wireless', NULL,array('class'=>'form-control','id'=>'mac_wireless'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('locations', NULL,array('class'=>'form-control','id'=>'locations'))}}
+                                <div class="col-sm-2">
+                                    {{ \Form::select('locations', $place,null, array('class' => 'form-control', 'id' => 'locations')); }}
                                 </div>
                             </div>   
                             <div class="form-group">
@@ -133,7 +152,7 @@
                     </div>
                     <div id="option1" class="tab-pane">
                         <div class="panel-body">
-
+                            <a href="javascript:;" rel="mis/hsware/dialog" class="btn btn-primary link_dialog" title="เพิ่มอุปกรณ์ใหม่" role="button"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์ใหม่</a>
                             <?php
                             foreach (\DB::table('hsware_group')
                                     ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
@@ -166,6 +185,7 @@
                                                     {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
                                                 </label>
                                             </div>
+
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -230,6 +250,7 @@
         language: 'th'
     });
     $(function () {
+        
         var options = {
             url: base_url + index_page + "mis/computer/add",
             success: showResponse

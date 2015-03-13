@@ -42,7 +42,7 @@
             </div>
             <div class="value">
                 <h1 class=" count2">
-                    0
+                    {{$hsware_count}}
                 </h1>
                 <p>รายการ Hardware</p>
             </div>
