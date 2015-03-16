@@ -29,6 +29,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
 
     Route::get('computer/export/{id}', 'App\Controllers\ComputerController@export');
 
+    //hsware
     Route::get('hsware', 'App\Controllers\HswareController@index');
     Route::get('hsware/listall', 'App\Controllers\HswareController@listall');
     Route::get('hsware/dialog', 'App\Controllers\HswareController@dialog');
@@ -45,11 +46,16 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
 
     Route::get('hsware/group/model', 'App\Controllers\HswareController@model');
     Route::get('hsware/group/model/listall', 'App\Controllers\HswareController@model_listall');
+    Route::get('hsware/group/model/sub/{id}', 'App\Controllers\HswareController@model_sub');
+    Route::get('hsware/group/model/sub/listall/{id}', 'App\Controllers\HswareController@model_sub_listall');
     Route::match(array('GET', 'POST'), 'hsware/group/model/add', array('uses' => 'App\Controllers\HswareController@model_add'));
+    Route::match(array('GET', 'POST'), 'hsware/group/model/sub/add/{id}', array('uses' => 'App\Controllers\HswareController@model_sub_add'));
+    Route::match(array('GET', 'POST'), 'hsware/group/model/dialog/add', array('uses' => 'App\Controllers\HswareController@model_dialog_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_edit'));
+    Route::match(array('GET', 'POST'), 'hsware/group/model/sub/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_sub_edit'));
     Route::get('hsware/group/model/delete/{id}', 'App\Controllers\HswareController@model_delete');
 
-    Route::get('hsware/export', 'App\Controllers\HswareController@export');
+    Route::get('hsware/export/{id}', 'App\Controllers\HswareController@export');
 
     //Testing
     Route::get('testing', 'App\Controllers\TestingController@group');

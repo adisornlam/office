@@ -74,10 +74,10 @@
                                 {{Form::label('type_id', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-5">
                                     <label class="checkbox-inline">     
-                                        {{Form::radio('type_id', 1,($item->type_id==1?TRUE:FALSE))}} PC
+                                        {{Form::radio('type_id', 1,($item->type_id==1?TRUE:FALSE),array('class'=>'type_id'))}} PC
                                     </label>
                                     <label class="checkbox-inline">
-                                        {{Form::radio('type_id', 2,($item->type_id==2?TRUE:FALSE))}} Notebook
+                                        {{Form::radio('type_id', 2,($item->type_id==2?TRUE:FALSE),array('class'=>'type_id'))}} Notebook
                                     </label>
                                 </div>
                             </div>
@@ -94,9 +94,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('mac_lan', 'Mac Address Lan Local', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('mac_lan', $item->mac_lan,array('class'=>'form-control','id'=>'mac_lan'))}}
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                {{Form::label('mac_wireless', 'Mac Address Wireless', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('mac_wireless', $item->mac_wireless,array('class'=>'form-control','id'=>'mac_wireless'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('locations', $item->locations,array('class'=>'form-control','id'=>'locations'))}}
+                                <div class="col-sm-2">
+                                    {{ \Form::select('locations', $place,$item->locations, array('class' => 'form-control', 'id' => 'locations')); }}
                                 </div>
                             </div>   
                             <div class="form-group">
@@ -176,6 +188,7 @@
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="profile">
                                         <div class="panel-body">
+                                            <a href="javascript:;" rel="mis/hsware/dialog" class="btn btn-primary link_dialog" title="เพิ่มอุปกรณ์ใหม่" role="button"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์ใหม่</a>
                                             <?php
                                             foreach (\DB::table('hsware_group')
                                                     ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
@@ -191,6 +204,7 @@
                                                         foreach (\DB::table('hsware_item')
                                                                 ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
                                                                 ->where('hsware_item.group_id', $group_item2->id)
+                                                                ->where('hsware_item.spare', 0)
                                                                 ->where('hsware_item.status', 0)
                                                                 ->select(array(
                                                                     'hsware_item.id as id',

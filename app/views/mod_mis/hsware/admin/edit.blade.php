@@ -52,10 +52,22 @@
                 <div class="tab-content">
                     <div id="info" class="tab-pane active">
                         <div class="panel-body">
+                            @if(!\Input::has('spare'))
                             <div class="form-group">
-                                {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label req'));}}
+                                {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('group_id', $group, $item->group_id, array('class' => 'form-control', 'id' => 'group_id')); }}
+                                    <label>
+                                        {{Form::checkbox('spare', 1,($item->spare==1?TRUE:FALSE))}} อะไหล่
+                                    </label>
+                                </div>
+                            </div>
+                            @else
+                            {{ (\Input::has('spare')?Form::hidden('spare',1):null)}}
+                            @endif
+                            <div class="form-group">
+                                {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                                <div class="col-sm-3">
+                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',$item->group_id)->lists('title', 'id'), $item->model_id, array('class' => 'form-control', 'id' => 'model_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -64,42 +76,36 @@
                                     {{ \Form::select('company_id', $company, $item->company_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            <div class="form-group">
-                                {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',$item->group_id)->lists('title', 'id'), $item->model_id, array('class' => 'form-control', 'id' => 'model_id')); }}
-                                </div>
-                            </div>
+                            @if(in_array($item->group_id, array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     {{Form::text('serial_code',  $item->serial_code,array('class'=>'form-control','id'=>'serial_code'))}}
                                 </div>
                             </div>
+                            @endif
+                            @if(in_array($item->group_id, array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('access_no', $item->access_no,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
+                            @endif
                             <div class="form-group">
                                 {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
                                     {{Form::text('serial_no', $item->serial_no,array('class'=>'form-control','id'=>'serial_no'))}}
                                 </div>
                             </div>
-                            <div class="form-group">
-                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-2">
-                                    {{Form::text('ip_address', $item->ip_address,array('class'=>'form-control','id'=>'ip_address'))}}
-                                </div>
-                            </div>
+                            @if(in_array($item->group_id, array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('locations', $item->locations,array('class'=>'form-control','id'=>'locations'))}}
+                                <div class="col-sm-2">
+                                    {{ \Form::select('locations', $place,$item->locations, array('class' => 'form-control', 'id' => 'locations')); }}
                                 </div>
-                            </div>
+                            </div>   
+                            @endif 
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
@@ -213,6 +219,7 @@
         </section>
     </div>
 </div>
+{{Form::hidden('group_id',$item->group_id)}}
 {{ Form::close() }}
 @stop
 

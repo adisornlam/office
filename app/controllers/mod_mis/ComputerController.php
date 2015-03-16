@@ -62,7 +62,7 @@ class ComputerController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         $link .= '<li><a href="{{\URL::to("mis/computer/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="{{\URL::to("mis/computer/export/$id")}}" title="แก้ไขรายการ"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/computer/export/$id")}}" title="พิมพ์ระเบียน"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
         $link .= '<li><a href="javascript:;" rel="mis/computer/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
@@ -121,7 +121,9 @@ class ComputerController extends \BaseController {
                 $computer_item->access_no = trim(\Input::get('access_no'));
                 $computer_item->title = trim(\Input::get('title'));
                 $computer_item->ip_address = trim(\Input::get('ip_address'));
-                $computer_item->locations = trim(\Input::get('locations'));
+                $computer_item->mac_lan = trim(\Input::get('mac_lan'));
+                $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
+                $computer_item->locations = \Input::get('locations');
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->created_user = \Auth::user()->id;
@@ -174,6 +176,8 @@ class ComputerController extends \BaseController {
                         'computer_item.type_id as type_id',
                         'computer_item.locations as locations',
                         'computer_item.ip_address as ip_address',
+                        'computer_item.mac_lan as mac_lan',
+                        'computer_item.mac_wireless as mac_wireless',
                         'computer_item.register_date as register_date',
                         'computer_item.disabled as disabled',
                         \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
@@ -189,7 +193,8 @@ class ComputerController extends \BaseController {
                     'แก่ไข Computer ' . $item->title => '#'
                 ),
                 'item' => $item,
-                'company' => \Company::lists('title', 'id')
+                'company' => \Company::lists('title', 'id'),
+                'place' => \Place::lists('title', 'id')
             );
 
             return \View::make('mod_mis.computer.admin.edit', $data);
@@ -215,7 +220,9 @@ class ComputerController extends \BaseController {
                 $computer_item->ip_address = trim(\Input::get('ip_address'));
                 $computer_item->title = trim(\Input::get('title'));
                 $computer_item->ip_address = trim(\Input::get('ip_address'));
-                $computer_item->locations = trim(\Input::get('locations'));
+                $computer_item->mac_lan = trim(\Input::get('mac_lan'));
+                $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
+                $computer_item->locations = \Input::get('locations');
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->updated_user = \Auth::user()->id;
@@ -283,11 +290,9 @@ class ComputerController extends \BaseController {
     }
 
     public function export($param) {
-        $data = array(
-            'title' => 'ระเบียนคอมพิวเตอร์'
-        );
-
-        return \View::make('mod_mis.computer.admin.export', $data);
+        $pdf = \App::make('dompdf');
+        $pdf->loadView('mod_mis.computer.admin.pdf_export');
+        return $pdf->download('computer.pdf');
     }
 
 }

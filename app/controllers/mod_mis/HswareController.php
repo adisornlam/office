@@ -25,7 +25,6 @@ class HswareController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการ Hardware & Software' => '#'
             ),
             'company' => \Company::lists('title', 'id'),
@@ -42,7 +41,8 @@ class HswareController extends \BaseController {
                 ->leftJoin('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
                 ->leftJoin('computer_item', 'computer_item.id', '=', 'computer_hsware.computer_id')
                 ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
-                ->leftJoin('users', 'users.id', '=', 'computer_user.user_id');
+                ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                ->leftJoin('place', 'hsware_item.locations', '=', 'place.id');
 
         if (\Input::has('group_id')) {
             $hsware_item->where('hsware_item.group_id', \Input::get('group_id'));
@@ -66,7 +66,7 @@ class HswareController extends \BaseController {
             'hsware_item.register_date as register_date',
             'hsware_item.created_user as created_user',
             'hsware_item.updated_user as updated_user',
-            'hsware_item.locations as locations',
+            'place.title as locations',
             'hsware_item.disabled as disabled',
             'hsware_item.status as status'
         ));
@@ -75,6 +75,7 @@ class HswareController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         $link .= '<li><a href="{{\URL::to("mis/hsware/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/hsware/export/$id")}}" title="พิมพ์ระเบียน" target="_blank"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
         $link .= '<li><a href="javascript:;" rel="mis/hsware/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
@@ -130,7 +131,6 @@ class HswareController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                 'รายการอุปกรณ์' => 'mis/hsware',
                 'รายการกลุ่มอุปกรณ์' => 'mis/hsware/group',
                 'รายการยี่ห้อ/รุ่น' => '#'
@@ -140,10 +140,53 @@ class HswareController extends \BaseController {
         return \View::make('mod_mis.hsware.admin.model', $data);
     }
 
+    public function model_sub($param) {
+        $item = \HswareModel::find($param);
+        $data = array(
+            'title' => 'รายการรุ่น ' . $item->title,
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => 'backend',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'รายการอุปกรณ์' => 'mis/hsware',
+                'รายการกลุ่มอุปกรณ์' => 'mis/hsware/group',
+                'รายการยี่ห้อ/รุ่น' => 'mis/hsware/group/model',
+                $item->title => '#'
+            )
+        );
+
+        return \View::make('mod_mis.hsware.admin.model_sub', $data);
+    }
+
     public function model_listall() {
         $hsware_group = \DB::table('hsware_model')
                 ->join('hsware_group', 'hsware_model.group_id', '=', 'hsware_group.id')
-                ->select(array('hsware_model.id as id', 'hsware_model.title as title', 'hsware_group.title as group', 'hsware_model.disabled as disabled'));
+                ->join('hsware_model_hierarchy', 'hsware_model.id', '=', 'hsware_model_hierarchy.hsware_model_id')
+                ->where('hsware_model_hierarchy.hsware_model_parent_id', 0)
+                ->select(array('hsware_model.id as id', 'hsware_model.id as item_id', 'hsware_model.title as title', 'hsware_group.title as group', 'hsware_model.disabled as disabled'));
+
+        $link = '<div class="dropdown">';
+        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
+        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/model/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/model/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '</ul>';
+        $link .= '</div>';
+
+        return \Datatables::of($hsware_group)
+                        ->edit_column('id', $link)
+                        ->edit_column('title', function($result_obj) {
+                            $str = '<a href="' . \URL::to('mis/hsware/group/model/sub/' . $result_obj->item_id . '') . '">' . $result_obj->title . '</a>';
+                            return $str;
+                        })
+                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->make(true);
+    }
+
+    public function model_sub_listall($param) {
+        $hsware_group = \DB::table('hsware_model')
+                ->join('hsware_model_hierarchy', 'hsware_model.id', '=', 'hsware_model_hierarchy.hsware_model_id')
+                ->where('hsware_model_hierarchy.hsware_model_parent_id', $param)
+                ->select(array('hsware_model.id as id', 'hsware_model.title as title', 'hsware_model.disabled as disabled'));
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -266,6 +309,70 @@ class HswareController extends \BaseController {
         }
     }
 
+    public function model_sub_add() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_mis.hsware.admin.model_sub_add');
+        } else {
+            $rules = array(
+                'title' => 'required'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $hsware_model = new \HswareModel();
+                $hsware_model->title = trim(\Input::get('title'));
+                $hsware_model->disabled = (\Input::has('disabled') ? 0 : 1);
+                $hsware_model->save();
+                $hsware_model_id = $hsware_model->id;
+
+                $hi = new \HswareModelHierarchy();
+                $hi->hsware_model_id = $hsware_model_id;
+                $hi->hsware_model_parent_id = \Input::get('parent_id');
+                $hi->save();
+
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
+    public function model_dialog_add() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_mis.hsware.admin.dialog_model_add');
+        } else {
+            $rules = array(
+                'title' => 'required'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $hsware_model = new \HswareModel();
+                $hsware_model->title = trim(\Input::get('title'));
+                $hsware_model->group_id = \Input::get('group_id');
+                $hsware_model->disabled = 1;
+                $hsware_model->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
     public function model_edit($param) {
         if (!\Request::isMethod('post')) {
             $data = array(
@@ -323,18 +430,17 @@ class HswareController extends \BaseController {
 
     public function add() {
         if (!\Request::isMethod('post')) {
-            $group = \HswareGroup::lists('title', 'id');
+            $group = \HswareGroup::find(\Input::get('group_id'));
             $data = array(
-                'title' => 'เพิ่มรายการอุปกรณ์',
+                'title' => 'เพิ่มรายการ' . (\Input::has('spare') ? 'อะไหล่' : 'อุปกรณ์') . ' ' . $group->title,
                 'breadcrumbs' => array(
                     'ภาพรวมระบบ' => 'backend',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'รายการอุปกรณ์' => 'mis/hsware',
                     'เพิ่มรายการอุปกรณ์' => '#'
                 ),
-                'group' => $group,
                 'company' => \Company::lists('title', 'id'),
+                'place' => \Place::lists('title', 'id'),
                 'spec_label' => \DB::table('hsware_spec_label')
                         ->where('group_id', \Input::get('group_id'))
                         ->get()
@@ -452,6 +558,7 @@ class HswareController extends \BaseController {
                     $hsware_item->locations = trim(\Input::get('locations'));
                     $hsware_item->register_date = trim(\Input::get('register_date'));
                     $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
+                    $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
                     $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
                     $hsware_item->created_user = \Auth::user()->id;
                     $hsware_item->save();
@@ -494,25 +601,25 @@ class HswareController extends \BaseController {
 
     public function edit($param) {
         if (!\Request::isMethod('post')) {
-            $group = \HswareGroup::lists('title', 'id');
             $item = \HswareItem::find($param);
+            $group = \HswareGroup::find($item->group_id);
             $option = \DB::table('hsware_item')
                     ->join('hsware_spec_label', 'hsware_item.group_id', '=', 'hsware_spec_label.group_id')
                     ->where('hsware_item.id', $param)
                     ->select('hsware_item.*', 'hsware_spec_label.title as title', 'hsware_spec_label.option_id as option_id', 'hsware_spec_label.name as name')
                     ->get();
             $data = array(
-                'title' => 'แก้ไขรายการอุปกรณ์',
+                'title' => 'แก้ไขรายการ' . (\Input::has('spare') ? 'อะไหล่' : 'อุปกรณ์') . ' ' . $group->title,
                 'breadcrumbs' => array(
                     'ภาพรวมระบบ' => 'backend',
                     'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
                     'รายการอุปกรณ์' => 'mis/hsware',
                     'แก้ไข ' . $item->title => '#'
                 ),
                 'item' => $item,
                 'group' => $group,
                 'company' => \Company::lists('title', 'id'),
+                'place' => \Place::lists('title', 'id'),
                 'spec_label' => \DB::table('hsware_spec_label')
                         ->where('group_id', $item->group_id)
                         ->get(),
@@ -521,7 +628,6 @@ class HswareController extends \BaseController {
             return \View::make('mod_mis.hsware.admin.edit', $data);
         } else {
             $rules = array(
-                'group_id' => 'required',
                 'photo1' => 'image|mimes:jpeg,png|max:512',
                 'photo2' => 'image|mimes:jpeg,png|max:512',
                 'photo3' => 'image|mimes:jpeg,png|max:512',
@@ -629,6 +735,7 @@ class HswareController extends \BaseController {
                 $hsware_item->locations = trim(\Input::get('locations'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
+                $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
                 $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $hsware_item->updated_user = \Auth::user()->id;
                 $hsware_item->save();
@@ -672,36 +779,38 @@ class HswareController extends \BaseController {
         }
     }
 
-    public function export() {
+    public function export($param) {
         $hsware_item = \DB::table('hsware_item')
-                ->leftJoin('hsware_type', 'hsware_item.type_id', '=', 'hsware_type.id')
                 ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
                 ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
-                ->join('company', 'hsware_item.company_id', '=', 'company.id');
-
-        if (\Input::has('group_id')) {
-            $hsware_item->where('hsware_item.group_id', \Input::get('group_id'));
-        }
-        if (\Input::has('company_id')) {
-            $hsware_item->where('hsware_item.company_id', \Input::get('company_id'));
-        }
-        $hsware_item->select(array(
-            'hsware_item.id as id',
-            'hsware_item.id as item_id',
-            'hsware_model.title as title',
-            'company.title as company',
-            'hsware_group.title as group_title',
-            'hsware_item.warranty_date as warranty_date',
-            'hsware_item.register_date as register_date',
-            'hsware_item.created_user as created_user',
-            'hsware_item.updated_user as updated_user',
-            'hsware_item.disabled as disabled',
-            'hsware_item.status as status'
-        ));
+                ->join('company', 'hsware_item.company_id', '=', 'company.id')
+                ->leftJoin('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                ->leftJoin('computer_item', 'computer_item.id', '=', 'computer_hsware.computer_id')
+                ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                ->leftJoin('place', 'hsware_item.locations', '=', 'place.id')
+                ->where('hsware_item.id', $param)
+                ->select(array(
+                    'hsware_item.id as id',
+                    'hsware_item.id as item_id',
+                    'hsware_item.serial_code as serial_code',
+                    'hsware_model.title as title',
+                    'computer_item.title as computer_title',
+                    \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                    'company.title as company',
+                    'hsware_group.title as group_title',
+                    'hsware_item.warranty_date as warranty_date',
+                    'hsware_item.register_date as register_date',
+                    'hsware_item.created_user as created_user',
+                    'hsware_item.updated_user as updated_user',
+                    'place.title as locations',
+                    'hsware_item.disabled as disabled',
+                    'hsware_item.status as status'
+                ))
+                ->first();
         $data = array(
-            'title' => 'รายการอุปกรณ์'
+            'item' => $hsware_item
         );
-        return \View::make('mod_mis.hsware.admin.export', $data);
     }
 
     private function upload_photo($file, $path) {

@@ -47,17 +47,17 @@
                 <div class="pull-left">                    
                     <div class="form-group">
                         <div class="col-sm-8">
-                            {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                            {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company,(isset($_COOKIE['hsware_company_id'])?$_COOKIE['hsware_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('group_id', array(''=>'เลือกกลุ่มอุปกรณ์')+$group, NULL, array('class' => 'form-control', 'id' => 'group_id')); }}
+                            {{ \Form::select('group_id', array(''=>'เลือกกลุ่มอุปกรณ์')+$group, (isset($_COOKIE['hsware_group_id'])?$_COOKIE['hsware_group_id']:null), array('class' => 'form-control', 'id' => 'group_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('status', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'status')); }}
+                            {{ \Form::select('status', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), (isset($_COOKIE['hsware_status'])?$_COOKIE['hsware_status']:null), array('class' => 'form-control', 'id' => 'status')); }}
                         </div>
                     </div>
                 </div>
@@ -111,10 +111,10 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "serial_code", "title": "เลขระเบียน", "width": "8%", "orderable": false, "searchable": true},
                 {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
-                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": false, "searchable": true},
-                {"data": "fullname", "title": "ผู้ใช้งาน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "8%", "orderable": false, "searchable": true},
+                {"data": "fullname", "title": "ผู้ใช้งาน", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "locations", "title": "Location", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
@@ -139,6 +139,7 @@
 
         $('#group_id').on('change', function () {
             if ($(this).val() !== '') {
+                $.cookie('hsware_group_id', $(this).val());
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);
@@ -148,6 +149,7 @@
         });
         $('#company_id').on('change', function () {
             if ($(this).val() !== '') {
+                $.cookie('hsware_company_id', $(this).val());
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);
@@ -157,6 +159,7 @@
         });
         $('#status').on('change', function () {
             if ($(this).val() !== '') {
+                $.cookie('hsware_status', $(this).val());
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);

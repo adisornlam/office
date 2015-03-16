@@ -35,6 +35,17 @@
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มคอมพิวเตอร์</p>
+            </div>
+        </section>
+    </div>
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_list">
         <section class="panel">
             <div class="symbol terques">
@@ -98,7 +109,7 @@
             </div>
             <div class="value">
                 <h1 class="count">
-                    0
+                    {{$supplier_count}}
                 </h1>
                 <p>รายการตัวแทนจำหน่าย</p>
             </div>
@@ -278,11 +289,24 @@
     $('#computer_list').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });
+    $('#computer_add').click(function () {
+        var data = {
+            url: 'mis/computer/dialog',
+            title: 'เลือกบริษัท'
+        };
+        genModal(data);
+    });
     $('#hsware_list').click(function () {
         window.location.href = base_url + index_page + 'mis/hsware';
     });
     $('#hsware_add_spare').click(function () {
-        window.location.href = base_url + index_page + 'mis/hsware/add?group_id=2&spare=1';
+        //window.location.href = base_url + index_page + 'mis/hsware/add?group_id=2&spare=1';
+        var data = {
+            url: 'mis/hsware/dialog',
+            title: 'เลือกกลุ่มอุปกรณ์',
+            v: {spare: 1}
+        };
+        genModal(data);
     });
     $('#deliver_list').click(function () {
         window.location.href = base_url + index_page + 'mis/deliver';

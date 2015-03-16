@@ -60,15 +60,8 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-sm-5">
-                                            {{ \Form::select('company_id', $company, \Input::get('company_id'), array('class' => 'form-control', 'id' => 'company_id')); }}
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <button type="button" class="btn btn-primary" id="btnCompany">เพิ่มบริษัท</button>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-3">
+                                    {{ \Form::select('company_id', $company, \Input::get('company_id'), array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -87,10 +80,10 @@
                                 {{Form::label('type_id', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-5">
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="type_id" value="1" checked=""> PC
+                                        <input type="radio" name="type_id" class="type_id" value="1" checked=""> PC
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="type_id" value="2"> Notebook
+                                        <input type="radio" name="type_id" class="type_id" value="2"> Notebook
                                     </label>
                                 </div>
                             </div>
@@ -112,7 +105,7 @@
                                     {{Form::text('mac_lan', NULL,array('class'=>'form-control','id'=>'mac_lan'))}}
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 {{Form::label('mac_wireless', 'Mac Address Wireless', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     {{Form::text('mac_wireless', NULL,array('class'=>'form-control','id'=>'mac_wireless'))}}
@@ -172,6 +165,7 @@
                                                 ->where('hsware_item.company_id', \Input::get('company_id'))
                                                 ->where('hsware_item.group_id', $group_item->id)
                                                 ->where('hsware_item.disabled', 0)
+                                                ->where('hsware_item.spare', 0)
                                                 ->where('hsware_item.status', 0)
                                                 ->select(array(
                                                     'hsware_item.id as id',
@@ -249,8 +243,22 @@
         format: 'yyyy-mm-dd',
         language: 'th'
     });
+
+
+    $('.type_id').click(function () {
+        if ($(this).is(':checked')) {
+            if ($(this).val() == 1) {
+                $('#mac_lan').parent().parent().removeClass('hidden');
+                $('#mac_wireless').parent().parent().addClass('hidden');
+            } else {
+                $('#mac_wireless').parent().parent().removeClass('hidden');
+                $('#mac_lan').parent().parent().addClass('hidden');
+            }
+        }
+    });
+
+
     $(function () {
-        
         var options = {
             url: base_url + index_page + "mis/computer/add",
             success: showResponse

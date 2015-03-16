@@ -61,6 +61,7 @@
         {{HTML::script('js/jquery.dcjqaccordion.2.7.js')}}
         {{HTML::script('js/jquery.scrollTo.min.js')}}
         {{HTML::script('js/jquery.nicescroll.js')}}
+        {{HTML::script('js/jquery.cookie.js')}}
         @yield('script')
         {{HTML::script('js/common-scripts.js')}}
         @yield('script_code')

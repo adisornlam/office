@@ -1,7 +1,7 @@
 <form name="form-add" action="{{URL::to('mis/computer/add')}}" method="get" role="form" class="form-horizontal">
     <div class="form-group">
         {{Form::label('company_id', 'บริษัท', array('class' => 'col-sm-3 control-label'));}}
-        <div class="col-sm-5">
+        <div class="col-sm-8">
             {{ \Form::select('company_id', $company, null, array('class' => 'form-control', 'id' => 'company_id')); }}
         </div>
     </div>

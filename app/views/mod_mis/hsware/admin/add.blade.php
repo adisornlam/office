@@ -65,15 +65,16 @@
                             {{ (\Input::has('spare')?Form::hidden('spare',1):null)}}
                             @endif
                             <div class="form-group">
-                                {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-2 control-label req'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('group_id', $group, \Input::get('group_id'), array('class' => 'form-control', 'id' => 'group_id')); }}
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',\Input::get('group_id'))->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',\Input::get('group_id'))->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id={{\Input::get('group_id')}}" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -85,7 +86,7 @@
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
                                 </div>
                             </div>
@@ -98,13 +99,19 @@
                                 </div>
                             </div>
                             @endif       
+                            <div class="form-group">
+                                {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('serial_no', null,array('class'=>'form-control','id'=>'serial_no'))}}
+                                </div>
+                            </div>
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('locations', NULL,array('class'=>'form-control','id'=>'locations'))}}
+                                <div class="col-sm-2">
+                                    {{ \Form::select('locations', $place,null, array('class' => 'form-control', 'id' => 'locations')); }}
                                 </div>
-                            </div>
+                            </div>   
                             @endif 
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
@@ -211,6 +218,7 @@
         </section>
     </div>
 </div>
+{{Form::hidden('group_id',\Input::get('group_id'))}}
 {{ Form::close() }}
 @stop
 

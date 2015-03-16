@@ -13,8 +13,7 @@
         "nesbot/Carbon": "*",
         "bllim/datatables": "*",
         "way/generators": "~2.0",
-        "jenssegers/date": "*",
-        "maatwebsite/excel": "1.*"
+        "jenssegers/date": "*"
     },
     "autoload": {
         "classmap": [

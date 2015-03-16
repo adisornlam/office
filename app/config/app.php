@@ -23,7 +23,7 @@ return array(
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => 'http://localhost/office/',
+    'url' => 'http://150.128.128.16/office/',
     /*
       |--------------------------------------------------------------------------
       | Application Timezone
@@ -113,7 +113,6 @@ return array(
         'Bllim\Datatables\DatatablesServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
         'Jenssegers\Date\DateServiceProvider',
-        'Maatwebsite\Excel\ExcelServiceProvider',
     ),
     /*
       |--------------------------------------------------------------------------
@@ -180,6 +179,5 @@ return array(
         'Carbon' => 'Carbon\Carbon',
         'Datatables' => 'Bllim\Datatables\Facade\Datatables',
         'Date' => 'Jenssegers\Date\Date',
-        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
     ),
 );
