@@ -32,7 +32,6 @@
                 <div class="pull-left">
                     <div class="btn-group">
                         <a href="javascript:;" rel="mis/hsware/dialog" class="btn btn-primary link_dialog" title="เลือกกลุ่มอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรายการ (F8)</a>
-                        <a href="{{URL::to('mis/hsware/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มอุปกรณ์</a>
                     </div>
                 </div>
             </div>
@@ -111,9 +110,9 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "serial_code", "title": "เลขระเบียน", "width": "8%", "orderable": false, "searchable": true},
+                {"data": "serial_code", "title": "เลขระเบียน", "width": "8%", "orderable": true, "searchable": true},
                 {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
-                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "8%", "orderable": false, "searchable": true},
+                {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "ผู้ใช้งาน", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "locations", "title": "Location", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},

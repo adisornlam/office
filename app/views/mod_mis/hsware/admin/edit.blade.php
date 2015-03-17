@@ -66,8 +66,28 @@
                             @endif
                             <div class="form-group">
                                 {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
-                                <div class="col-sm-3">
-                                    {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',$item->group_id)->lists('title', 'id'), $item->model_id, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',$item->group_id)->lists('title', 'id'), $item->model_id, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id={{$item->group_id}}" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                {{Form::label('sub_model', 'รุ่น', array('class' => 'col-sm-2 control-label'));}}
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            {{ \Form::select('sub_model', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model'));}}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="#" id="btnAddSubModel" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -110,7 +130,7 @@
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('warranty_date', $item->warranty_date,array('class'=>'form-control datepicker','id'=>'warranty_date'))}}
+                                        {{Form::text('warranty_date', ($item->warranty_date!='0000-00-00'?$item->warranty_date:''),array('class'=>'form-control datepicker','id'=>'warranty_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
@@ -237,7 +257,37 @@
         format: 'yyyy-mm-dd',
         language: 'th'
     });
+    $('#model_id').change(function () {
+        $('#btnAddSubModel').attr('href', base_url + index_page + 'mis/hsware/group/model/sub/' + $(this).val());
+        $.get("{{ url('get/submodel')}}",
+                {option: $(this).val()},
+        function (data) {
+            var submodel = $('#sub_model');
+            submodel.parent().parent().parent().parent().removeClass('hidden');
+            submodel.empty();
+            submodel.append("<option value=''>กรุณาเลือกรุ่น</option>");
+            $.each(data, function (index, element) {
+                submodel.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+    });
     $(function () {
+        var model_id = <?php echo ($item->model_id > 0 ? $item->model_id : 0); ?>;
+        var sub_model = <?php echo ($item->sub_model > 0 ? $item->sub_model : 0); ?>;
+        $('#btnAddSubModel').attr('href', base_url + index_page + 'mis/hsware/group/model/sub/' + model_id);
+        if ($('#model_id').val()) {
+            $.get("{{ url('get/submodel')}}",
+                    {option: model_id},
+            function (data) {
+                var submodel = $('#sub_model');
+                submodel.parent().parent().parent().parent().removeClass('hidden');
+                submodel.empty();
+                $.each(data, function (index, element) {
+                    var sub_model_select = (element.id == '' + sub_model + '' ? "selected='selected'" : "");
+                    submodel.append("<option value='" + element.id + "' " + sub_model_select + ">" + element.title + "</option>");
+                });
+            });
+        }
         var options = {
             url: base_url + index_page + "mis/hsware/edit/{{$item->id}}",
             success: showResponse

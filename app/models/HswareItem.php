@@ -28,4 +28,14 @@ class HswareItem extends \Eloquent {
         return $str;
     }
 
+    protected function get_submodel($param) {
+        $model = \HswareModel::find($param);
+        if ($model) {
+            $rs = $model->title;
+        } else {
+            $rs = '';
+        }
+        return $rs;
+    }
+
 }

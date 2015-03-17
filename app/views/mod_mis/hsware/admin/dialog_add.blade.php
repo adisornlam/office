@@ -2,7 +2,7 @@
     <div class="form-group">
         {{Form::label('group_id', 'กลุ่มอุปกรณ์', array('class' => 'col-sm-3 control-label'));}}
         <div class="col-sm-5">
-            {{ \Form::select('group_id', $group, null, array('class' => 'form-control', 'id' => 'group_id')); }}
+            {{ \Form::select('group_id', $group, (isset($_COOKIE['hsware_group_id'])?$_COOKIE['hsware_group_id']:null), array('class' => 'form-control', 'id' => 'group_id')); }}
         </div>
     </div>
     <div class="form-group">

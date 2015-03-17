@@ -69,10 +69,23 @@
                                 <div class="col-sm-10">
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ/รุ่น') +  \DB::table('hsware_model')->where('group_id',\Input::get('group_id'))->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id')); }}
+                                            {{ \Form::select('model_id',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',\Input::get('group_id'))->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id')); }}
                                         </div>
                                         <div class="col-sm-2">
-                                            <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id={{\Input::get('group_id')}}" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                            <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id={{\Input::get('group_id')}}" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                {{Form::label('sub_model', 'รุ่น', array('class' => 'col-sm-2 control-label'));}}
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            {{ \Form::select('sub_model', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model'));}}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="#" id="btnAddSubModel" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                         </div>
                                     </div>
                                 </div>
@@ -80,10 +93,10 @@
                             <div class="form-group">
                                 {{Form::label('company_id', 'สินทรัพย์บริษัท', array('class' => 'col-sm-2 control-label'));}}
                                 <div class="col-sm-3">
-                                    {{ \Form::select('company_id', $company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                                    {{ \Form::select('company_id', $company, (isset($_COOKIE['hsware_company_id'])?$_COOKIE['hsware_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
+                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,22,24)))
                             <div class="form-group">
                                 {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-3">
@@ -235,6 +248,20 @@
         todayHighlight: true,
         format: 'yyyy-mm-dd',
         language: 'th'
+    });
+    $('#model_id').change(function () {
+        $('#btnAddSubModel').attr('href', 'group/model/sub/' + $(this).val());
+        $.get("{{ url('get/submodel')}}",
+                {option: $(this).val()},
+        function (data) {
+            var submodel = $('#sub_model');
+            submodel.parent().parent().parent().parent().removeClass('hidden');
+            submodel.empty();
+            submodel.append("<option value=''>กรุณาเลือกรุ่น</option>");
+            $.each(data, function (index, element) {
+                submodel.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
     });
     $(function () {
         var options = {

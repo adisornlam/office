@@ -70,6 +70,32 @@
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_group_list">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count2">
+                    {{$hsware_group_count}}
+                </h1>
+                <p>รายการกลุ่มอุปกรณ์</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_model_list">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count2">
+                    {{$hsware_model_count}}
+                </h1>
+                <p>รายการยี่ห้อรุ่น</p>
+            </div>
+        </section>
+    </div>
 </div>
 
 <div class="page-header">
@@ -159,24 +185,39 @@
         </section>
     </div>
 </div>
-
 <div class="page-header">
-    <h1>Monitoring <small>ตรวจสอบและติดตามข้อมูล</small></h1>
+    <h1>MA <small>ดูแลและบำรุงรักษา</small></h1>
 </div>
 <div class="row state-overview">
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block2">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_list">
         <section class="panel">
             <div class="symbol red">
                 <i class="fa fa-wrench"></i>
             </div>
             <div class="value">
                 <h1 class=" count2">
-                    0
+                    {{$repairing_count}}
                 </h1>
-                <p>แจ้งซ่อมอุปกรณ์</p>
+                <p>รายการแจ้งซ่อมอุปกรณ์</p>
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>แบบฟอร์มแจ้งซ่อม</p>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="page-header">
+    <h1>Monitoring <small>ตรวจสอบและติดตามข้อมูล</small></h1>
+</div>
+<div class="row state-overview">    
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="block3">
         <section class="panel">
             <div class="symbol yellow">
@@ -282,6 +323,7 @@
         </section>
     </div>
 </div>
+
 @stop
 
 @section('script_code')
@@ -305,6 +347,22 @@
             url: 'mis/hsware/dialog',
             title: 'เลือกกลุ่มอุปกรณ์',
             v: {spare: 1}
+        };
+        genModal(data);
+    });
+    $('#hsware_group_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/hsware/group';
+    });
+    $('#hsware_model_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/hsware/group/model';
+    });
+    $('#repairing_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/repairing';
+    });
+    $('#repairing_add').click(function () {
+        var data = {
+            url: 'mis/repairing/add',
+            title: 'แจ้งซ่อมอุปกรณ์'
         };
         genModal(data);
     });

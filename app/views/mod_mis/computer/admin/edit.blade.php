@@ -168,6 +168,8 @@
                                                                 ->where('computer_hsware.computer_id', $item->id)
                                                                 ->select(array(
                                                                     'hsware_item.id as id',
+                                                                    'hsware_item.sub_model as sub_model',
+                                                                    'hsware_item.serial_code as codes',
                                                                     'hsware_model.title as title',
                                                                     'hsware_item.status as status',
                                                                 ))
@@ -176,7 +178,7 @@
                                                             <div class="checkbox">
                                                                 <label>
                                                                     {{Form::checkbox('hsware_item[]', $hs_item->id,($hs_item->status==1?TRUE:FALSE))}}
-                                                                    {{$hs_item->title}} {{\HswareItem::get_hsware($hs_item->id)}}
+                                                                    {{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}
                                                                 </label>
                                                             </div>
                                                         <?php }
@@ -208,6 +210,8 @@
                                                                 ->where('hsware_item.status', 0)
                                                                 ->select(array(
                                                                     'hsware_item.id as id',
+                                                                    'hsware_item.sub_model as sub_model',
+                                                                    'hsware_item.serial_code as codes',
                                                                     'hsware_model.title as title',
                                                                     'hsware_item.status as status',
                                                                 ))
@@ -216,7 +220,7 @@
                                                             <div class="checkbox">
                                                                 <label>
                                                                     {{Form::checkbox('hsware_item[]', $hs_item2->id,($hs_item2->status==1?TRUE:FALSE))}}
-                                                                    {{$hs_item2->title}} {{\HswareItem::get_hsware($hs_item2->id)}}
+                                                                    {{$hs_item2->codes}} {{$hs_item2->title}}  {{\HswareItem::get_hsware($hs_item2->id)}}
                                                                 </label>
                                                             </div>
                                                         <?php }

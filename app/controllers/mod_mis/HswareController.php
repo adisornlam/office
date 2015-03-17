@@ -56,6 +56,7 @@ class HswareController extends \BaseController {
         $hsware_item->select(array(
             'hsware_item.id as id',
             'hsware_item.id as item_id',
+            'hsware_item.sub_model as sub_model_id ',
             'hsware_item.serial_code as serial_code',
             'hsware_model.title as title',
             'computer_item.title as computer_title',
@@ -85,7 +86,7 @@ class HswareController extends \BaseController {
                         ->edit_column('status', '@if($status==1) <span class="label label-success">Used</span> @else <span class="label label-warning">Inactive</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', function($result_obj) {
-                            $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->option_item($result_obj->item_id) . '</a>';
+                            $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' '. $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id) . '</a>';
                             return $str;
                         })
                         ->edit_column('created_user', '{{\User::find($created_user)->username}}')
@@ -99,8 +100,6 @@ class HswareController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'ระเบียนคอมพิวเตอร์' => 'mis/computer',
-                'รายการอุปกรณ์' => 'mis/hsware',
                 'รายการกลุ่มอุปกรณ์' => '#'
             )
         );
@@ -131,8 +130,6 @@ class HswareController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'รายการอุปกรณ์' => 'mis/hsware',
-                'รายการกลุ่มอุปกรณ์' => 'mis/hsware/group',
                 'รายการยี่ห้อ/รุ่น' => '#'
             )
         );
@@ -147,8 +144,6 @@ class HswareController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => 'backend',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
-                'รายการอุปกรณ์' => 'mis/hsware',
-                'รายการกลุ่มอุปกรณ์' => 'mis/hsware/group',
                 'รายการยี่ห้อ/รุ่น' => 'mis/hsware/group/model',
                 $item->title => '#'
             )
@@ -192,7 +187,7 @@ class HswareController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         $link .= '<li><a href="javascript:;" rel="mis/hsware/group/model/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/model/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/hsware/group/model/sub/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
@@ -420,6 +415,20 @@ class HswareController extends \BaseController {
         }
     }
 
+    public function model_sub_delete($param) {
+        try {
+            \HswareModel::find($param)->delete();
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => true,
+                            'message' => 'ลบรายการสำเร็จ',
+                            'redirect' => 'mis/hsware/group/model'
+                        ), 200));
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     public function dialog() {
         $group = \HswareGroup::lists('title', 'id');
         $data = array(
@@ -514,6 +523,7 @@ class HswareController extends \BaseController {
                     $hsware_item->serial_no = trim(\Input::get('serial_no'));
                     $hsware_item->access_no = trim(\Input::get('access_no'));
                     $hsware_item->model_id = \Input::get('model_id');
+                    $hsware_item->sub_model = \Input::get('sub_model');
                     $hsware_item->title = trim(\Input::get('title'));
                     $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
                     $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
@@ -691,6 +701,7 @@ class HswareController extends \BaseController {
                 $hsware_item->serial_no = trim(\Input::get('serial_no'));
                 $hsware_item->access_no = trim(\Input::get('access_no'));
                 $hsware_item->model_id = \Input::get('model_id');
+                $hsware_item->sub_model = \Input::get('sub_model');
                 $hsware_item->title = trim(\Input::get('title'));
                 $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
                 $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
@@ -844,6 +855,16 @@ class HswareController extends \BaseController {
             $str .= $v . ' ';
         }
         return $str;
+    }
+
+    public function get_submodel($param) {
+        $model = \HswareModel::find($param);
+        if ($model) {
+            $rs = $model->title;
+        } else {
+            $rs = '';
+        }
+        return $rs;
     }
 
 }

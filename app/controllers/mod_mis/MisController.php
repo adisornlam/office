@@ -24,16 +24,19 @@ class MisController extends \BaseController {
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => '#'
             ),
             'compouter_count' => \ComputerItem::where('disabled', '=', 0)->count(),
-             'hsware_count' => \HswareItem::where('disabled', '=', 0)->count(),
+            'hsware_count' => \HswareItem::where('disabled', '=', 0)->count(),
             'users_count' => \User::where('disabled', '=', 0)->count(),
-            'supplier_count' => \Supplier::where('disabled', '=', 0)->count()
+            'supplier_count' => \Supplier::where('disabled', '=', 0)->count(),
+            'hsware_group_count' => \HswareGroup::where('disabled', '=', 0)->count(),
+            'hsware_model_count' => \HswareModel::where('disabled', '=', 0)->count(),
+            'repairing_count' => \RepairingItem::where('disabled', '=', 0)->count()
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);
         } elseif ($check->is('admin')) {
             return \View::make('mod_mis.home.admin.index', $data);
         } elseif ($check->is('employee')) {
-            return \View::make('mod_mis.employee.index', $data);
+            return \View::make('mod_mis.home.employee.index', $data);
         } elseif ($check->is('mis')) {
             return \View::make('mod_mis.home.mis.index', $data);
         } elseif ($check->is('hr')) {

@@ -96,12 +96,13 @@ class UsersController extends \BaseController {
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'firstname' => 'required|unique:users',
-                'lastname' => 'required|unique:users',
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'codes' => 'unique:users',
                 'email' => 'email|unique:users',
                 'role_id' => 'required',
-                'username' => 'required|unique:users',
-                'password' => 'required|min:8'
+                'username' => 'unique:users',
+                'password' => 'min:8'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -156,7 +157,6 @@ class UsersController extends \BaseController {
                 'lastname' => 'required',
                 'email' => 'email|unique:users',
                 'role_id' => 'required'
-                    // 'avatar' => 'image|mimes:jpeg,png|max:512',
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {

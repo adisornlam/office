@@ -73,13 +73,17 @@
                 <div class="form-group">
                     {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('disabled', 1)}} เปิดใช้งาน
+                        <label>
+                            {{Form::checkbox('disabled', 1)}} เปิดใช้งาน
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('verified', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('verified', 1)}} Verified
+                        <label>
+                            {{Form::checkbox('verified', 1)}} Verified
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">

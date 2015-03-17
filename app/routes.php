@@ -54,6 +54,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/group/model/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_edit'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/sub/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_sub_edit'));
     Route::get('hsware/group/model/delete/{id}', 'App\Controllers\HswareController@model_delete');
+    Route::get('hsware/group/model/sub/delete/{id}', 'App\Controllers\HswareController@model_sub_delete');
 
     Route::get('hsware/export/{id}', 'App\Controllers\HswareController@export');
 
@@ -67,14 +68,14 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('testing/view/listall/{id}', 'App\Controllers\TestingController@view_listall');
 
     Route::match(array('GET', 'POST'), 'testing/add', array('uses' => 'App\Controllers\TestingController@add'));
-    
+
     //supplier
     Route::get('supplier', 'App\Controllers\SupplierController@index');
     Route::get('supplier/listall', 'App\Controllers\SupplierController@listall');
     Route::match(array('GET', 'POST'), 'supplier/add', array('uses' => 'App\Controllers\SupplierController@add'));
     Route::match(array('GET', 'POST'), 'supplier/edit/{id}', array('uses' => 'App\Controllers\SupplierController@edit'));
     Route::get('supplier/delete/{id}', 'App\Controllers\SupplierController@delete');
-    
+
     //pr
     Route::get('purchaserequest', 'App\Controllers\PurchaseRequestController@index');
     Route::get('purchaserequest/listall', 'App\Controllers\PurchaseRequestController@listall');
@@ -82,6 +83,13 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'purchaserequest/edit/{id}', array('uses' => 'App\Controllers\PurchaseRequestController@edit'));
     Route::get('purchaserequest/delete/{id}', 'App\Controllers\PurchaseRequestController@delete');
     Route::get('purchaserequest/tmp/add', 'App\Controllers\PurchaseRequestController@tmp_add');
+    
+        //repairing
+    Route::get('repairing', 'App\Controllers\RepairingController@index');
+    Route::get('repairing/listall', 'App\Controllers\RepairingController@listall');
+    Route::match(array('GET', 'POST'), 'repairing/add', array('uses' => 'App\Controllers\RepairingController@add'));
+    Route::match(array('GET', 'POST'), 'repairing/edit/{id}', array('uses' => 'App\Controllers\RepairingController@edit'));
+    Route::get('repairing/delete/{id}', 'App\Controllers\SupplierController@delete');
 });
 
 //WHS
@@ -200,6 +208,15 @@ Route::get('get/position', function() {
     $input = Input::get('option');
     $position_id = \DB::table('position_item')->where('department_id', $input)->orderBy('title');
     return Response::json($position_id->select(array('id', 'title'))->get());
+});
+
+Route::get('get/submodel', function() {
+    $input = Input::get('option');
+    $hsware_group = \DB::table('hsware_model')
+            ->join('hsware_model_hierarchy', 'hsware_model.id', '=', 'hsware_model_hierarchy.hsware_model_id')
+            ->where('hsware_model_hierarchy.hsware_model_parent_id', $input)
+            ->orderBy('hsware_model.title');
+    return Response::json($hsware_group->select(array('hsware_model.id', 'hsware_model.title'))->get());
 });
 
 // Display all SQL executed in Eloquent
