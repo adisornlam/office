@@ -34,11 +34,19 @@
                         </a>
                     </li>
                     <li class="">
+                        <a data-toggle="tab" href="#serial">
+                            <i class="fa fa-list"></i>
+                            เพิ่มรายการ เลขระเบียน / Serial No.
+                        </a>
+                    </li>
+                    @if(\Input::get('group_id')!=2)
+                    <li class="">
                         <a data-toggle="tab" href="#option1">
                             <i class="fa fa-list"></i>
                             คุณสมบัติ
                         </a>
                     </li>
+                    @endif
                     <li class="">
                         <a data-toggle="tab" href="#gallery">
                             <i class="fa fa-picture-o"></i>
@@ -85,7 +93,7 @@
                                             {{ \Form::select('sub_model', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model'));}}
                                         </div>
                                         <div class="col-sm-2">
-                                            <a href="#" id="btnAddSubModel" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                            <a href="javascript:;" id="btnAddSubModel" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                         </div>
                                     </div>
                                 </div>
@@ -96,14 +104,6 @@
                                     {{ \Form::select('company_id', $company, (isset($_COOKIE['hsware_company_id'])?$_COOKIE['hsware_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,22,24)))
-                            <div class="form-group">
-                                {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
-                                </div>
-                            </div>
-                            @endif
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
@@ -111,13 +111,7 @@
                                     {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
-                            @endif       
-                            <div class="form-group">
-                                {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-3">
-                                    {{Form::text('serial_no', null,array('class'=>'form-control','id'=>'serial_no'))}}
-                                </div>
-                            </div>
+                            @endif
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
@@ -142,17 +136,11 @@
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('register_date', NULL,array('class'=>'form-control datepicker','id'=>'register_date'))}}
+                                        {{Form::text('register_date', date('Y-m-d'),array('class'=>'form-control datepicker','id'=>'register_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
                                     </div>
-                                </div>
-                            </div>         
-                            <div class="form-group">
-                                {{Form::label('count', 'จำนวนรายการ', array('class' => 'col-sm-2 control-label'))}}
-                                <div class="col-sm-1">
-                                    {{Form::text('count', 1,array('class'=>'form-control','id'=>'count'))}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -170,6 +158,25 @@
                             </div>
                         </div>
                     </div>
+                    <div id="serial" class="tab-pane">
+                        <div class="panel-body">
+                            @for($i = 1; $i <= 10; $i++)
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            {{Form::text('serial_code[]', null,array('class'=>'form-control','placeholder'=>'เลขระเบียน '.$i))}}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{Form::text('serial_no[]', null,array('class'=>'form-control','placeholder'=>'Serial No '.$i))}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endfor
+                        </div>
+                    </div>
+                    @if(\Input::get('group_id')!=2)
                     <div id="option1" class="tab-pane">
                         <div class="panel-body">
                             @foreach($spec_label as $item_label)
@@ -182,6 +189,7 @@
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
+                                                ->orderBy('title', 'asc')
                                                 ->lists('title','id'),
                                                 NULL,array('class'=>'form-control'))}}
                                     @else
@@ -192,6 +200,7 @@
                             @endforeach
                         </div>
                     </div>
+                    @endif
                     <div id="gallery" class="tab-pane">
                         <div class="panel-body">
                             <div class="form-group">
@@ -231,7 +240,7 @@
         </section>
     </div>
 </div>
-{{Form::hidden('group_id',\Input::get('group_id'))}}
+{{Form::hidden('group_id',\Input::get('group_id'),array('id'=>'group_id'))}}
 {{ Form::close() }}
 @stop
 
@@ -250,7 +259,9 @@
         language: 'th'
     });
     $('#model_id').change(function () {
-        $('#btnAddSubModel').attr('href', 'group/model/sub/' + $(this).val());
+
+        $('#btnAddSubModel').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()},
         function (data) {
@@ -263,6 +274,21 @@
             });
         });
     });
+    $('#btnAddSubModel').click(function () {
+        var data = {
+            url: $(this).attr('rel'),
+            title: 'เพิ่มรุ่นอุปกรณ์',
+            v: {redirect: 'mis/hsware/add?group_id=<?php echo \Input::get("group_id") ?>'}
+        };
+        genModal(data);
+    });
+//    $('#model_id').change(function () {
+//        $.get("{{ url('get/getSerialCode')}}",
+//                {company_id: $(this).val(), group_id: $('#group_id').val()},
+//        function (data) {
+//            console.log(data);
+//        });
+//    });
     $(function () {
         var options = {
             url: base_url + index_page + "mis/hsware/add",

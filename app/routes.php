@@ -83,8 +83,8 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'purchaserequest/edit/{id}', array('uses' => 'App\Controllers\PurchaseRequestController@edit'));
     Route::get('purchaserequest/delete/{id}', 'App\Controllers\PurchaseRequestController@delete');
     Route::get('purchaserequest/tmp/add', 'App\Controllers\PurchaseRequestController@tmp_add');
-    
-        //repairing
+
+    //repairing
     Route::get('repairing', 'App\Controllers\RepairingController@index');
     Route::get('repairing/listall', 'App\Controllers\RepairingController@listall');
     Route::match(array('GET', 'POST'), 'repairing/add', array('uses' => 'App\Controllers\RepairingController@add'));
@@ -217,6 +217,17 @@ Route::get('get/submodel', function() {
             ->where('hsware_model_hierarchy.hsware_model_parent_id', $input)
             ->orderBy('hsware_model.title');
     return Response::json($hsware_group->select(array('hsware_model.id', 'hsware_model.title'))->get());
+});
+
+Route::get('get/getSerialCode', function() {
+    $num = \DB::table('hsware_item')
+            ->where('company_id', Input::get('company_id'))
+            ->where('group_id', Input::get('group_id'))
+            ->where('deleted_at', null)
+            ->count();
+    $sr = $num + 1;
+    
+    return str_pad($sr, 3, "0", STR_PAD_LEFT);
 });
 
 // Display all SQL executed in Eloquent

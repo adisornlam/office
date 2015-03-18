@@ -96,14 +96,12 @@
                                     {{ \Form::select('company_id', $company, $item->company_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
-                            @if(in_array($item->group_id, array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     {{Form::text('serial_code',  $item->serial_code,array('class'=>'form-control','id'=>'serial_code'))}}
                                 </div>
                             </div>
-                            @endif
                             @if(in_array($item->group_id, array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
