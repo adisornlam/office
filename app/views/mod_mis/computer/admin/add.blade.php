@@ -121,7 +121,7 @@
                                 {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
-                                        {{Form::text('register_date', NULL,array('class'=>'form-control datepicker','id'=>'register_date'))}}
+                                        {{Form::text('register_date', date('Y-m-d'),array('class'=>'form-control datepicker','id'=>'register_date'))}}
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
                                         </span>
@@ -178,7 +178,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     {{Form::checkbox('hsware_item[]', $hs_item->id)}}
-                                                    {{$hs_item->codes}}  {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}} {{\HswareItem::get_hsware($hs_item->id)}}
+                                                    {{$hs_item->codes}}  {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}} {{\HswareItem::get_hsware($hs_item->id)}} {{$hs_item->id}} xx
                                                 </label>
                                             </div>
 

@@ -14,13 +14,13 @@
             <div class="panel-body">
                 <div class="form-group">
                     {{Form::label('firstname', 'ชื่อ', array('class' => 'col-sm-3 control-label req'))}}
-                    <div class="col-sm-9">
+                    <div class="col-sm-5">
                         {{Form::text('firstname', NULL,array('class'=>'form-control','id'=>'firstname'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('lastname', 'นามสกุล', array('class' => 'col-sm-3 control-label req'))}}
-                    <div class="col-sm-9">
+                    <div class="col-sm-5">
                         {{Form::text('lastname', NULL,array('class'=>'form-control','id'=>'lastname'))}}
                     </div>
                 </div>

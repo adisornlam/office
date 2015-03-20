@@ -54,7 +54,7 @@ class ComputerController extends \BaseController {
             $computer_item->where('computer_item.company_id', \Input::get('company_id'));
         }
 
-        if (\Input::has('status')) {
+        if (\Input::has('disabled')) {
             $computer_item->where('computer_item.disabled', \Input::get('disabled'));
         }
 
@@ -62,7 +62,7 @@ class ComputerController extends \BaseController {
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
         $link .= '<li><a href="{{\URL::to("mis/computer/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="{{\URL::to("mis/computer/export/$id")}}" title="พิมพ์ระเบียน"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
+        $link .= '<li><a href="{{\URL::to("mis/computer/export/$id")}}" title="พิมพ์ระเบียน" target="_blank"><i class="fa fa-print"></i> พิมพ์ระเบียน</a></li>';
         $link .= '<li><a href="javascript:;" rel="mis/computer/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
@@ -100,6 +100,7 @@ class ComputerController extends \BaseController {
             );
 
             return \View::make('mod_mis.computer.admin.add', $data);
+            //return \View::make('mod_mis.computer.admin.add_wizard', $data);
         } else {
             $rules = array(
                 'company_id' => 'required',
@@ -290,9 +291,41 @@ class ComputerController extends \BaseController {
     }
 
     public function export($param) {
-        $pdf = \App::make('dompdf');
-        $pdf->loadView('mod_mis.computer.admin.pdf_export');
-        return $pdf->download('computer.pdf');
+        $item = \DB::table('computer_item')
+                ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                ->leftJoin('position_item', 'position_item.id', '=', 'users.position_id')
+                ->leftJoin('company', 'computer_item.company_id', '=', 'company.id')
+                ->leftJoin('place', 'computer_item.locations', '=', 'place.id')
+                ->where('computer_item.id', $param)
+                ->select(array(
+                    'computer_item.id as id',
+                    'computer_item.title as title',
+                    'company.title as company',
+                    'computer_item.company_id as company_id',
+                    'computer_item.serial_code as serial_code',
+                    'computer_item.access_no as access_no',
+                    'computer_item.type_id as type_id',
+                    'computer_item.locations as locations',
+                    'computer_item.ip_address as ip_address',
+                    'computer_item.mac_lan as mac_lan',
+                    'computer_item.mac_wireless as mac_wireless',
+                    'computer_item.register_date as register_date',
+                    'place.title as place',
+                    'position_item.title as position',
+                    'computer_item.disabled as disabled',
+                    \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                    'position_item.title as position'
+                ))
+                ->first();
+        $data = array(
+            'item' => $item
+        );
+        if ($item->company_id == 1) {
+            return \View::make('mod_mis.computer.admin.word_export_arf', $data);
+        } else {
+            return \View::make('mod_mis.computer.admin.word_export_att', $data);
+        }
     }
 
 }

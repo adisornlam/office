@@ -13,13 +13,13 @@
             <div class="panel-body">
                 <div class="form-group">
                     {{Form::label('firstname', 'ชื่อ', array('class' => 'col-sm-3 control-label req'))}}
-                    <div class="col-sm-9">
+                    <div class="col-sm-5">
                         {{Form::text('firstname', NULL,array('class'=>'form-control','id'=>'firstname'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('lastname', 'นามสกุล', array('class' => 'col-sm-3 control-label req'))}}
-                    <div class="col-sm-9">
+                    <div class="col-sm-5">
                         {{Form::text('lastname', NULL,array('class'=>'form-control','id'=>'lastname'))}}
                     </div>
                 </div>
@@ -91,11 +91,6 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-10">
-                        {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnDialogSave'))}}    
-                    </div>
-                </div>
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="login">
@@ -122,7 +117,11 @@
             </div>
         </div>      
     </div>
-
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-10">
+            {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnDialogSave'))}}    
+        </div>
+    </div>
 </div>
 {{ Form::close() }}
 {{HTML::script('js/jquery.form.min.js')}}

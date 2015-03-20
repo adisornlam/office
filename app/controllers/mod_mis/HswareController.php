@@ -897,28 +897,29 @@ class HswareController extends \BaseController {
                 ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
                 ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
                 ->leftJoin('place', 'hsware_item.locations', '=', 'place.id')
+                ->leftJoin('position_item', 'position_item.id', '=', 'users.position_id')
                 ->where('hsware_item.id', $param)
                 ->select(array(
-                    'hsware_item.id as id',
-                    'hsware_item.id as item_id',
-                    'hsware_item.serial_code as serial_code',
+                    'hsware_item.*',
                     'hsware_model.title as title',
-                    'computer_item.title as computer_title',
                     \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
                     'company.title as company',
                     'hsware_group.title as group_title',
-                    'hsware_item.warranty_date as warranty_date',
-                    'hsware_item.register_date as register_date',
-                    'hsware_item.created_user as created_user',
-                    'hsware_item.updated_user as updated_user',
-                    'place.title as locations',
-                    'hsware_item.disabled as disabled',
-                    'hsware_item.status as status'
+                    'place.title as place',
+                    'position_item.title as position'
                 ))
-                ->first();
+                ->first();        
         $data = array(
-            'item' => $hsware_item
+            'item' => $hsware_item,
+            'spec_label' => \DB::table('hsware_spec_label')
+                    ->where('group_id', $hsware_item->group_id)
+                    ->get()
         );
+        if ($hsware_item->company_id == 1) {
+            return \View::make('mod_mis.hsware.admin.word_export_arf', $data);
+        } else {
+            return \View::make('mod_mis.hsware.admin.word_export_att', $data);
+        }
     }
 
     private function upload_photo($file, $path) {
@@ -945,7 +946,11 @@ class HswareController extends \BaseController {
         foreach ($option as $item_option) {
             if ($item_option->option_id != 0) {
                 $val = $item_option->{$item_option->name};
-                $v = \HswareSpecOptionItem::find($val)->title;
+                if ($val) {
+                    $v = \HswareSpecOptionItem::find($val)->title;
+                } else {
+                    $v = NULL;
+                }
             } else {
                 $v = $item_option->{$item_option->name};
             }

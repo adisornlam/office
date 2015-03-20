@@ -42,12 +42,12 @@
                 <div class="pull-left">                    
                     <div class="form-group">
                         <div class="col-sm-8">
-                            {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, NULL, array('class' => 'form-control', 'id' => 'company_id')); }}
+                            {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, (isset($_COOKIE['user_company_id'])?$_COOKIE['user_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
                     </div>                    
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('disabled', array(''=>'เลือกสถานะ',0=>'Active',1=>'Inactive'), NULL, array('class' => 'form-control', 'id' => 'disabled')); }}
+                            {{ \Form::select('disabled', array(''=>'เลือกสถานะ',0=>'Active',1=>'Inactive'), (isset($_COOKIE['hsware_disabled'])?$_COOKIE['hsware_disabled']:null), array('class' => 'form-control', 'id' => 'disabled')); }}
                         </div>
                     </div>
                 </div>
@@ -128,6 +128,7 @@
 
         $('#company_id').on('change', function () {
             if ($(this).val() !== '') {
+                $.cookie('user_company_id', $(this).val());
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);
@@ -137,6 +138,7 @@
         });
         $('#disabled').on('change', function () {
             if ($(this).val() !== '') {
+                $.cookie('hsware_disabled', $(this).val());
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);

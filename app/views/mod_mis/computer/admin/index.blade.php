@@ -51,7 +51,7 @@
                     </div>      
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('disabled', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), (isset($_COOKIE['computer_disabled'])?$_COOKIE['computer_disabled']:null), array('class' => 'form-control', 'id' => 'disabled')); }}
+                            {{ \Form::select('disabled', array(''=>'เลือกสถานะ',0=>'Active',1=>'Inactive'), (isset($_COOKIE['computer_disabled'])?$_COOKIE['computer_disabled']:null), array('class' => 'form-control', 'id' => 'disabled')); }}
                         </div>
                     </div>
                 </div>

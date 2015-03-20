@@ -46,7 +46,7 @@
                         </a>
                     </li>
                 </ul>
-                <span class="hidden-sm wht-color">{{$title}}</span>
+                <span class="hidden-sm wht-color">{{$title}} xx</span>
             </header>
             <div class="panel-body">
                 <div class="tab-content">
