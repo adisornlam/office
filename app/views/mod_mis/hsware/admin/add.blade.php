@@ -160,7 +160,19 @@
                     </div>
                     <div id="serial" class="tab-pane">
                         <div class="panel-body">
-                            @for($i = 1; $i <= 10; $i++)
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            {{Form::text('serial_code[]', null,array('class'=>'form-control','placeholder'=>'เลขระเบียน 1','id'=>'serial_code'))}}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{Form::text('serial_no[]', null,array('class'=>'form-control','placeholder'=>'Serial No 1'))}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @for($i = 2; $i <= 10; $i++)
                             <div class="form-group">
                                 <div class="col-sm-10">
                                     <div class="row">
@@ -290,6 +302,11 @@
 //        });
 //    });
     $(function () {
+        $.get("{{ url('get/getSerialCode')}}",
+                {company_id: $('#company_id').val(), group_id: $('#group_id').val()},
+        function (data) {
+            console.log(data);
+        });
         var options = {
             url: base_url + index_page + "mis/hsware/add",
             success: showResponse
@@ -298,7 +315,6 @@
             $('#form-add').ajaxSubmit(options);
         });
     });
-
     function showResponse(response, statusText, xhr, $form) {
         if (response.error.status === false) {
             $('form .form-group').removeClass('has-error');

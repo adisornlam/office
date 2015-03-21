@@ -220,14 +220,20 @@ Route::get('get/submodel', function() {
 });
 
 Route::get('get/getSerialCode', function() {
-    $num = \DB::table('hsware_item')
+
+    $item = \DB::table('hsware_item')
             ->where('company_id', Input::get('company_id'))
             ->where('group_id', Input::get('group_id'))
             ->where('deleted_at', null)
-            ->count();
-    $sr = $num + 1;
-    
-    return str_pad($sr, 3, "0", STR_PAD_LEFT);
+            ->orderBy('id', 'desc')
+            ->first();
+    //$str = explode("-", $item->serial_no);
+    $company = \Company::find(Input::get('company_id'));
+    $group = \HswareGroup::find(Input::get('group_id'));
+
+    //$sr = $str[2] + 1;
+
+    return $item->serial_no; //$company->company_code . '-' . $group->code_no . '-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
 });
 
 // Display all SQL executed in Eloquent

@@ -908,7 +908,7 @@ class HswareController extends \BaseController {
                     'place.title as place',
                     'position_item.title as position'
                 ))
-                ->first();        
+                ->first();
         $data = array(
             'item' => $hsware_item,
             'spec_label' => \DB::table('hsware_spec_label')
