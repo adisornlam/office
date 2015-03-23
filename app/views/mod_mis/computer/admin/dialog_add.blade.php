@@ -1,4 +1,4 @@
-<form name="form-add" action="{{URL::to('mis/computer/add')}}" method="get" role="form" class="form-horizontal">
+<form name="form-add" action="{{URL::to('mis/computer/add_wizard')}}" method="get" role="form" class="form-horizontal">
     <div class="form-group">
         {{Form::label('company_id', 'บริษัท', array('class' => 'col-sm-3 control-label'));}}
         <div class="col-sm-8">

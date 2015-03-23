@@ -271,9 +271,7 @@
         language: 'th'
     });
     $('#model_id').change(function () {
-
         $('#btnAddSubModel').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
-
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()},
         function (data) {

@@ -23,6 +23,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('computer/listall', 'App\Controllers\ComputerController@listall');
     Route::get('computer/dialog', 'App\Controllers\ComputerController@dialog');
     Route::match(array('GET', 'POST'), 'computer/add', array('uses' => 'App\Controllers\ComputerController@add'));
+    Route::match(array('GET', 'POST'), 'computer/add_wizard', array('uses' => 'App\Controllers\ComputerController@add_wizard'));
     Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
     Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
     Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
@@ -210,6 +211,14 @@ Route::get('get/position', function() {
     return Response::json($position_id->select(array('id', 'title'))->get());
 });
 
+Route::get('get/getmodel', function() {
+    $input = Input::get('option');
+    $hsware_group = \DB::table('hsware_model')
+            ->where('group_id', $input)
+            ->orderBy('title');
+    return Response::json($hsware_group->select(array('id', 'title'))->get());
+});
+
 Route::get('get/submodel', function() {
     $input = Input::get('option');
     $hsware_group = \DB::table('hsware_model')
@@ -234,6 +243,22 @@ Route::get('get/getSerialCode', function() {
     //$sr = $str[2] + 1;
 
     return $item->serial_no; //$company->company_code . '-' . $group->code_no . '-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
+});
+
+Route::get('get/getSerialCom', function() {
+
+    $item = \DB::table('computer_item')
+            ->where('company_id', Input::get('company_id'))
+            ->where('deleted_at', null)
+            ->orderBy('id', 'desc')
+            ->select(array('serial_code'))
+            ->first();
+    $str = explode("-", $item->serial_code);
+    $company = \Company::find(Input::get('company_id'));
+
+    $sr = $str[2] + 1;
+
+    return $company->company_code . '-C-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
 });
 
 // Display all SQL executed in Eloquent

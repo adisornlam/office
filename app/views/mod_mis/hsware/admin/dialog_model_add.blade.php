@@ -32,7 +32,20 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page + "mis/hsware/add?group_id={{\Input::get('group_id')}}";
+                    //window.location.href = base_url + index_page + "mis/hsware/add?group_id={{\Input::get('group_id')}}";
+                    $('#myModal').modal('hide');
+                    $('#myModal').on('hidden.bs.modal', function (e) {
+                        $.get("{{ url('get/getmodel')}}",
+                                {option: <?php echo \Input::get('group_id'); ?>},
+                        function (data) {
+                            var submodel = $('#model_id<?php echo \Input::get('group_id'); ?>');
+                            submodel.empty();
+                            submodel.append("<option value=''>กรุณาเลือกรายการ</option>");
+                            $.each(data, function (index, element) {
+                                submodel.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                            });
+                        });
+                    });
                 }
             }
         });
