@@ -295,6 +295,12 @@ class HswareController extends \BaseController {
                 $hsware_model->group_id = \Input::get('group_id');
                 $hsware_model->disabled = (\Input::has('disabled') ? 0 : 1);
                 $hsware_model->save();
+                $hsware_model_id = $hsware_model->id;
+
+                $hi = new \HswareModelHierarchy();
+                $hi->hsware_model_id = $hsware_model_id;
+                $hi->hsware_model_parent_id = 0;
+                $hi->save();
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
@@ -327,7 +333,7 @@ class HswareController extends \BaseController {
 
                 $hi = new \HswareModelHierarchy();
                 $hi->hsware_model_id = $hsware_model_id;
-                $hi->hsware_model_parent_id = \Input::get('parent_id');
+                $hi->hsware_model_parent_id = (\Input::get('parent_id') ? \Input::get('parent_id') : 0);
                 $hi->save();
 
                 return \Response::json(array(
@@ -548,128 +554,65 @@ class HswareController extends \BaseController {
                     $photo_5 = NULL;
                 }
 
+                $hsware_item = new \HswareItem();
+                $hsware_item->group_id = \Input::get('group_id');
+                $hsware_item->company_id = \Input::get('company_id');
+                $hsware_item->serial_code = trim(\Input::get('serial_code'));
+                $hsware_item->serial_no = trim(\Input::get('serial_no'));
+                $hsware_item->access_no = trim(\Input::get('access_no'));
+                $hsware_item->model_id = \Input::get('model_id');
+                $hsware_item->sub_model = \Input::get('sub_model');
+                $hsware_item->title = trim(\Input::get('title'));
+                $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
+                $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
+                $hsware_item->spec_value_3 = trim(\Input::get('spec_value_3'));
+                $hsware_item->spec_value_4 = trim(\Input::get('spec_value_4'));
+                $hsware_item->spec_value_5 = trim(\Input::get('spec_value_5'));
+                $hsware_item->spec_value_6 = trim(\Input::get('spec_value_6'));
+                $hsware_item->spec_value_7 = trim(\Input::get('spec_value_7'));
+                $hsware_item->spec_value_8 = trim(\Input::get('spec_value_8'));
+                $hsware_item->spec_value_9 = trim(\Input::get('spec_value_9'));
+                $hsware_item->spec_value_10 = trim(\Input::get('spec_value_10'));
+                $hsware_item->spec_value_11 = trim(\Input::get('spec_value_11'));
+                $hsware_item->spec_value_12 = trim(\Input::get('spec_value_12'));
+                $hsware_item->spec_value_13 = trim(\Input::get('spec_value_13'));
+                $hsware_item->spec_value_14 = trim(\Input::get('spec_value_14'));
+                $hsware_item->spec_value_15 = trim(\Input::get('spec_value_15'));
+                $hsware_item->spec_value_16 = trim(\Input::get('spec_value_16'));
+                $hsware_item->spec_value_17 = trim(\Input::get('spec_value_17'));
+                $hsware_item->spec_value_18 = trim(\Input::get('spec_value_18'));
+                $hsware_item->spec_value_19 = trim(\Input::get('spec_value_19'));
+                $hsware_item->spec_value_20 = trim(\Input::get('spec_value_20'));
+                $hsware_item->spec_value_21 = trim(\Input::get('spec_value_21'));
+                $hsware_item->spec_value_22 = trim(\Input::get('spec_value_22'));
+                $hsware_item->spec_value_23 = trim(\Input::get('spec_value_23'));
+                $hsware_item->spec_value_24 = trim(\Input::get('spec_value_24'));
+                $hsware_item->spec_value_25 = trim(\Input::get('spec_value_25'));
+                $hsware_item->spec_value_26 = trim(\Input::get('spec_value_26'));
+                $hsware_item->spec_value_27 = trim(\Input::get('spec_value_27'));
+                $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
+                $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
+                $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
+                $hsware_item->spec_value_31 = trim(\Input::get('spec_value_31'));
+                $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
+                $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
+                $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
+                $hsware_item->spec_value_35 = trim(\Input::get('spec_value_35'));
+                $hsware_item->photo1 = $photo_1;
+                $hsware_item->photo2 = $photo_2;
+                $hsware_item->photo3 = $photo_3;
+                $hsware_item->photo4 = $photo_4;
+                $hsware_item->photo5 = $photo_5;
+                $hsware_item->ip_address = trim(\Input::get('ip_address'));
+                $hsware_item->locations = trim(\Input::get('locations'));
+                $hsware_item->register_date = trim(\Input::get('register_date'));
+                $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
+                $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
+                $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
+                $hsware_item->created_user = \Auth::user()->id;
+                $hsware_item->save();
 
 
-                $i = 0;
-                if (\Input::get('serial_code')) {
-                    foreach (\Input::get('serial_code') as $item_serial) {
-                        $serial_no = \Input::get('serial_no');
-                        if ($item_serial != '') {
-                            $hsware_item = new \HswareItem();
-                            $hsware_item->group_id = \Input::get('group_id');
-                            $hsware_item->company_id = \Input::get('company_id');
-                            $hsware_item->serial_code = $item_serial;
-                            $hsware_item->serial_no = $serial_no[$i];
-                            $hsware_item->access_no = trim(\Input::get('access_no'));
-                            $hsware_item->model_id = \Input::get('model_id');
-                            $hsware_item->sub_model = \Input::get('sub_model');
-                            $hsware_item->title = trim(\Input::get('title'));
-                            $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
-                            $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
-                            $hsware_item->spec_value_3 = trim(\Input::get('spec_value_3'));
-                            $hsware_item->spec_value_4 = trim(\Input::get('spec_value_4'));
-                            $hsware_item->spec_value_5 = trim(\Input::get('spec_value_5'));
-                            $hsware_item->spec_value_6 = trim(\Input::get('spec_value_6'));
-                            $hsware_item->spec_value_7 = trim(\Input::get('spec_value_7'));
-                            $hsware_item->spec_value_8 = trim(\Input::get('spec_value_8'));
-                            $hsware_item->spec_value_9 = trim(\Input::get('spec_value_9'));
-                            $hsware_item->spec_value_10 = trim(\Input::get('spec_value_10'));
-                            $hsware_item->spec_value_11 = trim(\Input::get('spec_value_11'));
-                            $hsware_item->spec_value_12 = trim(\Input::get('spec_value_12'));
-                            $hsware_item->spec_value_13 = trim(\Input::get('spec_value_13'));
-                            $hsware_item->spec_value_14 = trim(\Input::get('spec_value_14'));
-                            $hsware_item->spec_value_15 = trim(\Input::get('spec_value_15'));
-                            $hsware_item->spec_value_16 = trim(\Input::get('spec_value_16'));
-                            $hsware_item->spec_value_17 = trim(\Input::get('spec_value_17'));
-                            $hsware_item->spec_value_18 = trim(\Input::get('spec_value_18'));
-                            $hsware_item->spec_value_19 = trim(\Input::get('spec_value_19'));
-                            $hsware_item->spec_value_20 = trim(\Input::get('spec_value_20'));
-                            $hsware_item->spec_value_21 = trim(\Input::get('spec_value_21'));
-                            $hsware_item->spec_value_22 = trim(\Input::get('spec_value_22'));
-                            $hsware_item->spec_value_23 = trim(\Input::get('spec_value_23'));
-                            $hsware_item->spec_value_24 = trim(\Input::get('spec_value_24'));
-                            $hsware_item->spec_value_25 = trim(\Input::get('spec_value_25'));
-                            $hsware_item->spec_value_26 = trim(\Input::get('spec_value_26'));
-                            $hsware_item->spec_value_27 = trim(\Input::get('spec_value_27'));
-                            $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
-                            $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
-                            $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
-                            $hsware_item->spec_value_31 = trim(\Input::get('spec_value_31'));
-                            $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
-                            $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
-                            $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
-                            $hsware_item->photo1 = $photo_1;
-                            $hsware_item->photo2 = $photo_2;
-                            $hsware_item->photo3 = $photo_3;
-                            $hsware_item->photo4 = $photo_4;
-                            $hsware_item->photo5 = $photo_5;
-                            $hsware_item->ip_address = trim(\Input::get('ip_address'));
-                            $hsware_item->locations = trim(\Input::get('locations'));
-                            $hsware_item->register_date = trim(\Input::get('register_date'));
-                            $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
-                            $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
-                            $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
-                            $hsware_item->created_user = \Auth::user()->id;
-                            $hsware_item->save();
-                        }
-                        $i++;
-                    }
-                } else {
-                    $hsware_item = new \HswareItem();
-                    $hsware_item->group_id = \Input::get('group_id');
-                    $hsware_item->company_id = \Input::get('company_id');
-                    $hsware_item->access_no = trim(\Input::get('access_no'));
-                    $hsware_item->model_id = \Input::get('model_id');
-                    $hsware_item->sub_model = \Input::get('sub_model');
-                    $hsware_item->title = trim(\Input::get('title'));
-                    $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
-                    $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
-                    $hsware_item->spec_value_3 = trim(\Input::get('spec_value_3'));
-                    $hsware_item->spec_value_4 = trim(\Input::get('spec_value_4'));
-                    $hsware_item->spec_value_5 = trim(\Input::get('spec_value_5'));
-                    $hsware_item->spec_value_6 = trim(\Input::get('spec_value_6'));
-                    $hsware_item->spec_value_7 = trim(\Input::get('spec_value_7'));
-                    $hsware_item->spec_value_8 = trim(\Input::get('spec_value_8'));
-                    $hsware_item->spec_value_9 = trim(\Input::get('spec_value_9'));
-                    $hsware_item->spec_value_10 = trim(\Input::get('spec_value_10'));
-                    $hsware_item->spec_value_11 = trim(\Input::get('spec_value_11'));
-                    $hsware_item->spec_value_12 = trim(\Input::get('spec_value_12'));
-                    $hsware_item->spec_value_13 = trim(\Input::get('spec_value_13'));
-                    $hsware_item->spec_value_14 = trim(\Input::get('spec_value_14'));
-                    $hsware_item->spec_value_15 = trim(\Input::get('spec_value_15'));
-                    $hsware_item->spec_value_16 = trim(\Input::get('spec_value_16'));
-                    $hsware_item->spec_value_17 = trim(\Input::get('spec_value_17'));
-                    $hsware_item->spec_value_18 = trim(\Input::get('spec_value_18'));
-                    $hsware_item->spec_value_19 = trim(\Input::get('spec_value_19'));
-                    $hsware_item->spec_value_20 = trim(\Input::get('spec_value_20'));
-                    $hsware_item->spec_value_21 = trim(\Input::get('spec_value_21'));
-                    $hsware_item->spec_value_22 = trim(\Input::get('spec_value_22'));
-                    $hsware_item->spec_value_23 = trim(\Input::get('spec_value_23'));
-                    $hsware_item->spec_value_24 = trim(\Input::get('spec_value_24'));
-                    $hsware_item->spec_value_25 = trim(\Input::get('spec_value_25'));
-                    $hsware_item->spec_value_26 = trim(\Input::get('spec_value_26'));
-                    $hsware_item->spec_value_27 = trim(\Input::get('spec_value_27'));
-                    $hsware_item->spec_value_28 = trim(\Input::get('spec_value_28'));
-                    $hsware_item->spec_value_29 = trim(\Input::get('spec_value_29'));
-                    $hsware_item->spec_value_30 = trim(\Input::get('spec_value_30'));
-                    $hsware_item->spec_value_31 = trim(\Input::get('spec_value_31'));
-                    $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
-                    $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
-                    $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
-                    $hsware_item->photo1 = $photo_1;
-                    $hsware_item->photo2 = $photo_2;
-                    $hsware_item->photo3 = $photo_3;
-                    $hsware_item->photo4 = $photo_4;
-                    $hsware_item->photo5 = $photo_5;
-                    $hsware_item->ip_address = trim(\Input::get('ip_address'));
-                    $hsware_item->locations = trim(\Input::get('locations'));
-                    $hsware_item->register_date = trim(\Input::get('register_date'));
-                    $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
-                    $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
-                    $hsware_item->disabled = (\Input::has('disabled') ? 0 : 1);
-                    $hsware_item->created_user = \Auth::user()->id;
-                    $hsware_item->save();
-                }
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,

@@ -3716,7 +3716,7 @@ table.sliders tr td {
     color: #757575;
     cursor: pointer;
     float: left;
-    margin: 10px 15px;
+    margin: 10px 5px;
 }
 
 .stepy-titles li span { display: block; }

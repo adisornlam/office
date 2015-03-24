@@ -33,12 +33,6 @@
                             ข้อมูลทั่วไป
                         </a>
                     </li>
-                    <li class="">
-                        <a data-toggle="tab" href="#serial">
-                            <i class="fa fa-list"></i>
-                            เพิ่มรายการ เลขระเบียน / Serial No.
-                        </a>
-                    </li>
                     @if(\Input::get('group_id')!=2)
                     <li class="">
                         <a data-toggle="tab" href="#option1">
@@ -104,6 +98,12 @@
                                     {{ \Form::select('company_id', $company, (isset($_COOKIE['hsware_company_id'])?$_COOKIE['hsware_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('serial_code', 'เลขระเบียน', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
+                                </div>
+                            </div>
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
@@ -157,37 +157,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="serial" class="tab-pane">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div class="col-sm-10">
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            {{Form::text('serial_code[]', null,array('class'=>'form-control','placeholder'=>'เลขระเบียน 1','id'=>'serial_code'))}}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            {{Form::text('serial_no[]', null,array('class'=>'form-control','placeholder'=>'Serial No 1'))}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @for($i = 2; $i <= 10; $i++)
-                            <div class="form-group">
-                                <div class="col-sm-10">
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            {{Form::text('serial_code[]', null,array('class'=>'form-control','placeholder'=>'เลขระเบียน '.$i))}}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            {{Form::text('serial_no[]', null,array('class'=>'form-control','placeholder'=>'Serial No '.$i))}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endfor
-                        </div>
-                    </div>
+                    </div>                    
                     @if(\Input::get('group_id')!=2)
                     <div id="option1" class="tab-pane">
                         <div class="panel-body">

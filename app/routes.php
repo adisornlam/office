@@ -22,8 +22,10 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('computer', 'App\Controllers\ComputerController@index');
     Route::get('computer/listall', 'App\Controllers\ComputerController@listall');
     Route::get('computer/dialog', 'App\Controllers\ComputerController@dialog');
+    Route::get('computer/dialog_notebook', 'App\Controllers\ComputerController@dialog_notebook');
     Route::match(array('GET', 'POST'), 'computer/add', array('uses' => 'App\Controllers\ComputerController@add'));
     Route::match(array('GET', 'POST'), 'computer/add_wizard', array('uses' => 'App\Controllers\ComputerController@add_wizard'));
+    Route::match(array('GET', 'POST'), 'computer/add_notebook_wizard', array('uses' => 'App\Controllers\ComputerController@add_notebook_wizard'));
     Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
     Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
     Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
