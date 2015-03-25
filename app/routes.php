@@ -41,6 +41,18 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('hsware/view/{id}', 'App\Controllers\HswareController@view');
     Route::get('hsware/delete/{id}', 'App\Controllers\HswareController@delete');
 
+    //software
+    Route::get('software', 'App\Controllers\SoftwareController@index');
+    Route::get('software/listall', 'App\Controllers\SoftwareController@listall');
+    Route::match(array('GET', 'POST'), 'software/add', array('uses' => 'App\Controllers\SoftwareController@add'));
+    Route::match(array('GET', 'POST'), 'software/edit/{id}', array('uses' => 'App\Controllers\SoftwareController@edit'));
+    Route::get('software/delete/{id}', 'App\Controllers\SoftwareController@delete');
+    Route::get('software/group', 'App\Controllers\SoftwareController@group');
+    Route::get('software/group/listall', 'App\Controllers\SoftwareController@group_listall');
+    Route::match(array('GET', 'POST'), 'software/group/add', array('uses' => 'App\Controllers\SoftwareController@group_add'));
+    Route::match(array('GET', 'POST'), 'software/group/edit/{id}', array('uses' => 'App\Controllers\SoftwareController@group_edit'));
+    Route::get('software/group/delete/{id}', 'App\Controllers\SoftwareController@group_delete');
+
     Route::get('hsware/group', 'App\Controllers\HswareController@group');
     Route::get('hsware/group/listall', 'App\Controllers\HswareController@group_listall');
     Route::match(array('GET', 'POST'), 'hsware/group/add', array('uses' => 'App\Controllers\HswareController@group_add'));

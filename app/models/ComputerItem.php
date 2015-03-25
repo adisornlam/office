@@ -12,6 +12,10 @@ class ComputerItem extends \Eloquent {
     public function users() {
         return $this->belongsToMany('User', 'computer_user', 'computer_id', 'user_id')->withTimestamps();
     }
+    
+    public function software() {
+        return $this->belongsToMany('SoftwareItem', 'computer_softeare', 'computer_id', 'software_id')->withTimestamps();
+    }
    
 
 }

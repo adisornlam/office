@@ -339,8 +339,7 @@ class HswareController extends \BaseController {
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
-                                'message' => NULL,
-                                'redirect' => (\Input::has('redirect') ? \Input::get('redirect') : FALSE),
+                                'message' => NULL
                             ), 200));
             }
         }

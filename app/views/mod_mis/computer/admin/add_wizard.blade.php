@@ -64,6 +64,9 @@
                             <div>UPS</div>
                         </li>
                         <li id="default-title-11" class="">
+                            <div>SOFTWARE</div>
+                        </li>
+                        <li id="default-title-12" class="">
                             <div>USER</div>
                         </li>
                     </ul>
@@ -91,21 +94,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            {{Form::label('type_id', 'ประเภทคอมพิวเตอร์', array('class' => 'col-sm-2 control-label'))}}
-                            <div class="col-sm-8">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="type_id" class="type_id" value="1" checked=""> PC
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="type_id" class="type_id" value="2"> Notebook
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             {{Form::label('title', 'ชื่อคอมพิวเตอร์', array('class' => 'col-sm-2 control-label req'))}}
                             <div class="col-sm-3">
                                 {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title'))}}
@@ -121,12 +109,6 @@
                             {{Form::label('mac_lan', 'Mac Address Lan Local', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
                                 {{Form::text('mac_lan', NULL,array('class'=>'form-control','id'=>'mac_lan'))}}
-                            </div>
-                        </div>
-                        <div class="form-group hidden">
-                            {{Form::label('mac_wireless', 'Mac Address Wireless', array('class' => 'col-sm-2 control-label'))}}
-                            <div class="col-sm-2">
-                                {{Form::text('mac_wireless', NULL,array('class'=>'form-control','id'=>'mac_wireless'))}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -223,7 +205,7 @@
                                         {{ \Form::select('sub_model[8][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model8'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel8" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel8" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +251,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22_1')); }}
+                                        {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=22" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -395,7 +377,7 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -415,7 +397,7 @@
                                         {{ \Form::select('sub_model[6][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model6'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel6" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel6" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -438,7 +420,7 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -458,7 +440,7 @@
                                         {{ \Form::select('sub_model[5][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model5'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel5" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel5" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -481,7 +463,7 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -501,9 +483,40 @@
                                         {{ \Form::select('sub_model[7][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model7'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel7" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel7" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        @foreach(\DB::table('hsware_spec_label')->where('group_id',7)->get() as $item_label)
+                        <div class="form-group">
+                            {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-3">              
+                                @if($item_label->option_id>0)
+                                {{Form::select($item_label->name.'[7][]',
+                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
+                                                ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
+                                                ->where('option_id',$item_label->option_id)
+                                                ->orderBy('title', 'asc')
+                                                ->lists('title','id'),
+                                                NULL,array('class'=>'form-control'))}}
+                                @else
+                                {{Form::text($item_label->name.'[7][]',null,array('class'=>'form-control'))}}
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                        <div class="form-group">
+                            {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-2">
+                                <div class="input-group date form_datetime-component">
+                                    {{Form::text('warranty_date[7][]', NULL,array('class'=>'form-control datepicker'))}}
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="help-block">LT ไม่ต้องกำหนด</span>
                             </div>
                         </div>
                     </div>
@@ -512,7 +525,7 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -532,7 +545,7 @@
                                         {{ \Form::select('sub_model[26][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model26'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel26" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel26" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -555,7 +568,7 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'ยี่ห้อ/รุ่น', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -575,7 +588,7 @@
                                         {{ \Form::select('sub_model[14][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model14'));}}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" id="btnAddSubModel14" rel="" class="btn btn-primary" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
+                                        <a href="javascript:;" id="btnAddSubModel14" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -617,11 +630,11 @@
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
-                            {{Form::label('model_id', 'HDD 1', array('class' => 'col-sm-2 control-label req'));}}
+                            {{Form::label('model_id', 'UPS', array('class' => 'col-sm-2 control-label'));}}
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[13][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',13)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22_1')); }}
+                                        {{ \Form::select('model_id[13][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',13)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id13')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=13" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -662,7 +675,25 @@
                         </div>
                     </div>
                 </fieldset>
-                <fieldset title="USER" class="step" id="default-step-11" >
+                <fieldset title="SOFTWARE" class="step" id="default-step-11" >
+                    <legend> </legend>                       
+                    <div class="panel-body">
+                        <div class="form-group">
+                            {{Form::label('model_id', 'กลุ่มโปรแกรมติดตั้ง', array('class' => 'col-sm-2 control-label req'));}}
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        {{ \Form::select('software_group_id',array('' => 'เลือกกลุ่มติดตั้ง Software') +  \DB::table('software_group_item')->where('disabled',0)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'software_group_id')); }}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="{{URL::to('mis/software/group/add')}}" class="btn btn-primary link_dialog" title="เพิ่มกลุ่มติดตั้ง Software" role="button"><i class="fa fa-plus"></i> เพิ่มกลุ่มติดตั้ง Software</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </fieldset>
+                <fieldset title="USER" class="step" id="default-step-12" >
                     <legend> </legend>
                     <div class="panel-body">
                         <div class="form-group">
@@ -720,7 +751,7 @@
     });
 
     $('#model_id2').change(function () {
-        $('#btnAddSubModel2').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val()) + '?group_id=2';
+        $('#btnAddSubModel2').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=2');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model2');
@@ -734,7 +765,7 @@
     });
 
     $('#model_id8').change(function () {
-        $('#btnAddSubModel8').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel8').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=8');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model8');
@@ -748,7 +779,7 @@
     });
 
     $('#model_id14').change(function () {
-        $('#btnAddSubModel14').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel14').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=14');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model14');
@@ -762,7 +793,7 @@
     });
 
     $('#model_id6').change(function () {
-        $('#btnAddSubModel6').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel6').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=6');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model6');
@@ -776,7 +807,7 @@
     });
 
     $('#model_id5').change(function () {
-        $('#btnAddSubModel5').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel5').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=5');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model5');
@@ -790,7 +821,7 @@
     });
 
     $('#model_id7').change(function () {
-        $('#btnAddSubModel7').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel7').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=7');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model7');
@@ -804,7 +835,7 @@
     });
 
     $('#model_id26').change(function () {
-        $('#btnAddSubModel26').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val());
+        $('#btnAddSubModel26').attr('rel', 'mis/hsware/group/model/sub/add/' + $(this).val() + '?group_id=26');
         $.get("{{ url('get/submodel')}}",
                 {option: $(this).val()}, function (data) {
             var submodel = $('#sub_model26');
@@ -815,19 +846,6 @@
                 submodel.append("<option value='" + element.id + "'>" + element.title + "</option>");
             });
         });
-    });
-
-
-    $('.type_id').click(function () {
-        if ($(this).is(':checked')) {
-            if ($(this).val() == 1) {
-                $('#mac_lan').parent().parent().removeClass('hidden');
-                $('#mac_wireless').parent().parent().addClass('hidden');
-            } else {
-                $('#mac_wireless').parent().parent().removeClass('hidden');
-                $('#mac_lan').parent().parent().addClass('hidden');
-            }
-        }
     });
 
     $('#company_id').change(function () {

@@ -40,13 +40,19 @@
                         </a>
                     </li>
                     <li class="">
+                        <a data-toggle="tab" href="#software">
+                            <i class="fa fa-list"></i>
+                            โปรแกรมติดตั้ง
+                        </a>
+                    </li>
+                    <li class="">
                         <a data-toggle="tab" href="#gallery">
                             <i class="fa fa-user"></i>
                             ผู้ใช้งาน
                         </a>
                     </li>
                 </ul>
-                <span class="hidden-sm wht-color">{{$title}} xx</span>
+                <span class="hidden-sm wht-color">{{$title}}</span>
             </header>
             <div class="panel-body">
                 <div class="tab-content">
@@ -228,6 +234,65 @@
                                                     </div>
                                                 </div>
                                             <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="software" class="tab-pane">
+                        <div class="panel-body">
+                            <div role="tabpanel">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">โปรแกรมที่ติดตั้ง</a></li>
+                                    <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">เปลี่ยนกลุ่มติดตั้งโปรแกรม</a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="home1">
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label col-lg-2" for="hsware_item">รายการโปรแกรมติดตั้ง</label>
+                                                <div class="col-lg-6">
+                                                    <?php
+                                                    foreach (\DB::table('software_group_item')
+                                                            ->join('software_group', 'software_group_item.id', '=', 'software_group.group_id')
+                                                            ->join('software_item', 'software_group.software_id', '=', 'software_item.id')
+                                                            ->where('software_group_item.id', $item->software_group_id)
+                                                            ->where('software_group_item.disabled', 0)
+                                                            ->select(array(
+                                                                'software_item.title as title',
+                                                            ))
+                                                            ->get() as $software_item) {
+                                                        ?>
+                                                        <div class="radio">
+                                                            <label>
+                                                                {{$software_item->title}}
+                                                            </label>
+                                                        </div>
+                                                    <?php }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="profile1">
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                {{Form::label('model_id', 'กลุ่มโปรแกรมติดตั้ง', array('class' => 'col-sm-2 control-label req'));}}
+                                                <div class="col-sm-10">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            {{ \Form::select('software_group_id',array('' => 'เลือกกลุ่มติดตั้ง Software') +  \DB::table('software_group_item')->where('disabled',0)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'software_group_id')); }}
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <a href="{{URL::to('mis/software/group/add')}}" class="btn btn-primary link_dialog" title="เพิ่มกลุ่มติดตั้ง Software" role="button"><i class="fa fa-plus"></i> เพิ่มกลุ่มติดตั้ง Software</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>    
                                         </div>
                                     </div>
                                 </div>

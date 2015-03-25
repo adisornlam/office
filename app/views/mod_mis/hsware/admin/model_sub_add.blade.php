@@ -19,7 +19,6 @@
     </div>
 </div>
 {{\Form::hidden('parent_id',\Request::segment(7))}}
-{{\Form::hidden('redirect',\Input::get('redirect'))}}
 {{ Form::close() }}
 <script type="text/javascript">
     $('body').on('shown.bs.modal', '.modal', function () {
@@ -41,11 +40,19 @@
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    if (data.error.redirect == false) {
-                        window.location.href = base_url + index_page + "mis/hsware/group/model/sub/{{\Request::segment(7)}}";
-                    } else {
-                        window.location.href = base_url + index_page + data.error.redirect;
-                    }
+                    $('#myModal').modal('hide');
+                    $('#myModal').on('hidden.bs.modal', function (e) {
+                        $.get("{{ url('get/submodel')}}",
+                                {option: <?php echo \Request::segment(7); ?>},
+                        function (data) {
+                            var submodel = $('#sub_model<?php echo \Input::get('group_id'); ?>');
+                            submodel.empty();
+                            submodel.append("<option value=''>กรุณาเลือกรายการ</option>");
+                            $.each(data, function (index, element) {
+                                submodel.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                            });
+                        });
+                    });
                 }
             }
         });

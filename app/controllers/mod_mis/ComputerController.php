@@ -205,6 +205,7 @@ class ComputerController extends \BaseController {
                 $spec_value_3 = \Input::get('spec_value_3');
                 $spec_value_4 = \Input::get('spec_value_4');
                 $spec_value_5 = \Input::get('spec_value_5');
+                $spec_value_11 = \Input::get('spec_value_11');
                 $spec_value_12 = \Input::get('spec_value_12');
                 $spec_value_13 = \Input::get('spec_value_13');
                 $spec_value_18 = \Input::get('spec_value_18');
@@ -215,7 +216,8 @@ class ComputerController extends \BaseController {
 
                 $computer_item = new \ComputerItem();
                 $computer_item->company_id = \Input::get('company_id');
-                $computer_item->type_id = \Input::get('type_id');
+                $computer_item->software_group_id = (\Input::has('software_group_id') ? \Input::get('software_group_id') : 0);
+                $computer_item->type_id = 1;
                 $computer_item->serial_code = trim(\Input::get('serial_code'));
                 $computer_item->access_no = trim(\Input::get('access_no'));
                 $computer_item->title = trim(\Input::get('title'));
@@ -427,6 +429,7 @@ class ComputerController extends \BaseController {
                     $hsware_item7->group_id = 7;
                     $hsware_item7->company_id = \Input::get('company_id');
                     $hsware_item7->model_id = (isset($model[7][0]) ? $model[7][0] : 0);
+                    $hsware_item31->spec_value_11 = (isset($spec_value_11[7][0]) ? $spec_value_11[7][0] : NULL);
                     $hsware_item7->locations = trim(\Input::get('locations'));
                     $hsware_item7->register_date = trim(\Input::get('register_date'));
                     $hsware_item7->warranty_date = (isset($warranty_date[7][0]) != '' ? trim($warranty_date[7][0]) : NULL);
@@ -520,6 +523,27 @@ class ComputerController extends \BaseController {
                     $hslog13->computer_id = $computer_id;
                     $hslog13->created_user = \Auth::user()->id;
                     $hslog13->save();
+                }
+
+                if (\Input::get('software_group_id') > 0) {
+
+                    $software_arr = \DB::table('software_group_item')
+                            ->join('software_group', 'software_group_item.id', '=', 'software_group.group_id')
+                            ->join('software_item', 'software_group.software_id', '=', 'software_item.id')
+                            ->where('software_group_item.id', \Input::get('software_group_id'))
+                            ->where('software_group_item.disabled', 0)
+                            ->select(array(
+                                'software_item.id as id',
+                            ))
+                            ->lists('id');
+                    $computer_item->software()->sync($software_arr);
+                    foreach (\Input::get('hsware_item') as $item) {
+                        $hslog = new \HswareComputerLog();
+                        $hslog->hsware_id = $item;
+                        $hslog->computer_id = $computer_id;
+                        $hslog->created_user = \Auth::user()->id;
+                        $hslog->save();
+                    }
                 }
 
                 return \Response::json(array(
@@ -904,6 +928,7 @@ class ComputerController extends \BaseController {
                         'computer_item.id as id',
                         'computer_item.title as title',
                         'computer_item.company_id as company_id',
+                        'computer_item.software_group_id as software_group_id',
                         'computer_item.serial_code as serial_code',
                         'computer_item.access_no as access_no',
                         'computer_item.type_id as type_id',
@@ -947,6 +972,7 @@ class ComputerController extends \BaseController {
             } else {
                 $computer_item = \ComputerItem::find($param);
                 $computer_item->company_id = \Input::get('company_id');
+                $computer_item->software_group_id = (\Input::has('software_group_id') ? \Input::get('software_group_id') : 0);
                 $computer_item->type_id = \Input::get('type_id');
                 $computer_item->serial_code = trim(\Input::get('serial_code'));
                 $computer_item->access_no = trim(\Input::get('access_no'));

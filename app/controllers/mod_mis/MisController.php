@@ -29,7 +29,8 @@ class MisController extends \BaseController {
             'supplier_count' => \Supplier::where('disabled', '=', 0)->count(),
             'hsware_group_count' => \HswareGroup::where('disabled', '=', 0)->count(),
             'hsware_model_count' => \HswareModel::where('disabled', '=', 0)->count(),
-            'repairing_count' => \RepairingItem::where('disabled', '=', 0)->count()
+            'repairing_count' => \RepairingItem::where('disabled', '=', 0)->count(),
+            'software_count' => \SoftwareItem::where('disabled', '=', 0)->count(),
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);

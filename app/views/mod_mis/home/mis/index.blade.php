@@ -28,7 +28,7 @@
                 <i class="fa fa-desktop"></i>
             </div>
             <div class="value">
-                <h1 class="count">
+                <h1 class="computer_count">
                     {{$compouter_count}}
                 </h1>
                 <p>ระเบียนคอมพิวเตอร์</p>
@@ -52,7 +52,7 @@
                 <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <h1 class=" count2">
+                <h1 class="hsware_count">
                     {{$hsware_count}}
                 </h1>
                 <p>รายการ Hardware</p>
@@ -96,6 +96,19 @@
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="software_list">
+        <section class="panel">
+            <div class="symbol yellow">
+                <i class="fa fa-windows"></i>
+            </div>
+            <div class="value">
+                <h1 class="software_count">
+                    {{$software_count}}
+                </h1>
+                <p>รายการ Software</p>
+            </div>
+        </section>
+    </div>
 </div>
 
 <div class="page-header">
@@ -108,7 +121,7 @@
                 <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <h1 class="count">
+                <h1 class="deliver_count">
                     0
                 </h1>
                 <p>รายการรับมอบอุปกรณ์</p>
@@ -134,7 +147,7 @@
                 <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <h1 class="count">
+                <h1 class="supplier_count">
                     {{$supplier_count}}
                 </h1>
                 <p>รายการตัวแทนจำหน่าย</p>
@@ -165,7 +178,7 @@
                 <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <h1 class="count">
+                <h1 class="purchase_request_count">
                     0
                 </h1>
                 <p>รายการขอซื้อ</p>
@@ -355,6 +368,9 @@
     });
     $('#hsware_model_list').click(function () {
         window.location.href = base_url + index_page + 'mis/hsware/group/model';
+    });
+    $('#software_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/software';
     });
     $('#repairing_list').click(function () {
         window.location.href = base_url + index_page + 'mis/repairing';
