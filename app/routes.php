@@ -264,6 +264,7 @@ Route::get('get/getSerialCom', function() {
     $item = \DB::table('computer_item')
             ->where('company_id', Input::get('company_id'))
             ->where('deleted_at', null)
+            ->where('type_id', 1)
             ->orderBy('id', 'desc')
             ->select(array('serial_code'))
             ->first();
@@ -273,6 +274,27 @@ Route::get('get/getSerialCom', function() {
     $sr = $str[2] + 1;
 
     return $company->company_code . '-C-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
+});
+
+Route::get('get/getSerialNotebook', function() {
+
+    $item = \DB::table('computer_item')
+            ->where('company_id', Input::get('company_id'))
+            ->where('deleted_at', null)
+            ->where('type_id', 2)
+            ->orderBy('id', 'desc')
+            ->select(array('serial_code'))
+            ->first();
+    if ($item) {
+        $str = explode("-", $item->serial_code);
+    } else {
+        $str[2] = 0;
+    }
+    $company = \Company::find(Input::get('company_id'));
+
+    $sr = $str[2] + 1;
+
+    return $company->company_code . '-NB-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
 });
 
 // Display all SQL executed in Eloquent

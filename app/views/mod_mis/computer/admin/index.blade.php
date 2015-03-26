@@ -55,6 +55,11 @@
                             {{ \Form::select('disabled', array(''=>'เลือกสถานะ',0=>'Active',1=>'Inactive'), (isset($_COOKIE['computer_disabled'])?$_COOKIE['computer_disabled']:null), array('class' => 'form-control', 'id' => 'disabled')); }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {{ \Form::select('type_id', array(''=>'เลือกประเภทคอมพิวเตอร์',1=>'PC',2=>'Notebook'), (isset($_COOKIE['computer_type_id'])?$_COOKIE['computer_type_id']:null), array('class' => 'form-control', 'id' => 'type_id')); }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,6 +102,7 @@
                 "data": function (d) {
                     d.company_id = $('#company_id').val();
                     d.status = $('#disabled').val();
+                    d.type_id = $('#type_id').val();
                 }
             },
             "columnDefs": [{
@@ -109,7 +115,7 @@
                 {"data": "title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "เจ้าของเครื่อง", "width": "20%", "orderable": false, "searchable": true},
                 {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
-                {"data": "ip_address", "title": "IP Address", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "ip_address", "title": "IP Address", "width": "10%", "orderable": true, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ],
             dom: 'T<"clear">lfrtip',
@@ -140,6 +146,16 @@
         });
         $('#disabled').on('change', function () {
             $.cookie('computer_disabled', $(this).val());
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#type_id').on('change', function () {
+            $.cookie('computer_type_id', $(this).val());
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();

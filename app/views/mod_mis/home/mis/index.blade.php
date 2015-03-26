@@ -53,7 +53,7 @@
             </div>
             <div class="value">
                 <h1 class="hsware_count">
-                    {{$hsware_count}}
+                    0
                 </h1>
                 <p>รายการ Hardware</p>
             </div>
@@ -89,8 +89,8 @@
                 <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <h1 class=" count2">
-                    {{$hsware_model_count}}
+                <h1 class="hsware_model_count">
+                    0
                 </h1>
                 <p>รายการยี่ห้อรุ่น</p>
             </div>
@@ -341,6 +341,29 @@
 
 @section('script_code')
 <script type="text/javascript">
+    function countUp(obj, count)
+    {
+        var div_by = 100,
+                speed = Math.round(count / div_by),
+                $display = $('.' + obj),
+                run_count = 1,
+                int_speed = 24;
+
+        var int = setInterval(function () {
+            if (run_count < div_by) {
+                $display.text(speed * run_count);
+                run_count++;
+            } else if (parseInt($display.text()) < count) {
+                var curr_count = parseInt($display.text()) + 1;
+                $display.text(curr_count);
+            } else {
+                clearInterval(int);
+            }
+        }, int_speed);
+    }
+
+    countUp('hsware_count',<?php echo $hsware_count; ?>);
+    countUp('hsware_model_count',<?php echo $hsware_model_count; ?>);
     $('#computer_list').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });

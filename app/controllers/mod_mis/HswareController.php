@@ -86,7 +86,8 @@ class HswareController extends \BaseController {
                         ->edit_column('status', '@if($status==1) <span class="label label-success">Used</span> @else <span class="label label-warning">Inactive</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', function($result_obj) {
-                            $str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id) . '</a>';
+                            //$str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id) . '</a>';
+                            $str = $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id);
                             return $str;
                         })
                         ->edit_column('created_user', '{{\User::find($created_user)->username}}')

@@ -167,6 +167,25 @@
                                 </div>
                             </div>
                         </div>
+                        @foreach(\DB::table('hsware_spec_label')->where('group_id',2)->get() as $item_label)
+                        <div class="form-group">
+                            {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-3">              
+                                @if($item_label->option_id>0)
+                                {{Form::select($item_label->name.'[2][]',
+                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
+                                                ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
+                                                ->where('option_id',$item_label->option_id)
+                                                ->orderBy('title', 'asc')
+                                                ->lists('title','id'),
+                                                NULL,array('class'=>'form-control'))}}
+                                @else
+                                {{Form::text($item_label->name.'[2][]',null,array('class'=>'form-control','placeholder'=>$item_label->placeholder))}}
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
                         <div class="form-group">
                             {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
@@ -224,7 +243,7 @@
                                                 ->lists('title','id'),
                                                 NULL,array('class'=>'form-control'))}}
                                 @else
-                                {{Form::text($item_label->name.'[8][]',null,array('class'=>'form-control'))}}
+                                {{Form::text($item_label->name.'[8][]',null,array('class'=>'form-control','placeholder'=>$item_label->placeholder))}}
                                 @endif
                             </div>
                         </div>
@@ -279,6 +298,38 @@
                         </div>
                         @endforeach
                         <div class="form-group">
+                            {{Form::label('model_id', 'HDD 2', array('class' => 'col-sm-2 control-label'));}}
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control')); }}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
+                        @foreach(\DB::table('hsware_spec_label')->where('group_id',22)->get() as $item_label)
+                        <div class="form-group">
+                            {{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-3">              
+                                @if($item_label->option_id>0)
+                                {{Form::select($item_label->name.'[22][]',
+                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
+                                                ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
+                                                ->where('option_id',$item_label->option_id)
+                                                ->orderBy('title', 'asc')
+                                                ->lists('title','id'),
+                                                NULL,array('class'=>'form-control'))}}
+                                @else
+                                {{Form::text($item_label->name.'[22][]',null,array('class'=>'form-control'))}}
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                        <div class="form-group">
                             {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
                                 <div class="input-group date form_datetime-component">
@@ -300,7 +351,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[3][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control')); }}
+                                        {{ \Form::select('model_id[3][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id3')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=3" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -607,7 +658,7 @@
                                                 ->lists('title','id'),
                                                 NULL,array('class'=>'form-control'))}}
                                 @else
-                                {{Form::text($item_label->name.'[14][]',null,array('class'=>'form-control'))}}
+                                {{Form::text($item_label->name.'[14][]',null,array('class'=>'form-control','placeholder'=>$item_label->placeholder))}}
                                 @endif
                             </div>
                         </div>
@@ -873,8 +924,7 @@
                 'serial_code': 'required',
                 'title': 'required',
                 'model_id[2][]': 'required',
-                'model_id[8][]': 'required',
-                'model_id[22][]': 'required'
+                'model_id[8][]': 'required'
             }
         });
 
