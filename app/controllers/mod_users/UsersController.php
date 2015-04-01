@@ -155,7 +155,6 @@ class UsersController extends \BaseController {
                 'company_id' => 'required',
                 'firstname' => 'required',
                 'lastname' => 'required',
-                'email' => 'email|unique:users',
                 'role_id' => 'required'
             );
             $validator = \Validator::make(\Input::all(), $rules);
@@ -185,7 +184,6 @@ class UsersController extends \BaseController {
                 $user->mobile = trim(\Input::get('mobile'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
                 $user->verified = (\Input::has('verified') ? 1 : 0);
-                //$user->avatar = $photo1;
                 $user->save();
 
                 $user->roles()->sync(array(\Input::get('role_id')));

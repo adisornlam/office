@@ -15,6 +15,10 @@ namespace App\Controllers;
  */
 class MisController extends \BaseController {
 
+    public function __construct() {
+        $this->beforeFilter('auth', array('except' => '/login'));
+    }
+
     public function index() {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
@@ -23,7 +27,9 @@ class MisController extends \BaseController {
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => '#'
             ),
-            'compouter_count' => \ComputerItem::where('disabled', '=', 0)->count(),
+            'compouter_count' => \ComputerItem::where('disabled', '=', 0)->where('type_id', '=', 1)->count(),
+            'notebook_count' => \ComputerItem::where('disabled', '=', 0)->where('type_id', '=', 2)->count(),
+            'printer_count' => \HswareItem::where('disabled', '=', 0)->where('group_id', '=', 24)->count(),
             'hsware_count' => \HswareItem::where('disabled', '=', 0)->count(),
             'users_count' => \User::where('disabled', '=', 0)->count(),
             'supplier_count' => \Supplier::where('disabled', '=', 0)->count(),

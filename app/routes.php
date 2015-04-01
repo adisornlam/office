@@ -250,13 +250,21 @@ Route::get('get/getSerialCode', function() {
             ->where('deleted_at', null)
             ->orderBy('id', 'desc')
             ->first();
-    //$str = explode("-", $item->serial_no);
+
+    if ($item) {
+        if ($item->serial_code != NULL) {
+            $str = explode("-", $item->serial_code);
+            $sl = $str[2] + 1;
+        } else {
+            $sl = 1;
+        }
+    } else {
+        $sl = 1;
+    }
     $company = \Company::find(Input::get('company_id'));
     $group = \HswareGroup::find(Input::get('group_id'));
 
-    //$sr = $str[2] + 1;
-
-    return $item->serial_no; //$company->company_code . '-' . $group->code_no . '-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
+    return $company->company_code . '-' . $group->code_no . '-' . str_pad($sl, 3, "0", STR_PAD_LEFT);
 });
 
 Route::get('get/getSerialCom', function() {
@@ -282,7 +290,7 @@ Route::get('get/getSerialNotebook', function() {
             ->where('company_id', Input::get('company_id'))
             ->where('deleted_at', null)
             ->where('type_id', 2)
-            ->orderBy('id', 'desc')
+            ->orderBy('serial_code', 'desc')
             ->select(array('serial_code'))
             ->first();
     if ($item) {

@@ -62,6 +62,10 @@ class ComputerController extends \BaseController {
             $computer_item->where('computer_item.type_id', \Input::get('type_id'));
         }
 
+        if (\Input::has('department_id')) {
+            $computer_item->where('users.department_id', \Input::get('department_id'));
+        }
+
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
@@ -191,7 +195,7 @@ class ComputerController extends \BaseController {
         } else {
             $rules = array(
                 'company_id' => 'required',
-                'title' => 'required'
+                'title' => 'required|unique:computer_item'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -954,6 +958,7 @@ class ComputerController extends \BaseController {
 
     public function delete($param) {
         $computer_item = \ComputerItem::find($param);
+
         \DB::table('users')
                 ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
                 ->where('computer_user.computer_id', $param)

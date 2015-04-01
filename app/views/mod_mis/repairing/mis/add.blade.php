@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="form-group">
-    <div class="col-sm-9">
+    <div class="col-sm-12">
         {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title','placeholder'=>'หัวข้อแจ้งซ่อม'))}}
     </div>
 </div>

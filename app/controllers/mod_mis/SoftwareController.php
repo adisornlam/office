@@ -29,7 +29,7 @@ class SoftwareController extends \BaseController {
 
     public function listall() {
         $software = $computer_item = \DB::table('software_item')
-                ->select(array('id', 'title', 'version', 'bit_os', 'free', 'disabled'))
+                ->select(array('id', 'id as item_id', 'title', 'version', 'bit_os', 'free', 'disabled'))
                 ->where('disabled', 0)
                 ->orderBy('title', 'asc');
 
@@ -43,6 +43,35 @@ class SoftwareController extends \BaseController {
 
         return \Datatables::of($software)
                         ->edit_column('id', $link)
+                        ->edit_column('title', function($result_obj) {
+                            $str = '<a href="' . \URL::to('mis/software/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . '</a>';
+                            return $str;
+                        })
+                        ->edit_column('free', '@if($free==0) <span class="label label-success">Free</span> @endif')
+                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->make(true);
+    }
+
+    public function license_listall($param) {
+        $software = $computer_item = \DB::table('license_item')
+                ->join('license_type', 'license_item.type_id', '=', 'license_type.id')
+                ->select(array('license_item.id as id', 'license_item.id as item_id', 'license_item.serial_code as serial_code', 'license_type.title as group_type', 'license_item.total as total', 'license_item.status as status', 'license_item.disabled as disabled'))
+                ->where('disabled', 0);
+
+        $link = '<div class="dropdown">';
+        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
+        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="javascript:;" rel="mis/software/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="mis/software/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '</ul>';
+        $link .= '</div>';
+
+        return \Datatables::of($software)
+                        ->edit_column('id', $link)
+                        ->edit_column('serial_code', function($result_obj) {
+                            $str = '<a href="' . \URL::to('mis/software/license/' . $result_obj->item_id . '') . '">' . $result_obj->serial_code . '</a>';
+                            return $str;
+                        })
                         ->edit_column('free', '@if($free==0) <span class="label label-success">Free</span> @endif')
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);

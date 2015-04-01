@@ -49,7 +49,12 @@
                         <div class="col-sm-8">
                             {{ \Form::select('company_id', array('' => 'เลือกบริษัท') +$company, (isset($_COOKIE['computer_company_id'])?$_COOKIE['computer_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
-                    </div>      
+                    </div>
+                    <div class="form-group hidden">
+                        <div class="col-sm-5">
+                            {{ \Form::select('department_id', array('' => 'เลือกฝ่าย/แผนก'),null , array('class' => 'form-control', 'id' => 'department_id')); }}
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-5">
                             {{ \Form::select('disabled', array(''=>'เลือกสถานะ',0=>'Active',1=>'Inactive'), (isset($_COOKIE['computer_disabled'])?$_COOKIE['computer_disabled']:null), array('class' => 'form-control', 'id' => 'disabled')); }}
@@ -103,6 +108,7 @@
                     d.company_id = $('#company_id').val();
                     d.status = $('#disabled').val();
                     d.type_id = $('#type_id').val();
+                    d.department_id = $('#department_id').val();
                 }
             },
             "columnDefs": [{
@@ -124,11 +130,11 @@
                 "aButtons": [
                     {
                         "sExtends": "copy",
-                        "mColumns": [1, 2, 3, 4]
+                        "mColumns": [1, 2, 3, 5]
                     },
                     {
                         "sExtends": "xls",
-                        "mColumns": [1, 2, 3, 4],
+                        "mColumns": [1, 2, 3, 5],
                         "sFileName": "export_computer_" + $.now() + ".csv"
                     }
                 ]
@@ -140,12 +146,32 @@
                 delay(function () {
                     oTable.fnDraw();
                 }, 500);
+
+                $.get("{{ url('get/department')}}",
+                        {option: $(this).val()}, function (data) {
+                    var department = $('#department_id');
+                    department.parent().parent().removeClass('hidden');
+                    department.empty();
+                    department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
+                    $.each(data, function (index, element) {
+                        department.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                    });
+                });
             } else {
                 oTable.fnDraw();
             }
         });
         $('#disabled').on('change', function () {
             $.cookie('computer_disabled', $(this).val());
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#department_id').on('change', function () {
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();

@@ -14,7 +14,7 @@
 {{ Form::close() }}
 <script type="text/javascript">
     $('body').on('shown.bs.modal', '.modal', function () {
-        $('#group_id').focus();
+        $('#title').focus();
     });
     $('#btnDialogSave').click(function () {
         $(this).attr('disabled', 'disabled');

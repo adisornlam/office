@@ -22,6 +22,7 @@
     <h1>ระเบียนคอมพิวเตอร์ <small>จัดการระบบระเบียนคอมพิวเตอร์</small></h1>
 </div>
 <div class="row state-overview">
+    
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
         <section class="panel">
             <div class="symbol terques">
@@ -32,6 +33,32 @@
                     {{$compouter_count}}
                 </h1>
                 <p>ระเบียนคอมพิวเตอร์</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="fa fa-laptop"></i>
+            </div>
+            <div class="value">
+                <h1 class="computer_count">
+                    {{$notebook_count}}
+                </h1>
+                <p>ระเบียนโน๊ตบุ๊ค</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="fa fa-print"></i>
+            </div>
+            <div class="value">
+                <h1 class="computer_count">
+                    {{$printer_count}}
+                </h1>
+                <p>ระเบียนปริ้นเตอร์</p>
             </div>
         </section>
     </div>
@@ -53,7 +80,7 @@
             </div>
             <div class="value">
                 <h1 class="hsware_count">
-                    0
+                    {{$hsware_count}}
                 </h1>
                 <p>รายการ Hardware</p>
             </div>
@@ -90,7 +117,7 @@
             </div>
             <div class="value">
                 <h1 class="hsware_model_count">
-                    0
+                    {{$hsware_model_count}}
                 </h1>
                 <p>รายการยี่ห้อรุ่น</p>
             </div>
@@ -341,29 +368,6 @@
 
 @section('script_code')
 <script type="text/javascript">
-    function countUp(obj, count)
-    {
-        var div_by = 100,
-                speed = Math.round(count / div_by),
-                $display = $('.' + obj),
-                run_count = 1,
-                int_speed = 24;
-
-        var int = setInterval(function () {
-            if (run_count < div_by) {
-                $display.text(speed * run_count);
-                run_count++;
-            } else if (parseInt($display.text()) < count) {
-                var curr_count = parseInt($display.text()) + 1;
-                $display.text(curr_count);
-            } else {
-                clearInterval(int);
-            }
-        }, int_speed);
-    }
-
-    countUp('hsware_count',<?php echo $hsware_count; ?>);
-    countUp('hsware_model_count',<?php echo $hsware_model_count; ?>);
     $('#computer_list').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });

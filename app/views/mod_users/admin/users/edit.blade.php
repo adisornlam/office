@@ -87,7 +87,7 @@
                 <div class="form-group">
                     {{Form::label('verified', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('verified', 1,($item->verified==0?TRUE:FALSE))}} ตรวจสอบ
+                        {{Form::checkbox('verified', 1,($item->verified==1?TRUE:FALSE))}} ตรวจสอบ
                     </div>
                 </div>
                 <div class="form-group">
@@ -217,8 +217,8 @@
 
     function showResponse(response, statusText, xhr, $form) {
         if (response.error.status === false) {
-            $('form .form-group').removeClass('has-error');
-            $('form .help-block').remove();
+            $('#form-add .form-group').removeClass('has-error');
+            $('#form-add .help-block').remove();
             $('#btnDialogSave').removeAttr('disabled');
             $.each(response.error.message, function (key, value) {
                 $('#' + key).parent().parent().addClass('has-error');

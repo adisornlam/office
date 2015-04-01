@@ -175,7 +175,7 @@
                                                 ->lists('title','id'),
                                                 NULL,array('class'=>'form-control'))}}
                                     @else
-                                    {{Form::text($item_label->name,null,array('class'=>'form-control'))}}
+                                    {{Form::text($item_label->name,null,array('class'=>'form-control','placeholder'=>$item_label->placeholder))}}
                                     @endif
                                 </div>
                             </div>
@@ -262,18 +262,11 @@
         };
         genModal(data);
     });
-//    $('#model_id').change(function () {
-//        $.get("{{ url('get/getSerialCode')}}",
-//                {company_id: $(this).val(), group_id: $('#group_id').val()},
-//        function (data) {
-//            console.log(data);
-//        });
-//    });
     $(function () {
         $.get("{{ url('get/getSerialCode')}}",
                 {company_id: $('#company_id').val(), group_id: $('#group_id').val()},
         function (data) {
-            console.log(data);
+            $('#serial_code').val(data);
         });
         var options = {
             url: base_url + index_page + "mis/hsware/add",

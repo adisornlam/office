@@ -510,8 +510,7 @@
                 'title': 'required',
                 'model_id[27][]': 'required',
                 'model_id[2][]': 'required',
-                'model_id[8][]': 'required',
-                'model_id[22][]': 'required'
+                'model_id[8][]': 'required'
             }
         });
 
