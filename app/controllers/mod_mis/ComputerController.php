@@ -849,7 +849,8 @@ class ComputerController extends \BaseController {
                         'computer_item.register_date as register_date',
                         'computer_item.disabled as disabled',
                         \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
-                        'position_item.title as position'
+                        'position_item.title as position',
+                        'users.id as user_id'
                     ))
                     ->first();
             $data = array(
@@ -959,23 +960,92 @@ class ComputerController extends \BaseController {
     public function delete($param) {
         $computer_item = \ComputerItem::find($param);
 
-        \DB::table('users')
-                ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
-                ->where('computer_user.computer_id', $param)
-                ->update(array('users.computer_status' => 0));
-        $computer_item->users()->restore();
+        if (\DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)->count() > 0) {
 
-        \DB::table('hsware_item')
-                ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                ->where('computer_hsware.computer_id', $param)
-                ->update(array('hsware_item.status' => 0));
-        $computer_item->hsware()->restore();
+            $user_item = \DB::table('users')
+                            ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                            ->where('computer_user.computer_id', $param)->first();
+
+            if ($computer_item->type_id == 1) {
+                \DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)
+                        ->update(array('users.computer_status' => 0));
+            } else {
+                \DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)
+                        ->update(array('users.notebook_status' => 0));
+            }
+
+            \DB::table('computer_user')
+                    ->where('computer_id', $param)
+                    ->where('user_id', $user_item->user_id)
+                    ->delete();
+        }
+
+        if (\DB::table('hsware_item')
+                        ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                        ->where('computer_hsware.computer_id', $param)->count() > 0) {
+
+            $hsware_item = \DB::table('hsware_item')
+                            ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                            ->where('computer_hsware.computer_id', $param)->first();
+
+            \DB::table('hsware_item')
+                    ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                    ->where('computer_hsware.computer_id', $param)
+                    ->update(array('hsware_item.status' => 0));
+
+            \DB::table('computer_hsware')
+                    ->where('computer_id', $param)
+                    ->where('hsware_id', $hsware_item->hsware_id)
+                    ->delete();
+        }
         $computer_item->delete();
         return \Response::json(array(
                     'error' => array(
                         'status' => true,
                         'message' => 'ลบรายการสำเร็จ',
-                        'redirect' => 'mis/backend'
+                        'redirect' => 'mis/computer'
+                    ), 200));
+    }
+
+    public function deleteuser($param) {
+        $computer_item = \ComputerItem::find($param);
+
+        if (\DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)->count() > 0) {
+
+            $user_item = \DB::table('users')
+                            ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                            ->where('computer_user.computer_id', $param)->first();
+
+            if ($computer_item->type_id == 1) {
+                \DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)
+                        ->update(array('users.computer_status' => 0));
+            } elseif ($computer_item->type_id == 2) {
+                \DB::table('users')
+                        ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                        ->where('computer_user.computer_id', $param)
+                        ->update(array('users.notebook_status' => 0));
+            }
+            \DB::table('computer_user')
+                    ->where('computer_id', $param)
+                    ->where('user_id', $user_item->user_id)
+                    ->delete();
+        }
+
+        return \Response::json(array(
+                    'error' => array(
+                        'status' => true,
+                        'message' => 'ลบรายการสำเร็จ',
+                        'redirect' => 'mis/computer/edit/' . $param
                     ), 200));
     }
 

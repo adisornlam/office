@@ -102,6 +102,7 @@
             "processing": true,
             "serverSide": true,
             "pageLength": 25,
+            stateSave: true,
             "ajax": {
                 "url": base_url + index_page + "mis/computer/listall",
                 "data": function (d) {

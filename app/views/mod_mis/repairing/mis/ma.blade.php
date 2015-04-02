@@ -30,8 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/repairing/add" class="btn btn-primary link_dialog" title="เพิ่มรายการแจ้งซ่อม" role="button"><i class="fa fa-plus"></i> เพิ่มรายการแจ้งซ่อม (F8)</a>
-                        <a href="{{URL::to('mis/repairing/ma')}}" class="btn btn-primary" title="รายการ MA" role="button"><i class="fa fa-list"></i> รายการ MA</a>
+                        <a href="javascript:;" rel="mis/repairing/ma/dialog" class="btn btn-primary link_dialog" title="เพิ่มรายการ MA" role="button"><i class="fa fa-plus"></i> เพิ่มรายการ MA (F8)</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +45,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="repairing-list" class="table table-striped table-bordered"></table>
+                    <table id="ma-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -64,12 +63,12 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        var oTable = $("#repairing-list").dataTable({
+        var oTable = $("#ma-list").dataTable({
             "processing": true,
             "serverSide": true,
             "pageLength": 25,
             "ajax": {
-                "url": base_url + index_page + "mis/repairing/listall"
+                "url": base_url + index_page + "mis/repairing/ma/listall"
             },
             "columnDefs": [{
                     "targets": "_all",
@@ -77,12 +76,12 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
-                {"data": "group_title", "title": "อุปกรณ์", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
-                {"data": "created_at", "title": "วันที่สร้าง", "width": "10%", "orderable": true, "searchable": true},
-                {"data": "created_user", "title": "ผู้แจ้งเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
-                {"data": "receive_user", "title": "ผู้รับเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
+                {"data": "group_title", "title": "คอมพิวเตอร์/อุปกรณ์", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
+                {"data": "created_user", "title": "ผู้ดำเนินการ", "width": "15%", "sClass": "text-center", "orderable": true, "searchable": true},
+                {"data": "created_at", "title": "วันที่ดำเนินการ", "width": "10%", "orderable": true, "searchable": true},
+                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });
     });

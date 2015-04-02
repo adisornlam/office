@@ -180,7 +180,6 @@
                                                 ->lists('title','id'),
                                                 $val,array('class'=>'form-control'))}}
                                     @else
-
                                     {{Form::text($item_label->name,$val,array('class'=>'form-control'))}}
                                     @endif
                                 </div>

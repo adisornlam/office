@@ -312,7 +312,9 @@
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane active" id="user1">
                                         <div class="panel-body">
-                                            <p>{{$item->fullname}} {{$item->position}}</p>
+                                            @if($item->fullname)
+                                            <p><a href="javascript:;" rel="mis/computer/deleteuser/{{$item->id}}" class="link_dialog delete" title="ถอดถอนผู้ใช้งานออก"><i class="fa fa-trash-o fa-lg"></i></a> {{$item->fullname}} {{$item->position}}</p>
+                                            @endif
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="user2">

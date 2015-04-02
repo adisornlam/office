@@ -29,6 +29,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'computer/edit/{id}', array('uses' => 'App\Controllers\ComputerController@edit'));
     Route::get('computer/view/{id}', 'App\Controllers\ComputerController@view');
     Route::get('computer/delete/{id}', 'App\Controllers\ComputerController@delete');
+    Route::get('computer/deleteuser/{id}', 'App\Controllers\ComputerController@deleteuser');
 
     Route::get('computer/export/{id}', 'App\Controllers\ComputerController@export');
 
@@ -105,6 +106,11 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'repairing/add', array('uses' => 'App\Controllers\RepairingController@add'));
     Route::match(array('GET', 'POST'), 'repairing/edit/{id}', array('uses' => 'App\Controllers\RepairingController@edit'));
     Route::get('repairing/delete/{id}', 'App\Controllers\SupplierController@delete');
+
+    Route::get('repairing/ma', 'App\Controllers\RepairingController@ma');
+    Route::get('repairing/ma/listall', 'App\Controllers\RepairingController@ma_listall');
+    Route::get('repairing/ma/dialog', 'App\Controllers\RepairingController@ma_dialog');
+    Route::match(array('GET', 'POST'), 'repairing/ma/add', array('uses' => 'App\Controllers\RepairingController@ma_add'));
 });
 
 //WHS
