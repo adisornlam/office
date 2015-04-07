@@ -105,6 +105,10 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('repairing/listall', 'App\Controllers\RepairingController@listall');
     Route::match(array('GET', 'POST'), 'repairing/add', array('uses' => 'App\Controllers\RepairingController@add'));
     Route::match(array('GET', 'POST'), 'repairing/edit/{id}', array('uses' => 'App\Controllers\RepairingController@edit'));
+    Route::get('repairing/view/{id}', 'App\Controllers\RepairingController@view');
+    Route::post('repairing/view/{id}', 'App\Controllers\RepairingController@send_repairing');
+    Route::post('repairing/update/rating/{id}', 'App\Controllers\RepairingController@update_rating');
+    Route::get('repairing/receive/{id}', 'App\Controllers\RepairingController@receive');
     Route::get('repairing/delete/{id}', 'App\Controllers\SupplierController@delete');
 
     Route::get('repairing/ma', 'App\Controllers\RepairingController@ma');

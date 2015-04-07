@@ -77,10 +77,10 @@ class ComputerController extends \BaseController {
 
         return \Datatables::of($computer_item)
                         ->edit_column('id', $link)
-//                        ->edit_column('serial_code', function($result_obj) {
-//                            $str = '<a href="' . \URL::to('computer/view/' . $result_obj->item_id . '') . '" title="ดูรายละเอียด เลขระเบียน ' . $result_obj->serial_code . '">' . $result_obj->serial_code . '</a>';
-//                            return $str;
-//                        })
+                        ->edit_column('serial_code', function($result_obj) {
+                            $str = '<a href="' . \URL::to('computer/view/' . $result_obj->item_id . '') . '" title="ดูรายละเอียด เลขระเบียน ' . $result_obj->serial_code . '">' . $result_obj->serial_code . '</a>';
+                            return $str;
+                        })
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->make(true);
     }
@@ -867,6 +867,136 @@ class ComputerController extends \BaseController {
             );
 
             return \View::make('mod_mis.computer.admin.edit', $data);
+        } else {
+            $rules = array(
+                'company_id' => 'required',
+                'title' => 'required',
+                'ip_address' => 'ip'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $computer_item = \ComputerItem::find($param);
+                $computer_item->company_id = \Input::get('company_id');
+                $computer_item->software_group_id = (\Input::has('software_group_id') ? \Input::get('software_group_id') : 0);
+                $computer_item->type_id = \Input::get('type_id');
+                $computer_item->serial_code = trim(\Input::get('serial_code'));
+                $computer_item->access_no = trim(\Input::get('access_no'));
+                $computer_item->ip_address = trim(\Input::get('ip_address'));
+                $computer_item->title = trim(\Input::get('title'));
+                $computer_item->ip_address = trim(\Input::get('ip_address'));
+                $computer_item->mac_lan = trim(\Input::get('mac_lan'));
+                $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
+                $computer_item->locations = \Input::get('locations');
+                $computer_item->register_date = trim(\Input::get('register_date'));
+                $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
+                $computer_item->updated_user = \Auth::user()->id;
+                $computer_item->save();
+                $computer_id = $computer_item->id;
+                if (\Input::has('user_item')) {
+                    \DB::table('users')
+                            ->join('computer_user', 'users.id', '=', 'computer_user.user_id')
+                            ->where('computer_user.computer_id', $param)
+                            ->update(array('users.computer_status' => 0));
+                    $computer_item->users()->sync(\Input::get('user_item'));
+                    foreach (\Input::get('user_item') as $uitem) {
+                        $hsware_item = \User::find($uitem);
+                        $hsware_item->computer_status = 1;
+                        $hsware_item->save();
+                    }
+                }
+                if (\Input::get('hsware_item') > 0) {
+                    \DB::table('hsware_item')
+                            ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                            ->where('computer_hsware.computer_id', $param)
+                            ->update(array('hsware_item.status' => 0));
+                    $computer_item->hsware()->sync(\Input::get('hsware_item'));
+                    foreach (\Input::get('hsware_item') as $item) {
+                        $hsware_item = \HswareItem::find($item);
+                        $hsware_item->status = 1;
+                        $hsware_item->save();
+
+                        $hslog = new \HswareComputerLog();
+                        $hslog->hsware_id = $item;
+                        $hslog->computer_id = $computer_id;
+                        $hslog->updated_user = \Auth::user()->id;
+                        $hslog->save();
+                    }
+                }
+                if (\Input::get('software_group_id') > 0) {
+
+                    $software_arr = \DB::table('software_group_item')
+                            ->join('software_group', 'software_group_item.id', '=', 'software_group.group_id')
+                            ->join('software_item', 'software_group.software_id', '=', 'software_item.id')
+                            ->where('software_group_item.id', \Input::get('software_group_id'))
+                            ->where('software_group_item.disabled', 0)
+                            ->select(array(
+                                'software_item.id as id'
+                            ))
+                            ->lists('id');
+                    $computer_item->software()->sync($software_arr);
+                    foreach ($software_arr as $item) {
+                        $hslog = new \ComputerSoftwareLog();
+                        $hslog->computer_id = $computer_id;
+                        $hslog->software_id = $item;
+                        $hslog->created_user = \Auth::user()->id;
+                        $hslog->save();
+                    }
+                }
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
+    public function view($param) {
+        if (!\Request::isMethod('post')) {
+            $item = \DB::table('computer_item')
+                    ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                    ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                    ->leftJoin('position_item', 'position_item.id', '=', 'users.position_id')
+                    ->where('computer_item.id', $param)
+                    ->select(array(
+                        'computer_item.id as id',
+                        'computer_item.title as title',
+                        'computer_item.company_id as company_id',
+                        'computer_item.software_group_id as software_group_id',
+                        'computer_item.serial_code as serial_code',
+                        'computer_item.access_no as access_no',
+                        'computer_item.type_id as type_id',
+                        'computer_item.locations as locations',
+                        'computer_item.ip_address as ip_address',
+                        'computer_item.mac_lan as mac_lan',
+                        'computer_item.mac_wireless as mac_wireless',
+                        'computer_item.register_date as register_date',
+                        'computer_item.disabled as disabled',
+                        \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                        'position_item.title as position',
+                        'users.id as user_id'
+                    ))
+                    ->first();
+            $data = array(
+                'title' => 'แก่ไข Computer ' . $item->title,
+                'breadcrumbs' => array(
+                    'ภาพรวมระบบ' => '',
+                    'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                    'ระเบียนคอมพิวเตอร์' => 'mis/computer',
+                    'แก่ไข Computer ' . $item->title => '#'
+                ),
+                'item' => $item,
+                'company' => \Company::lists('title', 'id'),
+                'place' => \Place::lists('title', 'id')
+            );
+
+            return \View::make('mod_mis.computer.admin.view', $data);
         } else {
             $rules = array(
                 'company_id' => 'required',

@@ -21,6 +21,7 @@
     var base_url = protocol + "//" + document.location.hostname + "/office/";
     var index_page = "";
     $(function () {
+        $('#username').focus();
         $('#btnLogin').click(function () {
             $.ajax({
                 type: "post",

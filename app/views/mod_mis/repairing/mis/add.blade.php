@@ -35,7 +35,7 @@
         $(this).attr('disabled', 'disabled');
         $.ajax({
             type: "post",
-            url: base_url + index_page + "mis/repairing/add",
+            url: base_url + index_page + "mis/repairing/view/save",
             data: $('#form-add, textarea input:not(#btnSave)').serializeArray(),
             success: function (data) {
                 if (data.error.status == false) {

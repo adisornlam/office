@@ -62,6 +62,7 @@
         {{HTML::script('js/jquery.scrollTo.min.js')}}
         {{HTML::script('js/jquery.nicescroll.js')}}
         {{HTML::script('js/jquery.cookie.js')}}
+        {{HTML::script('js/jquery.titlealert.min.js')}}
         @yield('script')
         {{HTML::script('js/common-scripts.js')}}
         @yield('script_code')

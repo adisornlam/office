@@ -47,10 +47,14 @@ class RepairingController extends \BaseController {
             'repairing_item.title as title',
             'repairing_group.title as group_title',
             'repairing_item.disabled as disabled',
+            'repairing_item.status as status',
             'repairing_item.receive_user as receive_user',
             'repairing_item.created_user as created_user',
+            'repairing_item.rating as rating',
             'repairing_item.created_at as created_at'
         ));
+        $repairing->orderBy('repairing_item.id', 'desc');
+
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
@@ -84,6 +88,18 @@ class RepairingController extends \BaseController {
                             return $str;
                         })
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->edit_column('status', function($result_obj) {
+                            if ($result_obj->status == 0) {
+                                $str = '<span class="label label-warning">รอรับเรื่อง</span>';
+                            } elseif ($result_obj->status == 1) {
+                                $str = '<span class="label label-info">กำลังดำเนินการ</span>';
+                            } elseif ($result_obj->status == 2) {
+                                $str = '<span class="label label-success">อยู่ระหว่างส่งงาน</span>';
+                            } elseif ($result_obj->status == 3) {
+                                $str = '<span class="label label-success">ดำเนินการเรียบร้อย</span>';
+                            }
+                            return $str;
+                        })
                         ->make(true);
     }
 
@@ -120,6 +136,7 @@ class RepairingController extends \BaseController {
                 $repairing->disabled = 0;
                 $repairing->created_user = \Auth::user()->id;
                 $repairing->save();
+
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
@@ -131,11 +148,22 @@ class RepairingController extends \BaseController {
 
     public function view($param) {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
+        $item = \RepairingItem::find($param);
         $data = array(
-            'item' => \Supplier::find($param)
+            'title' => 'รายการแจ้งซ่อม ' . $item->title,
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
+                'รายการแจ้งซ่อมอุปกรณ์' => 'mis/repairing',
+                'รายการแจ้งซ่อม ' . $item->title => '#'
+            ),
+            'item' => $item,
+            'group' => \RepairingGroup::find($item->group_id),
+            'user' => \User::find($item->created_user),
+            'receive_user' => \User::find($item->receive_user)
         );
         if ($check->is('administrator')) {
-            return \View::make('mod_users.admin.users.view', $data);
+            return \View::make('mod_mis.repairing.admin.view', $data);
         } elseif ($check->is('mis')) {
             return \View::make('mod_mis.repairing.mis.view', $data);
         } elseif ($check->is('employee')) {
@@ -143,50 +171,67 @@ class RepairingController extends \BaseController {
         }
     }
 
-    public function edit($param) {
-        if (!\Request::isMethod('post')) {
-            $data = array(
-                'item' => \Supplier::find($param)
-            );
-            return \View::make('mod_mis.supplier.mis.edit', $data);
+    public function receive($param) {
+        $repairing_item = \RepairingItem::find($param);
+        $repairing_item->status = 1;
+        $repairing_item->receive_user = \Auth::user()->id;
+        $repairing_item->receive_at = date('Y-m-d H:i:s');
+        $repairing_item->save();
+        return \Response::json(array(
+                    'error' => array(
+                        'status' => TRUE,
+                        'message' => NULL
+                    ), 200));
+    }
+
+    public function send_repairing($param) {
+        $rules = array(
+            'desc2' => 'required',
+            'status' => 'required'
+        );
+        $validator = \Validator::make(\Input::all(), $rules);
+        if ($validator->fails()) {
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => FALSE,
+                            'message' => $validator->errors()->toArray()
+                        ), 400));
         } else {
-            $rules = array(
-                'title' => 'required',
-                'phone' => 'required'
-            );
-            $validator = \Validator::make(\Input::all(), $rules);
-            if ($validator->fails()) {
-                return \Response::json(array(
-                            'error' => array(
-                                'status' => FALSE,
-                                'message' => $validator->errors()->toArray()
-                            ), 400));
-            } else {
-                $supplier = \Supplier::find($param);
-                $supplier->title = trim(\Input::get('title'));
-                $supplier->address = trim(\Input::get('address'));
-                $supplier->phone = trim(\Input::get('phone'));
-                $supplier->fax = trim(\Input::get('fax'));
-                $supplier->remark = trim(\Input::get('remark'));
-                $supplier->disabled = (\Input::has('disabled') ? 0 : 1);
-                $supplier->save();
-                return \Response::json(array(
-                            'error' => array(
-                                'status' => TRUE,
-                                'message' => NULL
-                            ), 200));
-            }
+            $repairing_item = \RepairingItem::find($param);
+            $repairing_item->desc2 = trim(\Input::get('desc2'));
+            $repairing_item->status_success = \Input::get('status');
+            $repairing_item->remark = trim(\Input::get('remark'));
+            $repairing_item->status = 2;
+            $repairing_item->save();
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => TRUE,
+                            'message' => NULL
+                        ), 200));
         }
+    }
+
+    public function update_rating($param) {
+        $repairing_item = \RepairingItem::find($param);
+        $repairing_item->rating = \Input::get('val');
+        $repairing_item->status = 3;
+        $repairing_item->rating_at = date('Y-m-d H:i:s');
+        $repairing_item->save();
+        return \Response::json(array(
+                    'error' => array(
+                        'status' => TRUE,
+                        'message' => NULL
+                    ), 200));
     }
 
     public function delete($param) {
         try {
-            \Supplier::find($param)->delete();
+            \RepairingItem::find($param)->delete();
             return \Response::json(array(
                         'error' => array(
                             'status' => true,
                             'message' => 'ลบรายการสำเร็จ',
-                            'redirect' => 'mis/supplier'
+                            'redirect' => 'mis/repairing'
                         ), 200));
         } catch (\Exception $e) {
             throw $e;

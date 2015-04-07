@@ -82,7 +82,8 @@
                 {"data": "created_at", "title": "วันที่สร้าง", "width": "10%", "orderable": true, "searchable": true},
                 {"data": "created_user", "title": "ผู้แจ้งเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
                 {"data": "receive_user", "title": "ผู้รับเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "rating", "title": "Rating", "width": "5%", "sClass": "text-center", "orderable": true, "searchable": true},
+                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });
     });

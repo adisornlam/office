@@ -80,7 +80,7 @@
                 {"data": "group_title", "title": "กลุ่ม", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "created_at", "title": "วันที่สร้าง", "width": "10%", "orderable": true, "searchable": true},
                 {"data": "receive_user", "title": "ผู้รับเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });
     });
