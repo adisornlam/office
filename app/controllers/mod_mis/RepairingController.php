@@ -44,7 +44,7 @@ class RepairingController extends \BaseController {
         $repairing->select(array(
             'repairing_item.id as id',
             'repairing_item.id as item_id',
-            'repairing_item.title as title',
+            'repairing_item.desc as title',
             'repairing_group.title as group_title',
             'repairing_item.disabled as disabled',
             'repairing_item.status as status',
@@ -66,7 +66,7 @@ class RepairingController extends \BaseController {
         return \Datatables::of($repairing)
                         ->edit_column('id', $link)
                         ->edit_column('title', function($result_obj) {
-                            $str = '<a href="' . \URL::to('mis/repairing/view/' . $result_obj->item_id . '') . '" title="ดูรายการแจ้งซ่อม">' . $result_obj->title . '</a>';
+                            $str = '<a href="' . \URL::to('mis/repairing/view/' . $result_obj->item_id . '') . '" title="ดูรายการแจ้งซ่อม">' . \Str::limit($result_obj->title,50) . '</a>';
                             return $str;
                         })
                         ->edit_column('receive_user', function($result_obj) {
@@ -118,7 +118,6 @@ class RepairingController extends \BaseController {
             }
         } else {
             $rules = array(
-                'title' => 'required',
                 'desc' => 'required'
             );
             $validator = \Validator::make(\Input::all(), $rules);
@@ -150,7 +149,7 @@ class RepairingController extends \BaseController {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $item = \RepairingItem::find($param);
         $data = array(
-            'title' => 'รายการแจ้งซ่อม ' . $item->title,
+            'title' => 'รายการแจ้งซ่อม ' . \Str::limit($item->desc,50),
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
@@ -160,7 +159,8 @@ class RepairingController extends \BaseController {
             'item' => $item,
             'group' => \RepairingGroup::find($item->group_id),
             'user' => \User::find($item->created_user),
-            'receive_user' => \User::find($item->receive_user)
+            'receive_user' => \User::find($item->receive_user),
+            'publem' => \DB::table('repairing_publem')->where('group_id', $item->group_id)->lists('title', 'id')
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.repairing.admin.view', $data);
@@ -198,6 +198,7 @@ class RepairingController extends \BaseController {
                         ), 400));
         } else {
             $repairing_item = \RepairingItem::find($param);
+            $repairing_item->publem_id = \Input::get('publem_id');
             $repairing_item->desc2 = trim(\Input::get('desc2'));
             $repairing_item->status_success = \Input::get('status');
             $repairing_item->remark = trim(\Input::get('remark'));

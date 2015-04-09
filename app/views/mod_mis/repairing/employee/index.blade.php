@@ -76,9 +76,10 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "50%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่ม", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "created_at", "title": "วันที่สร้าง", "width": "10%", "orderable": true, "searchable": true},
+                {"data": "created_user", "title": "ผู้แจ้งเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
                 {"data": "receive_user", "title": "ผู้รับเรื่อง", "width": "10%", "sClass": "text-center", "orderable": true, "searchable": true},
                 {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]

@@ -10,13 +10,8 @@
     </div>
 </div>
 <div class="form-group">
-    <div class="col-sm-9">
-        {{Form::text('title', NULL,array('class'=>'form-control','id'=>'title','placeholder'=>'หัวข้อแจ้งซ่อม'))}}
-    </div>
-</div>
-<div class="form-group">
     <div class="col-sm-12">
-        {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'address','placeholder'=>'รายละเอียดการแจ้งซ่อม'))}}
+        {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc','placeholder'=>'รายละเอียดการแจ้งซ่อม'))}}
     </div>    
 </div>
 <span class="label label-danger">หมายเหตุ</span>
@@ -29,7 +24,7 @@
 {{ Form::close() }}
 <script type="text/javascript">
     $('body').on('shown.bs.modal', '.modal', function () {
-        $('#title').focus();
+        $('#desc').focus();
     });
     $('#btnSave').click(function () {
         $(this).attr('disabled', 'disabled');

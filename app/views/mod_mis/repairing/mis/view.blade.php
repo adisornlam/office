@@ -76,7 +76,27 @@
                 รายงานการให้บริการ
             </header>
             <div class="panel-body">    
-                {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal'))}}           
+                {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal'))}}         
+                <div class="form-group">
+                    {{Form::label('type_id', 'ประเภทดำเนินการ', array('class' => 'col-sm-2 control-label req'))}}
+                    <div class="col-sm-5">
+                        <label class="radio-inline">
+                            <input type="radio" name="type_id" value="1" checked="checked"> ซ่อม
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="type_id" value="2"> เปลี่ยน
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="type_id" value="3"> เคลม
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('publem_id', 'กลุ่มปัญหา', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-4">
+                        {{ \Form::select('publem_id', array(''=>'เลือกกลุ่มปัญหา')+$publem, null, array('class' => 'form-control', 'id' => 'status')); }}
+                    </div>
+                </div>
                 <div class="form-group">
                     {{Form::label('desc2', 'รายละเอียด', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-4">
@@ -265,7 +285,7 @@
             }
         });
     });
-    <?php if ($item->rating > 0) { ?>
+<?php if ($item->rating > 0) { ?>
         $('#input-id').rating('update', <?php echo $item->rating; ?>);
         $('#input-id').rating('create', {disabled: true, showClear: false});
 <?php } ?>
