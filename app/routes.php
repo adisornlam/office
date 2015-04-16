@@ -252,6 +252,32 @@ Route::get('get/submodel', function() {
     return Response::json($hsware_group->select(array('hsware_model.id', 'hsware_model.title'))->get());
 });
 
+Route::get('get/userddl', function() {
+    $input = Input::get('option');
+    $users = \DB::table('users')
+            ->where('department_id', $input);
+    $users->select(array(
+        'id',
+        \DB::raw('CONCAT(firstname," ",lastname) as title')
+    ));
+    return Response::json($users->get());
+});
+
+Route::get('get/hswareddl', function() {
+    $input = Input::get('option');
+    $company_id = Input::get('company_id');
+    $reparing_publem = \RepairingPublem::find($input);
+    $hsware_item = \DB::table('hsware_item')            
+            ->where('group_id', $reparing_publem->group_ref_id)
+            ->where('spare', 1)
+            ->where('company_id', $company_id);
+    $hsware_item->select(array(
+        'id',
+        \DB::raw('CONCAT(serial_code) as title')
+    ));
+    return Response::json($hsware_item->get());
+});
+
 Route::get('get/getSerialCode', function() {
 
     $item = \DB::table('hsware_item')

@@ -15,6 +15,10 @@ namespace App\Controllers;
  */
 class RepairingController extends \BaseController {
 
+    public function __construct() {
+        $this->beforeFilter('auth', array('except' => '/login'));
+    }
+
     public function index() {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
@@ -66,7 +70,7 @@ class RepairingController extends \BaseController {
         return \Datatables::of($repairing)
                         ->edit_column('id', $link)
                         ->edit_column('title', function($result_obj) {
-                            $str = '<a href="' . \URL::to('mis/repairing/view/' . $result_obj->item_id . '') . '" title="ดูรายการแจ้งซ่อม">' . \Str::limit($result_obj->title,50) . '</a>';
+                            $str = '<a href="' . \URL::to('mis/repairing/view/' . $result_obj->item_id . '') . '" title="ดูรายการแจ้งซ่อม">' . \Str::limit($result_obj->title, 50) . '</a>';
                             return $str;
                         })
                         ->edit_column('receive_user', function($result_obj) {
@@ -118,7 +122,8 @@ class RepairingController extends \BaseController {
             }
         } else {
             $rules = array(
-                'desc' => 'required'
+                'desc' => 'required',
+                'user_id' => 'required',
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -129,17 +134,18 @@ class RepairingController extends \BaseController {
                             ), 400));
             } else {
                 $repairing = new \RepairingItem();
-                $repairing->title = trim(\Input::get('title'));
                 $repairing->group_id = \Input::get('group_id');
                 $repairing->desc = \Input::get('desc');
-                $repairing->disabled = 0;
-                $repairing->created_user = \Auth::user()->id;
+                $repairing->created_user = \Input::get('user_id');
+                $repairing->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
                 $repairing->save();
+                $repairing_id = $repairing->id;
 
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
-                                'message' => NULL
+                                'message' => NULL,
+                                'repairing_id' => $repairing_id
                             ), 200));
             }
         }
@@ -149,7 +155,7 @@ class RepairingController extends \BaseController {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $item = \RepairingItem::find($param);
         $data = array(
-            'title' => 'รายการแจ้งซ่อม ' . \Str::limit($item->desc,50),
+            'title' => 'รายการแจ้งซ่อม ' . \Str::limit($item->desc, 50),
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ' => 'mis',
@@ -199,10 +205,12 @@ class RepairingController extends \BaseController {
         } else {
             $repairing_item = \RepairingItem::find($param);
             $repairing_item->publem_id = \Input::get('publem_id');
+            $repairing_item->type_id = \Input::get('type_id');
             $repairing_item->desc2 = trim(\Input::get('desc2'));
             $repairing_item->status_success = \Input::get('status');
             $repairing_item->remark = trim(\Input::get('remark'));
             $repairing_item->status = 2;
+            $repairing_item->success_at = \Input::get('success_at') . ' ' . date('H:i:s');
             $repairing_item->save();
             return \Response::json(array(
                         'error' => array(

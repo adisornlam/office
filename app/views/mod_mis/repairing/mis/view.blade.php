@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('style')
 {{HTML::style('css/star-rating.min.css')}}
+{{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 @stop
 @section('content')
 @if(isset($breadcrumbs))
@@ -81,20 +82,20 @@
                     {{Form::label('type_id', 'ประเภทดำเนินการ', array('class' => 'col-sm-2 control-label req'))}}
                     <div class="col-sm-5">
                         <label class="radio-inline">
-                            <input type="radio" name="type_id" value="1" checked="checked"> ซ่อม
+                            <input type="radio" name="type_id" class="type_id" value="1" checked="checked"> ซ่อม
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="type_id" value="2"> เปลี่ยน
+                            <input type="radio" name="type_id" class="type_id" value="2"> เปลี่ยน
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="type_id" value="3"> เคลม
+                            <input type="radio" name="type_id" class="type_id" value="3"> เคลม
                         </label>
                     </div>
-                </div>
+                </div>                
                 <div class="form-group">
                     {{Form::label('publem_id', 'กลุ่มปัญหา', array('class' => 'col-sm-2 control-label'))}}
-                    <div class="col-sm-4">
-                        {{ \Form::select('publem_id', array(''=>'เลือกกลุ่มปัญหา')+$publem, null, array('class' => 'form-control', 'id' => 'status')); }}
+                    <div class="col-sm-3">
+                        {{ \Form::select('publem_id', array(''=>'เลือกกลุ่มปัญหา')+$publem, null, array('class' => 'form-control', 'id' => 'publem_id')); }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -102,11 +103,28 @@
                     <div class="col-sm-4">
                         {{Form::textarea('desc2', NULL,array('class'=>'form-control','id'=>'desc2','rows'=>10))}}
                     </div>
-                </div>                    
+                </div>   
+                <div class="form-group hidden">
+                    {{Form::label('hsware_id', 'อะไหล่', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-3">
+                        {{ \Form::select('hsware_id', array('' => 'กรุณาเลือกอะไหล่') , null, array('class' => 'form-control', 'id' => 'hsware_id')); }}
+                    </div>
+                </div>
                 <div class="form-group">
                     {{Form::label('status', 'สถานะ', array('class' => 'col-sm-2 control-label'))}}
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         {{ \Form::select('status', array(''=>'เลือกสถานะ',1=>'ดำเนินการซ่อม / แก้ไข เรียบร้อย ใช้งานได้ตามปกติ',2=>'ดำเนินการซ่อมตามสถานที่ที่แจ้ง',3=>'ส่งซ่อมภายนอก',4=>'ไม่สามารถซ่อมได้ / ใช้งานได้ เนื่องจาก'), null, array('class' => 'form-control', 'id' => 'status')); }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('success_at', 'วันที่ซ่อมเสร็จ', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-2">
+                        <div class="input-group date form_datetime-component">
+                            {{Form::text('success_at', date('Y-m-d'),array('class'=>'form-control datepicker','id'=>'success_at','placeholder'=>'วันที่ซ่อมเสร็จ'))}}
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group hidden" id="status_radio">
@@ -126,7 +144,7 @@
                             <input type="text" placeholder="จำนวนบาท" name="cost" id="cost" class="form-control" disabled>
                         </div>
                     </div>
-                </div>
+                </div>                
                 <div class="form-group hidden" id="div_remark">
                     {{Form::label('remark', 'หมายเหตุ', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-7">
@@ -217,10 +235,18 @@
 
 @section('script')
 {{HTML::script('js/star-rating.min.js')}}
+{{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
+{{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
 @stop
 
 @section('script_code')
 <script type="text/javascript">
+    $('.datepicker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd',
+        language: 'th'
+    });
     $('#status').change(function () {
         $('#status_radio').addClass('hidden');
         $('#div_remark').addClass('hidden');
@@ -240,6 +266,28 @@
             $('#cost').removeAttr('disabled');
         }
     });
+
+    $('.type_id').click(function () {
+        if ($(this).val() == 2) {
+            $('#hsware_id').parent().parent().removeClass('hidden');
+        } else {
+            $('#hsware_id').parent().parent().addClass('hidden');
+        }
+    });
+
+    $('#publem_id').change(function () {
+        $.get("{{ url('get/hswareddl')}}",
+                {option: $(this).val(), company_id:<?php echo (isset($receive_user->company_id) ? $receive_user->company_id : 0); ?>},
+        function (data) {
+            var hsware_id = $('#hsware_id');
+            hsware_id.empty();
+            hsware_id.append("<option value=''>กรุณาเลือกอะไหล่</option>");
+            $.each(data, function (index, element) {
+                hsware_id.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+    });
+
     $('#btnReceive').click(function () {
         var data = {
             title: 'ยืนยันรับรายการแจ้งซ่อม',
@@ -263,7 +311,6 @@
 
         });
     });
-
     $('#btnSave').click(function () {
         $(this).attr('disabled', 'disabled');
         $.ajax({
