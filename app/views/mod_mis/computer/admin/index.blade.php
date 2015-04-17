@@ -118,7 +118,7 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": true, "searchable": true},
                 {"data": "title", "title": "ชื่อเครื่อง", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "เจ้าของเครื่อง", "width": "20%", "orderable": false, "searchable": true},
                 {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},

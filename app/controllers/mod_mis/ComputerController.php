@@ -114,9 +114,7 @@ class ComputerController extends \BaseController {
                 'company' => \Company::lists('title', 'id'),
                 'place' => \Place::lists('title', 'id')
             );
-
-            //return \View::make('mod_mis.computer.admin.add', $data);
-            return \View::make('mod_mis.computer.admin.add_wizard', $data);
+            return \View::make('mod_mis.computer.admin.add_pc_wizard', $data);
         } else {
             $rules = array(
                 'company_id' => 'required',
@@ -191,7 +189,7 @@ class ComputerController extends \BaseController {
                 'place' => \Place::lists('title', 'id')
             );
 
-            return \View::make('mod_mis.computer.admin.add_wizard', $data);
+            return \View::make('mod_mis.computer.admin.add_pc_wizard', $data);
         } else {
             $rules = array(
                 'company_id' => 'required',
@@ -233,6 +231,7 @@ class ComputerController extends \BaseController {
                 $computer_item->mac_lan = trim(\Input::get('mac_lan'));
                 $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
                 $computer_item->locations = \Input::get('locations');
+                $computer_item->floor = \Input::get('floor');
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->created_user = \Auth::user()->id;
@@ -1186,6 +1185,7 @@ class ComputerController extends \BaseController {
                 ->leftJoin('position_item', 'position_item.id', '=', 'users.position_id')
                 ->leftJoin('company', 'computer_item.company_id', '=', 'company.id')
                 ->leftJoin('place', 'computer_item.locations', '=', 'place.id')
+                ->leftJoin('supplier_item', 'computer_item.supplier_id', '=', 'supplier_item.id')
                 ->where('computer_item.id', $param)
                 ->select(array(
                     'computer_item.id as id',
@@ -1202,6 +1202,7 @@ class ComputerController extends \BaseController {
                     'computer_item.register_date as register_date',
                     'place.title as place',
                     'position_item.title as position',
+                    'supplier_item.title as supplier',
                     'computer_item.disabled as disabled',
                     \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
                     'position_item.title as position'

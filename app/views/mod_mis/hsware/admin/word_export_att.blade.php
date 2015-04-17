@@ -81,7 +81,7 @@
                         <strong>ชื่ออุปกรณ์</strong> 
                     </td>
                     <td>
-                        <p>{{$item->title}}</p>
+                        <p>{{$item->title}} {{\HswareItem::get_submodel($item->sub_model)}}</p>
                     </td>
                     <td width="20%">
                         <strong>เจ้าของเครื่อง</strong> 

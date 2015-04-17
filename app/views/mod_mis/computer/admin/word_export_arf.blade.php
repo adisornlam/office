@@ -26,7 +26,7 @@
             }
             #footer {
                 width:100%;
-                height:80px;
+                height:150px;
                 position:absolute;
                 bottom:0;
                 left:0;
@@ -82,7 +82,7 @@
                         <strong>Com Name</strong> 
                     </td>
                     <td>
-                        <p>{{$item->title}}</p>
+                        <p>{{strtoupper($item->title)}}</p>
                     </td>
                     <td>
                         <strong>เจ้าของเครื่อง</strong> 
@@ -110,20 +110,22 @@
                         <strong>Mac Address</strong>
                     </td>                   
                     <td>
-                        <p>{{$item->place}}</p>
+                        <p>{{$item->mac_lan}}</p>
                     </td>
-                    <td>&nbsp;</td>
+                    <td><strong>Wireless Lan</strong></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td>
-                        <strong>IP Address</strong>
-                    </td>
-                    <td>
-                        <p>{{$item->ip_address}}</p>
-                    </td>
+                    <td><strong>IP Address</strong></td>
+                    <td><p>{{$item->ip_address}}</p></td>
+                    <td><strong>Location</strong></td>
                     <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td><strong>วันที่เริ่มใช้งาน</strong></td>
+                    <td>{{$item->register_date}}</td>
+                    <td><strong>Supplier</strong></td>
+                    <td><p>{{$item->supplier}}</p></td>
                 </tr>
             </table>
             <h3>รายการอุปกรณ์</h3>
@@ -135,36 +137,51 @@
                         ->select(array('hsware_group.id', 'hsware_group.title'))
                         ->distinct()
                         ->get() as $group_item) {
-                    ?>
-                    <tr>
-                        <td width="20%">
-                            <strong>{{$group_item->title}}</strong> 
-                        </td>
-                        <td>
-                            <?php
-                            foreach (\DB::table('computer_hsware')
+
+                    if (\DB::table('computer_hsware')
                                     ->leftJoin('hsware_item', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                                    ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
                                     ->where('hsware_item.group_id', $group_item->id)
                                     ->where('computer_hsware.computer_id', $item->id)
                                     ->select(array(
-                                        'hsware_item.id as id',
-                                        'hsware_item.sub_model as sub_model',
-                                        'hsware_item.serial_code as codes',
-                                        'hsware_model.title as title',
-                                        'hsware_item.status as status',
-                                    ))
-                                    ->get() as $hs_item) {
-                                ?>
-                                <p>{{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}</p>
-                            <?php } ?>
-                        </td>                    
-                    </tr>
-                <?php } ?>
+                                        'hsware_item.id as id'
+                                    ))->count() > 0) {
+                        ?>
+                        <tr>
+                            <td width="20%">
+                                <strong>{{$group_item->title}}</strong> 
+                            </td>
+                            <td>
+                                <?php
+                                foreach (\DB::table('computer_hsware')
+                                        ->leftJoin('hsware_item', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                                        ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
+                                        ->where('hsware_item.group_id', $group_item->id)
+                                        ->where('computer_hsware.computer_id', $item->id)
+                                        ->select(array(
+                                            'hsware_item.id as id',
+                                            'hsware_item.sub_model as sub_model',
+                                            'hsware_item.serial_code as codes',
+                                            'hsware_model.title as title',
+                                            'hsware_item.status as status',
+                                            'hsware_item.warranty_date as warranty'
+                                        ))
+                                        ->get() as $hs_item) {
+                                    ?>
+                                    <p>
+                                        {{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}  @if($hs_item->warranty=="0000-00-00") ประกัน LT @elseif($hs_item->warranty) วันหมดประกัน {{$hs_item->warranty}} @else ประกัน LT @endif
+                                    </p>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                    <?php }
+                } ?>
             </table>
         </div>
         <div id="footer">
             <table border="0" width="100%">
+                <tr>
+                    <td colspan="2"><hr /></td>
+                </tr>
                 <tr>
                     <td align="left">
                         {{HTML::image('img/arf/address_footer.jpg',null)}}

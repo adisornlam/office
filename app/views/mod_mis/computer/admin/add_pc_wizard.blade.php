@@ -31,7 +31,7 @@
                 <div class="stepy-tab">
                     <ul id="default-titles" class="stepy-titles clearfix">
                         <li id="default-title-0" class="current-step">
-                            <div>ข้อมูลคอมพิวเตอร์</div>
+                            <div>Info</div>
                         </li>
                         <li id="default-title-1" class="">
                             <div>Mainboard</div>
@@ -112,11 +112,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
+                            {{Form::label('locations', 'สถานที่', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
                                 {{ \Form::select('locations', $place,null, array('class' => 'form-control', 'id' => 'locations')); }}
                             </div>
                         </div>   
+                        <div class="form-group">
+                            {{Form::label('floor', 'ชั้นวาง', array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-2">
+                                {{ \Form::select('floor', array(''=>'เลือกชั้นวาง',1=>'ชั้น 1',2=>'ชั้น 2',3=>'ชั้น 3',4=>'ชั้น 4'),null, array('class' => 'form-control', 'id' => 'floor')); }}
+                            </div>
+                        </div>
                         <div class="form-group">
                             {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
@@ -149,7 +155,7 @@
                                         {{ \Form::select('model_id[2][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',2)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id2')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=2" class="btn btn-primary link_dialog" title="เพิ่มยี่ห้ออุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=2" class="btn btn-primary link_dialog" title="เพิ่มยี่ห้ออุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +217,7 @@
                                         {{ \Form::select('model_id[8][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',8)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id8')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=8" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=8" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -273,7 +279,7 @@
                                         {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=22" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=22" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +360,7 @@
                                         {{ \Form::select('model_id[3][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id3')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=3" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=3" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -435,7 +441,7 @@
                                         {{ \Form::select('model_id[6][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',6)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id6')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=6" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=6" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -478,7 +484,7 @@
                                         {{ \Form::select('model_id[5][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',5)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id5')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=5" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=5" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -521,7 +527,7 @@
                                         {{ \Form::select('model_id[7][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',7)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id7')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=7" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=7" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +589,7 @@
                                         {{ \Form::select('model_id[26][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',26)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id26')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=26" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=26" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -626,7 +632,7 @@
                                         {{ \Form::select('model_id[14][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',14)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id14')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=14" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=14" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>
@@ -688,7 +694,7 @@
                                         {{ \Form::select('model_id[13][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',13)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id13')); }}
                                     </div>
                                     <div class="col-sm-2">
-                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/add?group_id=13" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
+                                        <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=13" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
                                     </div>
                                 </div>
                             </div>

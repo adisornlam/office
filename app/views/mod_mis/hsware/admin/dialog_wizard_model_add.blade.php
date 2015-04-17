@@ -37,7 +37,7 @@
                         $.get("{{ url('get/getmodel')}}",
                                 {option: <?php echo \Input::get('group_id'); ?>},
                         function (data) {
-                            var submodel = $('#model_id');
+                            var submodel = $('#model_id<?php echo \Input::get('group_id'); ?>');
                             submodel.empty();
                             submodel.append("<option value=''>กรุณาเลือกรายการ</option>");
                             $.each(data, function (index, element) {

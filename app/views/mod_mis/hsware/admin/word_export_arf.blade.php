@@ -1,13 +1,3 @@
-<?php
-header("Content-type: application/vnd.ms-word");
-header("Content-Disposition: attachment; filename=testing.doc");
-?>
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="UTF-8">
@@ -16,19 +6,18 @@ and open the template in the editor.
         <style type="text/css">
             body {
                 font-family: 'tahoma', sans-serif; 
-                font-size: 1em; 
+                font-size: 12pt; 
                 line-height: 1.7em;
                 margin:0;
                 padding:0;
                 height:100%;
+                background: white; 
             }
             #wrapper {
                 min-height:100%;
                 position:relative;
             }
-            #header {
-                padding:10px;
-            }
+
             #content {
                 padding:10px;
                 padding-bottom:80px;   /* Height of the footer element */
@@ -40,11 +29,8 @@ and open the template in the editor.
                 bottom:0;
                 left:0;
             }
-            p {
-                border-bottom: 1px dashed #999;
-                display: inline;
-            }
-
+            table.myTable { border-collapse:collapse; }
+            table.myTable td, table.myTable th { border:1px solid black;padding:5px; }
         </style>
     </head>
     <body>
@@ -61,7 +47,8 @@ and open the template in the editor.
             </table>
         </div>
         <div id="content">
-            <table border="0" width="100%" id="table_head">
+
+            <table border="0" width="100%" class="myTable">
                 <tr>
                     <td width="20%">
                         <strong>ทรัพย์สินบริษัท</strong>
@@ -87,16 +74,16 @@ and open the template in the editor.
                     </td>
                 </tr>
             </table>
-            <hr />
-            <table border="0" width="100%" id="table_head">
+            <h3>ข้อมูลอุปกรณ์ {{$item->group_title}}</h3>
+            <table border="0" width="100%" class="myTable">
                 <tr>
                     <td width="20%">
-                        <strong>Computer Name</strong> 
+                        <strong>ชื่ออุปกรณ์</strong> 
                     </td>
                     <td>
-                        <p>{{$item->title}}</p>
+                        <p>{{$item->title}} {{\HswareItem::get_submodel($item->sub_model)}} </p>
                     </td>
-                    <td>
+                    <td width="20%">
                         <strong>เจ้าของเครื่อง</strong> 
                     </td>
                     <td>
@@ -119,63 +106,44 @@ and open the template in the editor.
                 </tr>
                 <tr>
                     <td>
-                        <strong>Mac Address</strong>
+                        <strong>ประกัน</strong>
                     </td>                   
                     <td>
-                        <p>{{$item->place}}</p>
+                        <p>&nbsp;</p>
                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>IP Address</strong>
-                    </td>
-                    <td>
-                        <p>{{$item->ip_address}}</p>
-                    </td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                 </tr>
             </table>
-            <hr />
-            <table border="0" width="100%" id="table_head">
-                <?php
-                foreach (\DB::table('hsware_group')
-                        ->join('hsware_item', 'hsware_item.group_id', '=', 'hsware_group.id')
-                        ->where('hsware_group.disabled', 0)
-                        ->select(array('hsware_group.id', 'hsware_group.title'))
-                        ->distinct()
-                        ->get() as $group_item) {
-                    ?>
-                    <tr>
-                        <td width="20%">
-                            <strong>{{$group_item->title}}</strong> 
-                        </td>
-                        <td>
-                            <?php
-                            foreach (\DB::table('computer_hsware')
-                                    ->leftJoin('hsware_item', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                                    ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
-                                    ->where('hsware_item.group_id', $group_item->id)
-                                    ->where('computer_hsware.computer_id', $item->id)
-                                    ->select(array(
-                                        'hsware_item.id as id',
-                                        'hsware_item.sub_model as sub_model',
-                                        'hsware_item.serial_code as codes',
-                                        'hsware_model.title as title',
-                                        'hsware_item.status as status',
-                                    ))
-                                    ->get() as $hs_item) {
-                                ?>
-                                <p>{{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}</p>
-                            <?php } ?>
-                        </td>                    
-                    </tr>
-                <?php } ?>
+            <h3>รายละเอียดอุปกรณ์</h3>
+            <table border="0" width="100%" class="myTable">       
+                @foreach($spec_label as $item_label)
+                <tr>
+                    <td width="20%">
+                        <strong>{{Form::label('', $item_label->title, array('class' => 'col-sm-2 control-label'))}}</strong> 
+                    </td>
+                    <td>
+                        <?php
+                        $val = $item->{$item_label->name};
+                        ?>
+                        @if($item_label->option_id>0)
+                        @if($val>0)
+                        {{\HswareSpecOptionItem::find($val)->title}}
+                        @endif
+                        @else
+                        {{$val}}
+                        @endif
+
+                    </td>                    
+                </tr>
+                @endforeach
             </table>
         </div>
         <div id="footer">
             <table border="0" width="100%">
                 <tr>
                     <td align="left">
-                        {{HTML::image('img/arf/address_footer.jpg',null,array('width'=>300))}}
+                        {{HTML::image('img/arf/address_arf.jpg',null,array('width'=>300))}}
                     </td>
                     <td align="right">
                         {{HTML::image('img/att/cer_att.jpg',null,array('width'=>300))}}

@@ -111,6 +111,12 @@
                                     {{Form::text('access_no', NULL,array('class'=>'form-control','id'=>'access_no'))}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('ip_address', 'IP Address', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('ip_address', NULL,array('class'=>'form-control','id'=>'ip_address'))}}
+                                </div>
+                            </div>
                             @endif
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
@@ -118,7 +124,13 @@
                                 <div class="col-sm-2">
                                     {{ \Form::select('locations', $place,null, array('class' => 'form-control', 'id' => 'locations')); }}
                                 </div>
-                            </div>   
+                            </div>
+                            <div class="form-group">
+                                {{Form::label('floor', 'ชั้นวาง', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{ \Form::select('floor', array(''=>'เลือกชั้นวาง',1=>'ชั้น 1',2=>'ชั้น 2',3=>'ชั้น 3',4=>'ชั้น 4'),null, array('class' => 'form-control', 'id' => 'floor')); }}
+                                </div>
+                            </div>
                             @endif 
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}

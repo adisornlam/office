@@ -67,6 +67,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'hsware/group/model/add', array('uses' => 'App\Controllers\HswareController@model_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/sub/add/{id}', array('uses' => 'App\Controllers\HswareController@model_sub_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/dialog/add', array('uses' => 'App\Controllers\HswareController@model_dialog_add'));
+    Route::match(array('GET', 'POST'), 'hsware/group/model/dialog/wizard/add', array('uses' => 'App\Controllers\HswareController@model_dialog_wizard_add'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_edit'));
     Route::match(array('GET', 'POST'), 'hsware/group/model/sub/edit/{id}', array('uses' => 'App\Controllers\HswareController@model_sub_edit'));
     Route::get('hsware/group/model/delete/{id}', 'App\Controllers\HswareController@model_delete');

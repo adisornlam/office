@@ -100,11 +100,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            {{Form::label('locations', 'ตำแหน่งวาง', array('class' => 'col-sm-2 control-label'))}}
+                            {{Form::label('locations', 'สถานที่', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
                                 {{ \Form::select('locations', $place,null, array('class' => 'form-control', 'id' => 'locations')); }}
                             </div>
                         </div>   
+                        <div class="form-group">
+                            {{Form::label('floor', 'ชั้นวาง', array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-2">
+                                {{ \Form::select('floor', array(''=>'เลือกชั้นวาง',1=>'ชั้น 1',2=>'ชั้น 2',3=>'ชั้น 3',4=>'ชั้น 4'),null, array('class' => 'form-control', 'id' => 'floor')); }}
+                            </div>
+                        </div>
                         <div class="form-group">
                             {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">

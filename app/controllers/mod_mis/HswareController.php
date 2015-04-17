@@ -407,6 +407,35 @@ class HswareController extends \BaseController {
         }
     }
 
+    public function model_dialog_wizard_add() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_mis.hsware.admin.dialog_wizard_model_add');
+        } else {
+            $rules = array(
+                'title' => 'required'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $hsware_model = new \HswareModel();
+                $hsware_model->title = trim(\Input::get('title'));
+                $hsware_model->group_id = \Input::get('group_id');
+                $hsware_model->disabled = 1;
+                $hsware_model->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
     public function model_edit($param) {
         if (!\Request::isMethod('post')) {
             $data = array(
@@ -605,6 +634,7 @@ class HswareController extends \BaseController {
                 $hsware_item->photo5 = $photo_5;
                 $hsware_item->ip_address = trim(\Input::get('ip_address'));
                 $hsware_item->locations = trim(\Input::get('locations'));
+                $hsware_item->floor = \Input::get('floor');
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
                 $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
