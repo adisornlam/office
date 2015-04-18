@@ -41,21 +41,24 @@
 </div>
 {{ Form::close() }}
 <script type="text/javascript">
-    $('#btnSave').click(function() {
+    $('body').on('shown.bs.modal', '.modal', function () {
+        $('#name').focus();
+    });
+    $('#btnSave').click(function () {
         $.ajax({
             type: "post",
-            url: base_url + index_page +"users/roles/add",
+            url: base_url + index_page + "users/roles/add",
             data: $('#form-add input:not(#btnSave)').serializeArray(),
-            success: function(data) {
+            success: function (data) {
                 if (data.error.status == false) {
                     $('form .form-group').removeClass('has-error');
                     $('form .help-block').remove();
-                    $.each(data.error.message, function(key, value) {
+                    $.each(data.error.message, function (key, value) {
                         $('#' + key).parent().parent().addClass('has-error');
                         $('#' + key).after('<p class="help-block">' + value + '</p>');
                     });
                 } else {
-                    window.location.href = base_url + index_page +"users/roles";
+                    window.location.href = base_url + index_page + "users/roles";
                 }
             }
         });

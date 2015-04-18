@@ -44,6 +44,9 @@ class UsersController extends \BaseController {
         if (\Input::has('company_id')) {
             $users->where('users.company_id', \Input::get('company_id'));
         }
+        if (\Input::has('department_id')) {
+            $users->where('users.department_id', \Input::get('department_id'));
+        }
         if (\Input::has('disabled')) {
             $users->where('users.disabled', \Input::get('disabled'));
         }
@@ -91,8 +94,13 @@ class UsersController extends \BaseController {
     }
 
     public function add() {
+        $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         if (!\Request::isMethod('post')) {
-            return \View::make('mod_users.admin.users.add');
+            if ($check->is('administrator')) {
+                return \View::make('mod_users.admin.users.add');
+            } elseif ($check->is('mis')) {
+                return \View::make('mod_users.mis.users.add');
+            }
         } else {
             $rules = array(
                 'company_id' => 'required',
@@ -137,6 +145,7 @@ class UsersController extends \BaseController {
     }
 
     public function edit($param) {
+        $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         if (!\Request::isMethod('post')) {
             $item = \User::find($param);
             $role = \DB::table('role_user')->where('user_id', $param)->first();
@@ -149,7 +158,11 @@ class UsersController extends \BaseController {
                 'item' => $item,
                 'role_id' => ($role->role_id)
             );
-            return \View::make('mod_users.admin.users.edit', $data);
+            if ($check->is('administrator')) {
+                return \View::make('mod_users.admin.users.edit', $data);
+            } elseif ($check->is('mis')) {
+                return \View::make('mod_users.mis.users.edit', $data);
+            }
         } else {
             $rules = array(
                 'company_id' => 'required',
@@ -182,6 +195,7 @@ class UsersController extends \BaseController {
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
                 $user->mobile = trim(\Input::get('mobile'));
+                $user->username = trim(\Input::get('username'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
                 $user->verified = (\Input::has('verified') ? 1 : 0);
                 $user->save();

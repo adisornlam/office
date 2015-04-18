@@ -35,6 +35,8 @@ class HomeController extends \BaseController {
                 return \View::make('mod_home.employee.mis.index', $data);
             } elseif ($check->is('hr')) {
                 return \View::make('mod_home.employee.hr.index', $data);
+            } elseif ($check->is('oil_service')) {
+                return \View::make('mod_home.oil_service.index', $data);
             }
         } else {
             return \View::make('home.guest.index', $data);

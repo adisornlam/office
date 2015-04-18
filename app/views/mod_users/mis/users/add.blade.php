@@ -1,4 +1,3 @@
-{{HTML::style('assets/bootstrap-fileupload/bootstrap-fileupload.css')}}
 {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal'))}}
 <div role="tabpanel">
 
@@ -25,7 +24,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('codes', 'รหัสพนักงาน', array('class' => 'col-sm-3 control-label req'))}}
+                    {{Form::label('codes', 'รหัสพนักงาน', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-4">
                         {{Form::text('codes', NULL,array('class'=>'form-control','id'=>'codes'))}}
                     </div>
@@ -61,12 +60,18 @@
                 <div class="form-group">
                     {{Form::label('company_id', 'บริษัท', array('class' => 'col-sm-3 control-label req'));}}
                     <div class="col-sm-7">
-                        {{ \Form::select('company_id', array('' => 'เลือกบริษัท') + \Company::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'company_id')); }}
+                        {{ \Form::select('company_id', array('' => 'กรุณาเลือกบริษัท') + \Company::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'company_id')); }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('department_id', 'ฝ่าย/แผนก', array('class' => 'col-sm-3 control-label'));}}
+                    <div class="col-sm-7">
+                        {{ \Form::select('department_id', array('' =>'กรุณาเลือกฝ่าย/แผนก'), null, array('class' => 'form-control', 'id' => 'department_id'));}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('position_id', 'ตำแหน่ง', array('class' => 'col-sm-3 control-label'));}}
-                    <div class="col-sm-5">
+                    <div class="col-sm-7">
                         {{ \Form::select('position_id', array('' =>'กรุณาเลือกตำแหน่ง'), null, array('class' => 'form-control', 'id' => 'position_id'));}}
                     </div>
                 </div>
@@ -82,13 +87,8 @@
                     {{Form::label('verified', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
                         <label>
-                            {{Form::checkbox('verified', 1)}} Verified
+                            {{Form::checkbox('verified', 1)}} ตรวจสอบ
                         </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-10">
-                        {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnDialogSave'))}}    
                     </div>
                 </div>
             </div>
@@ -117,26 +117,43 @@
             </div>
         </div>      
     </div>
-
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-10">
+            {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnDialogSave'))}}    
+        </div>
+    </div>
 </div>
 {{ Form::close() }}
-{{HTML::script('assets/bootstrap-fileupload/bootstrap-fileupload.js')}}
 {{HTML::script('js/jquery.form.min.js')}}
 <script type="text/javascript">
     $('body').on('shown.bs.modal', '.modal', function () {
         $('#firstname').focus();
     });
 
-    $('#company_id').change(function () {
-        $.get("{{ url('get/position')}}",
+    $('#form-add #company_id').change(function () {
+        $.get("{{ url('get/department')}}",
                 {option: $(this).val()},
         function (data) {
-            var position = $('#position_id');
-            position.empty();
-            position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+            var department = $('#form-add #department_id');
+            department.empty();
+            department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
             $.each(data, function (index, element) {
-                position.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                department.append("<option value='" + element.id + "'>" + element.title + "</option>");
             });
+
+            $('#form-add #department_id').change(function () {
+                $.get("{{ url('get/position')}}",
+                        {option: $(this).val()},
+                function (data) {
+                    var position = $('#form-add #position_id');
+                    position.empty();
+                    position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+                    $.each(data, function (index, element) {
+                        position.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                    });
+                });
+            });
+
         });
     });
 

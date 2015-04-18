@@ -199,6 +199,15 @@ Route::group(array('prefix' => 'setting', 'before' => 'authen'), function() {
     Route::get('menu/sub/listall/{id}', 'App\Controllers\MenuController@listall');
 });
 
+//Oil Service
+Route::group(array('prefix' => 'oilservice', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\OilController@index');
+    Route::get('analysis', 'App\Controllers\OilController@analysis');
+    Route::get('analysis/listall', 'App\Controllers\OilController@analysis_listall');
+    Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\OilController@add'));
+    Route::post('analysis/save', 'App\Controllers\OilController@analysis_save');
+});
+
 
 Route::get('get/amphur', function() {
     $input = Input::get('option');
@@ -268,7 +277,7 @@ Route::get('get/hswareddl', function() {
     $input = Input::get('option');
     $company_id = Input::get('company_id');
     $reparing_publem = \RepairingPublem::find($input);
-    $hsware_item = \DB::table('hsware_item')            
+    $hsware_item = \DB::table('hsware_item')
             ->where('group_id', $reparing_publem->group_ref_id)
             ->where('spare', 1)
             ->where('company_id', $company_id);

@@ -16,31 +16,31 @@
                 <div class="form-group">
                     {{Form::label('firstname', 'ชื่อ', array('class' => 'col-sm-3 control-label req'))}}
                     <div class="col-sm-9">
-                        {{Form::text('firstname', NULL,array('class'=>'form-control','id'=>'firstname'))}}
+                        {{Form::text('firstname', $item->firstname,array('class'=>'form-control','id'=>'firstname'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('lastname', 'นามสกุล', array('class' => 'col-sm-3 control-label req'))}}
                     <div class="col-sm-9">
-                        {{Form::text('lastname', NULL,array('class'=>'form-control','id'=>'lastname'))}}
+                        {{Form::text('lastname', $item->lastname,array('class'=>'form-control','id'=>'lastname'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('codes', 'รหัสพนักงาน', array('class' => 'col-sm-3 control-label req'))}}
                     <div class="col-sm-4">
-                        {{Form::text('codes', NULL,array('class'=>'form-control','id'=>'codes'))}}
+                        {{Form::text('codes', $item->codes,array('class'=>'form-control','id'=>'codes'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('email', 'อีเมล์', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-8">
-                        {{Form::text('email', NULL,array('class'=>'form-control','id'=>'email'))}}
+                        {{Form::text('email', $item->email,array('class'=>'form-control','id'=>'email'))}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('phone', 'เบอร์ติดต่อ', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-4">
-                        {{Form::text('phone', NULL,array('class'=>'form-control','id'=>'phone'))}}
+                        {{Form::text('phone', $item->phone,array('class'=>'form-control','id'=>'phone'))}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,25 +63,31 @@
                 <div class="form-group">
                     {{Form::label('company_id', 'บริษัท', array('class' => 'col-sm-3 control-label req'));}}
                     <div class="col-sm-7">
-                        {{ \Form::select('company_id', array('' => 'เลือกบริษัท') + \Company::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'company_id')); }}
+                        {{ \Form::select('company_id', array('' => 'กรุณาเลือกบริษัท') + \Company::lists('title', 'id'), $item->company_id, array('class' => 'form-control', 'id' => 'company_id')); }}
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('department_id', 'ฝ่าย/แผนก', array('class' => 'col-sm-3 control-label req'));}}
+                    {{Form::label('department_id', 'ฝ่าย/แผนก', array('class' => 'col-sm-3 control-label'));}}
                     <div class="col-sm-7">
-                        {{ \Form::select('department_id', array('' => 'เลือกฝ่าย/แผนก') + \Department::lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'department_id')); }}
+                        {{ \Form::select('department_id', array('' =>'กรุณาเลือกฝ่าย/แผนก'), null, array('class' => 'form-control', 'id' => 'department_id'));}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('position_id', 'ตำแหน่ง', array('class' => 'col-sm-3 control-label'));}}
+                    <div class="col-sm-7">
+                        {{ \Form::select('position_id', array('' =>'กรุณาเลือกตำแหน่ง'), null, array('class' => 'form-control', 'id' => 'position_id'));}}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('disabled', 1)}} เปิดใช้งาน
+                        {{Form::checkbox('disabled', 1,($item->disabled==0?TRUE:FALSE))}} เปิดใช้งาน
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('verified', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
-                        {{Form::checkbox('verified', 1)}} Verified
+                        {{Form::checkbox('verified', 1,($item->verified==1?TRUE:FALSE))}} ตรวจสอบ
                     </div>
                 </div>
                 <div class="form-group">
@@ -97,19 +103,13 @@
                     {{Form::label('role_id', 'กลุ่ม', array('class' => 'col-sm-3 control-label req'));}}
                     <div class="col-sm-5">
                         {{ \Form::select('role_id', array('' => 'เลือกกลุ่ม') + DB::table('roles')
-                                ->lists('name', 'id'), null, array('class' => 'form-control', 'id' => 'role_id')); }}
+                                ->lists('name', 'id'), $role_id, array('class' => 'form-control', 'id' => 'role_id')); }}
                     </div>
                 </div>
                 <div class="form-group">
                     {{Form::label('username', 'ชื่อผู้ใช้', array('class' => 'col-sm-3 control-label req'))}}
                     <div class="col-sm-6">
-                        {{Form::text('username', NULL,array('class'=>'form-control','id'=>'username'))}}
-                    </div>
-                </div>
-                <div class="form-group">
-                    {{Form::label('password', 'รหัสผ่าน', array('class' => 'col-sm-3 control-label req'))}}
-                    <div class="col-sm-6">
-                        {{Form::password('password',array('class' => 'form-control'))}}
+                        {{Form::text('username', $item->username,array('class'=>'form-control','id'=>'username'))}}
                     </div>
                 </div>
             </div>
@@ -152,9 +152,62 @@
         $('#firstname').focus();
     });
 
+    $('#form-add #company_id').change(function () {
+        $.get("{{ url('get/department')}}",
+                {option: $(this).val()},
+        function (data) {
+            var department = $('#form-add #department_id');
+            department.empty();
+            department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
+            $.each(data, function (index, element) {
+                department.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+    });
+
+    $('#form-add #department_id').change(function () {
+        $.get("{{ url('get/position')}}",
+                {option: $(this).val()},
+        function (data) {
+            var position = $('#form-add #position_id');
+            position.empty();
+            position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+            $.each(data, function (index, element) {
+                position.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+    });
+
     $(function () {
+        var department_id = <?php echo ($item->department_id ? $item->department_id : 0); ?>;
+        var position_id = <?php echo ($item->position_id ? $item->position_id : 0); ?>;
+        $.get("{{ url('get/department')}}",
+                {option: $('#form-add #company_id').val()},
+        function (data) {
+            var department = $('#form-add #department_id');
+            department.empty();
+            department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
+            $.each(data, function (index, element) {
+                var department_select = (element.id === '' + department_id + '' ? "selected" : "");
+                department.append("<option value='" + element.id + "' " + department_select + ">" + element.title + "</option>");
+            });
+
+            $.get("{{ url('get/position')}}",
+                    {option: $('#form-add #department_id').val()},
+            function (data) {
+                var position = $('#form-add #position_id');
+                position.empty();
+                position.append("<option value=''>กรุณาเลือกตำแหน่ง</option>");
+                $.each(data, function (index, element) {
+                    var position_select = (element.id === '' + position_id + '' ? "selected" : "");
+                    position.append("<option value='" + element.id + "' " + position_select + ">" + element.title + "</option>");
+                });
+            });
+
+        });
+
         var options = {
-            url: base_url + index_page + "users/add",
+            url: base_url + index_page + "users/edit/{{$item->id}}",
             success: showResponse
         };
         $('#btnDialogSave').click(function () {
@@ -164,8 +217,8 @@
 
     function showResponse(response, statusText, xhr, $form) {
         if (response.error.status === false) {
-            $('form .form-group').removeClass('has-error');
-            $('form .help-block').remove();
+            $('#form-add .form-group').removeClass('has-error');
+            $('#form-add .help-block').remove();
             $('#btnDialogSave').removeAttr('disabled');
             $.each(response.error.message, function (key, value) {
                 $('#' + key).parent().parent().addClass('has-error');
