@@ -35,6 +35,8 @@ class RepairingController extends \BaseController {
             return \View::make('mod_mis.repairing.mis.index', $data);
         } elseif ($check->is('employee')) {
             return \View::make('mod_mis.repairing.employee.index', $data);
+        } else {
+            return \View::make('mod_mis.repairing.shared.index', $data);
         }
     }
 
@@ -119,11 +121,12 @@ class RepairingController extends \BaseController {
                 return \View::make('mod_mis.repairing.mis.add', $data);
             } elseif ($check->is('employee')) {
                 return \View::make('mod_mis.repairing.employee.add', $data);
+            } else {
+                return \View::make('mod_mis.repairing.shared.add', $data);
             }
         } else {
             $rules = array(
-                'desc' => 'required',
-                'user_id' => 'required',
+                'desc' => 'required'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -136,8 +139,10 @@ class RepairingController extends \BaseController {
                 $repairing = new \RepairingItem();
                 $repairing->group_id = \Input::get('group_id');
                 $repairing->desc = \Input::get('desc');
-                $repairing->created_user = \Input::get('user_id');
-                $repairing->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
+                $repairing->created_user = (\Input::get('user_id') ? \Input::get('user_id') : \Auth::user()->id);
+                if (\Input::get('created_at')) {
+                    $repairing->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
+                }
                 $repairing->save();
                 $repairing_id = $repairing->id;
 
@@ -154,6 +159,69 @@ class RepairingController extends \BaseController {
     public function view($param) {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $item = \RepairingItem::find($param);
+        if ($item->group_id == 1) {
+
+            if (\DB::table('computer_item')
+                            ->join('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                            ->where('computer_user.user_id', $item->created_user)
+                            ->count() > 0) {
+                $group_id = \DB::table('computer_item')
+                        ->join('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                        ->where('computer_user.user_id', $item->created_user)
+                        ->select(array(
+                            'computer_item.id as id',
+                            \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
+                        ))
+                        ->lists('title', 'id');
+            } else {
+                $group_id = \DB::table('computer_item')
+                        ->where('computer_item.disabled', 0)
+                        ->where('computer_item.type_id', 1)
+                        ->select(array(
+                            'computer_item.id as id',
+                            \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
+                        ))
+                        ->lists('title', 'id');
+            }
+        } elseif ($item->group_id == 2) {
+            $group_id = \DB::table('computer_item')
+                    ->where('computer_item.disabled', 0)
+                    ->where('computer_item.type_id', 2)
+                    ->select(array(
+                        'computer_item.id as id',
+                        \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
+                    ))
+                    ->lists('title', 'id');
+        } elseif ($item->group_id == 3) {
+            $group_id = \DB::table('hsware_item')
+                    ->where('disabled', 0)
+                    ->where('group_id', 24)
+                    ->select(array(
+                        'id',
+                        'serial_code as title'
+                    ))
+                    ->lists('title', 'id');
+        } elseif ($item->group_id == 4) {
+            $group_id = \DB::table('hsware_item')
+                    ->where('disabled', 0)
+                    ->where('group_id', 14)
+                    ->select(array(
+                        'id',
+                        'serial_code as title'
+                    ))
+                    ->lists('title', 'id');
+        } elseif ($item->group_id == 5) {
+            $group_id = \DB::table('hsware_item')
+                    ->where('disabled', 0)
+                    ->where('group_id', 13)
+                    ->select(array(
+                        'id',
+                        'serial_code as title'
+                    ))
+                    ->lists('title', 'id');
+        } else {
+            $group_id = array('' => 'ไม่มีรายการ');
+        }
         $data = array(
             'title' => 'รายการแจ้งซ่อม ' . \Str::limit($item->desc, 50),
             'breadcrumbs' => array(
@@ -166,7 +234,8 @@ class RepairingController extends \BaseController {
             'group' => \RepairingGroup::find($item->group_id),
             'user' => \User::find($item->created_user),
             'receive_user' => \User::find($item->receive_user),
-            'publem' => \DB::table('repairing_publem')->where('group_id', $item->group_id)->lists('title', 'id')
+            'publem' => \DB::table('repairing_publem')->where('group_id', $item->group_id)->lists('title', 'id'),
+            'computer' => $group_id
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.repairing.admin.view', $data);
@@ -174,6 +243,8 @@ class RepairingController extends \BaseController {
             return \View::make('mod_mis.repairing.mis.view', $data);
         } elseif ($check->is('employee')) {
             return \View::make('mod_mis.repairing.employee.view', $data);
+        } else {
+            return \View::make('mod_mis.repairing.shared.view', $data);
         }
     }
 

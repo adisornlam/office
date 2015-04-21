@@ -2,6 +2,7 @@
 @section('style')
 {{HTML::style('css/star-rating.min.css')}}
 {{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
+{{HTML::style('css/bootstrap-select.min.css')}}
 @stop
 @section('content')
 @if(isset($breadcrumbs))
@@ -91,7 +92,13 @@
                             <input type="radio" name="type_id" class="type_id" value="3"> เคลม
                         </label>
                     </div>
-                </div>                
+                </div>       
+                <div class="form-group">
+                    {{Form::label('computer_id', 'เลขระเบียน', array('class' => 'col-sm-2 control-label req'))}}
+                    <div class="col-sm-3">
+                        {{ \Form::select('computer_id', array(''=>'ค้นหาเลขระเบียน')+$computer,null, array('class' => 'form-control selectpicker', 'id' => 'computer_id','data-live-search'=>'true','data-style'=>'btn-info')); }}
+                    </div>
+                </div>
                 <div class="form-group">
                     {{Form::label('publem_id', 'กลุ่มปัญหา', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-3">
@@ -237,6 +244,7 @@
 {{HTML::script('js/star-rating.min.js')}}
 {{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
 {{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
+{{HTML::script('js/bootstrap-select.min.js')}}
 @stop
 
 @section('script_code')

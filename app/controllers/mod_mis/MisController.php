@@ -48,6 +48,8 @@ class MisController extends \BaseController {
             return \View::make('mod_mis.home.mis.index', $data);
         } elseif ($check->is('hr')) {
             return \View::make('mod_mis.home.hr.index', $data);
+        }else{
+            return \View::make('mod_mis.home.shared.index', $data);
         }
     }
 

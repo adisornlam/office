@@ -206,6 +206,7 @@ Route::group(array('prefix' => 'oilservice', 'before' => 'authen'), function() {
     Route::get('analysis/listall', 'App\Controllers\OilController@analysis_listall');
     Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\OilController@add'));
     Route::post('analysis/save', 'App\Controllers\OilController@analysis_save');
+    Route::match(array('GET', 'POST'), 'analysis/edit/{id}', array('uses' => 'App\Controllers\OilController@edit'));
 });
 
 

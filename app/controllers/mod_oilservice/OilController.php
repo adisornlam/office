@@ -26,7 +26,8 @@ class OilController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่าย Oil Service' => '#'
-            )
+            ),
+            'analysis_count' => \OilAnalysisItem::where('disabled', 0)->count()
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);
@@ -57,7 +58,7 @@ class OilController extends \BaseController {
     }
 
     public function analysis_listall() {
-        $computer_item = \DB::table('oil_analysis_item')
+        $analysis_item = \DB::table('oil_analysis_item')
                 ->select(array(
             'oil_analysis_item.id as id',
             'oil_analysis_item.viscosity as viscosity',
@@ -67,20 +68,50 @@ class OilController extends \BaseController {
             'oil_analysis_item.oxidation as oxidation',
             'oil_analysis_item.nitration as nitration',
             'oil_analysis_item.tan as tan',
+            'oil_analysis_item.diagnose as diagnose',
+            'oil_analysis_item.solve as solve',
             'oil_analysis_item.created_at as created_at',
             'oil_analysis_item.disabled as disabled'
         ));
 
-//        $link = '<div class="dropdown">';
-//        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
-//        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-//        $link .= '<li><a href="{{\URL::to("oilservice/analysis/edit/$id")}}" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-//        $link .= '<li><a href="javascript:;" rel="oilservice/analysis/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
-//        $link .= '</ul>';
-//        $link .= '</div>';
+        if (\Input::has('viscosity')) {
+            $analysis_item->where('oil_analysis_item.viscosity', \Input::get('viscosity'));
+        }
 
-        return \Datatables::of($computer_item)
-                        //->edit_column('id', $link)
+        if (\Input::has('nas')) {
+            $analysis_item->where('oil_analysis_item.nas', \Input::get('nas'));
+        }
+
+        if (\Input::has('colour')) {
+            $analysis_item->where('oil_analysis_item.colour', \Input::get('colour'));
+        }
+
+        if (\Input::has('moisture')) {
+            $analysis_item->where('oil_analysis_item.moisture', \Input::get('moisture'));
+        }
+
+        if (\Input::has('oxidation')) {
+            $analysis_item->where('oil_analysis_item.oxidation', \Input::get('oxidation'));
+        }
+
+        if (\Input::has('nitration')) {
+            $analysis_item->where('oil_analysis_item.nitration', \Input::get('nitration'));
+        }
+
+        if (\Input::has('tan')) {
+            $analysis_item->where('oil_analysis_item.tan', \Input::get('tan'));
+        }
+
+        $link = '<div class="dropdown">';
+        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
+        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="javascript:;"  rel="oilservice/analysis/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="oilservice/analysis/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '</ul>';
+        $link .= '</div>';
+
+        return \Datatables::of($analysis_item)
+                        ->edit_column('id', $link)
                         ->add_column('viscosity_text', function($result_obj) {
                             $oil_status_item = \OilStatusItem::where('group_id', 1)->where('wieht', $result_obj->viscosity)->first();
                             if ($oil_status_item) {
@@ -179,23 +210,89 @@ class OilController extends \BaseController {
         return \View::make('mod_oilservice.oilservice.analysis.add', $data);
     }
 
+    public function edit($id = 0) {
+        if (!\Request::isMethod('post')) {
+            $data = array(
+                'item' => \OilAnalysisItem::find($id)
+            );
+            return \View::make('mod_oilservice.oilservice.analysis.edit', $data);
+        } else {
+            $rules = array();
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $analysis_item = \OilAnalysisItem::find($id);
+                $analysis_item->diagnose = \Input::get('diagnose');
+                $analysis_item->solve = \Input::get('solve');
+                $analysis_item->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            }
+        }
+    }
+
     public function analysis_save() {
-        $oil_analysis_item = new \OilAnalysisItem();
-        $oil_analysis_item->viscosity = \Input::get('viscosity');
-        $oil_analysis_item->nas = \Input::get('nas');
-        $oil_analysis_item->colour = \Input::get('colour');
-        $oil_analysis_item->moisture = \Input::get('moisture');
-        $oil_analysis_item->oxidation = \Input::get('oxidation');
-        $oil_analysis_item->nitration = \Input::get('nitration');
-        $oil_analysis_item->tan = \Input::get('tan');
-        $oil_analysis_item->diagnose = trim(\Input::get('diagnose'));
-        $oil_analysis_item->solve = trim(\Input::get('solve'));
-        $oil_analysis_item->save();
+        $analysis_count = \DB::table('oil_analysis_item')
+                ->where('viscosity', \Input::get('viscosity'))
+                ->where('nas', \Input::get('nas'))
+                ->where('colour', \Input::get('colour'))
+                ->where('moisture', \Input::get('moisture'))
+                ->where('oxidation', \Input::get('oxidation'))
+                ->where('nitration', \Input::get('nitration'))
+                ->where('tan', \Input::get('tan'))
+                ->count();
+        if ($analysis_count <= 0) {
+            $oil_analysis_item = new \OilAnalysisItem();
+            $oil_analysis_item->viscosity = \Input::get('viscosity');
+            $oil_analysis_item->nas = \Input::get('nas');
+            $oil_analysis_item->colour = \Input::get('colour');
+            $oil_analysis_item->moisture = \Input::get('moisture');
+            $oil_analysis_item->oxidation = \Input::get('oxidation');
+            $oil_analysis_item->nitration = \Input::get('nitration');
+            $oil_analysis_item->tan = \Input::get('tan');
+            $oil_analysis_item->diagnose = trim(\Input::get('diagnose'));
+            $oil_analysis_item->solve = trim(\Input::get('solve'));
+            $oil_analysis_item->save();
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => TRUE,
+                            'message' => NULL
+                        ), 200));
+        } else {
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => FALSE,
+                            'message' => 'ค่าที่กรอกนี้มีอยู่แล้ว กรุณาตรวจสอบอีกครั้ง !!!'
+                        ), 400));
+        }
+
         return \Response::json(array(
                     'error' => array(
                         'status' => TRUE,
                         'message' => NULL
                     ), 200));
+    }
+
+    public function analysis_delete($param) {
+        try {
+            \OilAnalysisItem::find($param)->delete();
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => true,
+                            'message' => 'ลบรายการสำเร็จ',
+                            'redirect' => 'oilservice/analysis'
+                        ), 200));
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
 }

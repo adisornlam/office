@@ -20,30 +20,30 @@
 @endif
 
 <div class="page-header">
-    <h1>Oil Analysis <small>Report</small></h1>
+    <h1>MA <small>ดูแลและบำรุงรักษา</small></h1>
 </div>
 <div class="row state-overview">
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="oilservice_analysis_report_list">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_list">
         <section class="panel">
             <div class="symbol red">
-                <i class="fa fa-flask"></i>
+                <i class="fa fa-wrench"></i>
             </div>
             <div class="value">
                 <h1 class=" count2">
-                    {{$analysis_count}}
+                    {{$repairing_count}}
                 </h1>
-                <p>รายการวิเคราะห์น้ำมันไฮดรอลิค</p>
+                <p>รายการแจ้งซ่อมอุปกรณ์</p>
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="oilservice_analysis_report_add">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_add">
         <section class="panel">
             <div class="symbol green">
                 <i class="fa fa-plus"></i>
             </div>
             <div class="value">
                 <p>&nbsp;</p>
-                <p>เพิ่มรายการวิเคราะห์</p>
+                <p>แบบฟอร์มแจ้งซ่อม</p>
             </div>
         </section>
     </div>
@@ -52,19 +52,15 @@
 
 @section('script_code')
 <script type="text/javascript">
-    $('#oilservice_analysis_report_list').click(function () {
-        window.location.href = base_url + index_page + 'oilservice/analysis';
+    $('#repairing_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/repairing';
     });
-
-    $('#oilservice_analysis_report_add').click(function () {
-        window.location.href = base_url + index_page + 'oilservice/analysis/add';
+    $('#repairing_add').click(function () {
+        var data = {
+            url: 'mis/repairing/add',
+            title: 'แจ้งซ่อมอุปกรณ์'
+        };
+        genModal(data);
     });
-//    $('#oilservice_analysis_report_add').click(function () {
-//        var data = {
-//            url: 'oilservice/analysis/add',
-//            title: 'เพิ่มรายการวิเคราะห์'
-//        };
-//        genModal(data);
-//    });
 </script>
 @stop

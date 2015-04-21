@@ -34,7 +34,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',1)->get() as $item_viscosity)
                             <label class="radio-inline">
-                                {{Form::radio('viscosity',$item_viscosity->wieht,(\Input::get('viscosity')==$item_viscosity->wieht?TRUE:FALSE))}} {{$item_viscosity->wieht}}
+                                {{Form::radio('viscosity',$item_viscosity->wieht,(\Input::get('viscosity')==$item_viscosity->wieht?TRUE:FALSE))}} {{$item_viscosity->wieht}} ({{$item_viscosity->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -44,7 +44,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',2)->get() as $item_nas)
                             <label class="radio-inline">
-                                {{Form::radio('nas',$item_nas->wieht,(\Input::get('nas')==$item_nas->wieht?TRUE:FALSE))}} {{$item_nas->wieht}}
+                                {{Form::radio('nas',$item_nas->wieht,(\Input::get('nas')==$item_nas->wieht?TRUE:FALSE))}} {{$item_nas->wieht}} ({{$item_nas->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -54,7 +54,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',3)->get() as $item_colour)
                             <label class="radio-inline">
-                                {{Form::radio('colour',$item_colour->wieht,(\Input::get('colour')==$item_colour->wieht?TRUE:FALSE))}} {{$item_colour->wieht}}
+                                {{Form::radio('colour',$item_colour->wieht,(\Input::get('colour')==$item_colour->wieht?TRUE:FALSE))}} {{$item_colour->wieht}} ({{$item_colour->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -64,7 +64,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',4)->get() as $item_moisture)
                             <label class="radio-inline">
-                                {{Form::radio('moisture',$item_moisture->wieht,(\Input::get('moisture')==$item_moisture->wieht?TRUE:FALSE))}} {{$item_moisture->wieht}}
+                                {{Form::radio('moisture',$item_moisture->wieht,(\Input::get('moisture')==$item_moisture->wieht?TRUE:FALSE))}} {{$item_moisture->wieht}} ({{$item_moisture->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -74,7 +74,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',5)->get() as $item_oxidation)
                             <label class="radio-inline">
-                                {{Form::radio('oxidation',$item_oxidation->wieht,(\Input::get('oxidation')==$item_oxidation->wieht?TRUE:FALSE))}} {{$item_oxidation->wieht}}
+                                {{Form::radio('oxidation',$item_oxidation->wieht,(\Input::get('oxidation')==$item_oxidation->wieht?TRUE:FALSE))}} {{$item_oxidation->wieht}} ({{$item_oxidation->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -84,7 +84,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',6)->get() as $item_nitration)
                             <label class="radio-inline">
-                                {{Form::radio('nitration',$item_nitration->wieht,(\Input::get('nitration')==$item_nitration->wieht?TRUE:FALSE))}} {{$item_nitration->wieht}}
+                                {{Form::radio('nitration',$item_nitration->wieht,(\Input::get('nitration')==$item_nitration->wieht?TRUE:FALSE))}} {{$item_nitration->wieht}} ({{$item_nitration->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -94,7 +94,7 @@
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',7)->get() as $item_tan)
                             <label class="radio-inline">
-                                {{Form::radio('tan',$item_tan->wieht,(\Input::get('tan')==$item_tan->wieht?TRUE:FALSE))}} {{$item_tan->wieht}}
+                                {{Form::radio('tan',$item_tan->wieht,(\Input::get('tan')==$item_tan->wieht?TRUE:FALSE))}} {{$item_tan->wieht}} ({{$item_tan->title2}})
                             </label>
                             @endforeach        
                         </div>
@@ -223,13 +223,8 @@
 
     function showResponse(response, statusText, xhr, $form) {
         if (response.error.status === false) {
-            $('form .form-group').removeClass('has-error');
-            $('form .help-block').remove();
             $('#btnSave').removeAttr('disabled');
-            $.each(response.error.message, function (key, value) {
-                $('#' + key).parent().parent().addClass('has-error');
-                $('#' + key).after('<p class="help-block">' + value + '</p>');
-            });
+            alert(response.error.message);
         } else {
             window.location.href = base_url + index_page + "oilservice/analysis";
         }
