@@ -68,6 +68,7 @@ class HswareController extends \BaseController {
             'hsware_item.created_user as created_user',
             'hsware_item.updated_user as updated_user',
             'place.title as locations',
+            'hsware_item.spare as spare',
             'hsware_item.disabled as disabled',
             'hsware_item.status as status'
         ));
@@ -84,6 +85,7 @@ class HswareController extends \BaseController {
         return \Datatables::of($hsware_item)
                         ->edit_column('id', $link)
                         ->edit_column('status', '@if($status==1) <span class="label label-success">Used</span> @else <span class="label label-warning">Inactive</span> @endif')
+                        ->edit_column('spare', '@if($spare==1) <span class="label label-success">Yes</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', function($result_obj) {
                             //$str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id) . '</a>';

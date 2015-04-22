@@ -59,6 +59,11 @@
                             {{ \Form::select('status', array(''=>'เลือกสถานะ',1=>'Active',0=>'Inactive'), (isset($_COOKIE['hsware_status'])?$_COOKIE['hsware_status']:null), array('class' => 'form-control', 'id' => 'status')); }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {{Form::checkbox('spare', 1,NULL,['id'=>'spare'])}} อะไหล่
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,6 +108,7 @@
                     d.group_id = $('#group_id').val();
                     d.company_id = $('#company_id').val();
                     d.status = $('#status').val();
+                    d.spare = $('#spare').val();
                 }
             },
             "columnDefs": [{
@@ -118,6 +124,7 @@
                 {"data": "locations", "title": "Location", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
+                {"data": "spare", "title": "อะไหล่", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false},
                 {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false}
             ],
             "dom": 'T<"clear">lfrtip',

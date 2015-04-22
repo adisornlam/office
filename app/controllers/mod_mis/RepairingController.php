@@ -274,6 +274,7 @@ class RepairingController extends \BaseController {
                             'message' => $validator->errors()->toArray()
                         ), 400));
         } else {
+
             $repairing_item = \RepairingItem::find($param);
             $repairing_item->publem_id = \Input::get('publem_id');
             $repairing_item->type_id = \Input::get('type_id');
@@ -283,6 +284,19 @@ class RepairingController extends \BaseController {
             $repairing_item->status = 2;
             $repairing_item->success_at = \Input::get('success_at') . ' ' . date('H:i:s');
             $repairing_item->save();
+
+            if (\Input::get('type_id') == 2) {
+                $reparing_publem = \RepairingPublem::find(\Input::get('publem_id'));
+                $hsware_item = \DB::table('hsware_item')
+                        ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                        ->where('computer_hsware.computer_id', \Input::get('computer_id'))
+                        ->where('hsware_item.group_id', $reparing_publem->group_ref_id)
+                        ->select(array(
+                            'computer_item.id as id',
+                            \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
+                        ))
+                        ->lists('title', 'id');
+            }
             return \Response::json(array(
                         'error' => array(
                             'status' => TRUE,
