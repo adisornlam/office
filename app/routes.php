@@ -352,6 +352,18 @@ Route::get('get/getSerialNotebook', function() {
     return $company->company_code . '-NB-' . str_pad($sr, 3, "0", STR_PAD_LEFT);
 });
 
+Route::get('get/licenseddl', function() {
+    $input = Input::get('option');
+    $users = \DB::table('license_item')
+            ->where('group_id', $input)
+            ->where('status', 0);
+    $users->select(array(
+        'id',
+        \DB::raw('CONCAT(title," (",license_code,")") as title')
+    ));
+    return Response::json($users->get());
+});
+
 // Display all SQL executed in Eloquent
 //Event::listen('illuminate.query', function($query) {
 //    var_dump($query);

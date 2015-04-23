@@ -24,7 +24,7 @@
             }
             #footer {
                 width:100%;
-                height:80px;
+                height:150px;
                 position:absolute;
                 bottom:0;
                 left:0;
@@ -111,7 +111,7 @@
                     <td>
                         <p>&nbsp;</p>
                     </td>
-                    <td>&nbsp;</td>
+                    <td><strong>วันที่เริ่มใช้งาน</strong></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
@@ -141,6 +141,9 @@
         </div>
         <div id="footer">
             <table border="0" width="100%">
+                <tr>
+                    <td colspan="2"><hr /></td>
+                </tr>
                 <tr>
                     <td align="left">
                         {{HTML::image('img/att/adds_att.jpg',null,array('width'=>300))}}

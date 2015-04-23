@@ -179,6 +179,9 @@
         <div id="footer">
             <table border="0" width="100%">
                 <tr>
+                    <td colspan="2"><hr /></td>
+                </tr>
+                <tr>
                     <td align="left">
                         {{HTML::image('img/att/adds_att.jpg',null,array('width'=>300))}}
                     </td>

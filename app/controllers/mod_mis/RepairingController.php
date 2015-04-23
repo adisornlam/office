@@ -357,6 +357,7 @@ class RepairingController extends \BaseController {
                 ->leftJoin('hsware_item', 'ma_item.hsware_id', '=', 'hsware_item.id')
                 ->leftJoin('users', 'ma_item.created_user', '=', 'users.id')
                 ->leftJoin('repairing_group', 'ma_item.group_id', '=', 'repairing_group.id')
+                ->leftJoin('repairing_publem', 'ma_item.publem_id', '=', 'repairing_publem.id')
                 ->leftJoin('company', 'ma_item.company_id', '=', 'company.id');
         if (\Input::has('group_id')) {
             $repairing->where('ma_item.type_id', \Input::get('type_id'));
@@ -364,7 +365,7 @@ class RepairingController extends \BaseController {
         $repairing->select(array(
             'ma_item.id as id',
             'ma_item.id as item_id',
-            'ma_item.title as title',
+            'repairing_publem.title as title',
             'repairing_group.title as group_title',
             'company.title as company',
             'ma_item.status as status',
@@ -421,6 +422,7 @@ class RepairingController extends \BaseController {
                 $group_id = \DB::table('computer_item')
                         ->where('computer_item.disabled', 0)
                         ->where('computer_item.type_id', 1)
+                        ->where('computer_item.company_id', \Input::get('company_id'))
                         ->select(array(
                             'computer_item.id as id',
                             \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
@@ -430,6 +432,7 @@ class RepairingController extends \BaseController {
                 $group_id = \DB::table('computer_item')
                         ->where('computer_item.disabled', 0)
                         ->where('computer_item.type_id', 2)
+                        ->where('computer_item.company_id', \Input::get('company_id'))
                         ->select(array(
                             'computer_item.id as id',
                             \DB::raw('CONCAT(computer_item.serial_code," -- ",computer_item.title) as title')
@@ -437,6 +440,7 @@ class RepairingController extends \BaseController {
                         ->lists('title', 'id');
             } elseif (\Input::get('group_id') == 3) {
                 $group_id = \DB::table('hsware_item')
+                        ->where('hsware_item.company_id', \Input::get('company_id'))
                         ->where('disabled', 0)
                         ->where('group_id', 24)
                         ->select(array(
@@ -446,6 +450,7 @@ class RepairingController extends \BaseController {
                         ->lists('title', 'id');
             } elseif (\Input::get('group_id') == 4) {
                 $group_id = \DB::table('hsware_item')
+                        ->where('hsware_item.company_id', \Input::get('company_id'))
                         ->where('disabled', 0)
                         ->where('group_id', 14)
                         ->select(array(
@@ -455,6 +460,7 @@ class RepairingController extends \BaseController {
                         ->lists('title', 'id');
             } elseif (\Input::get('group_id') == 5) {
                 $group_id = \DB::table('hsware_item')
+                        ->where('hsware_item.company_id', \Input::get('company_id'))
                         ->where('disabled', 0)
                         ->where('group_id', 13)
                         ->select(array(
@@ -474,7 +480,8 @@ class RepairingController extends \BaseController {
                     'รายการ MA' => 'mis/repairing/ma',
                     'เพิ่มรายการ MA' => '#'
                 ),
-                'computer' => $group_id
+                'computer' => $group_id,
+                'publem' => \DB::table('repairing_publem')->where('group_id', \Input::get('group_id'))->lists('title', 'id'),
             );
             if ($check->is('administrator')) {
                 return \View::make('mod_mis.admin.ma_add', $data);
@@ -483,7 +490,6 @@ class RepairingController extends \BaseController {
             }
         } else {
             $rules = array(
-                'title' => 'required',
                 'computer_id' => 'required',
                 'desc' => 'required'
             );
@@ -505,7 +511,11 @@ class RepairingController extends \BaseController {
                 $ma_item->company_id = $computer_item->company_id;
                 $ma_item->computer_id = (\Input::get('group_id') <= 2 ? \Input::get('computer_id') : 0);
                 $ma_item->hsware_id = (\Input::get('group_id') > 2 ? \Input::get('group_id') : 0);
+                $ma_item->publem_id = \Input::get('publem_id');
                 $ma_item->type_id = \Input::get('type_id');
+                $ma_item->software_id = \Input::get('software_id');
+                $ma_item->license_group_id = \Input::get('license_group_id');
+                $ma_item->license_id = \Input::get('license_id');
                 $ma_item->serial_no = 0;
                 $ma_item->title = trim(\Input::get('title'));
                 $ma_item->desc = \Input::get('desc');
@@ -515,6 +525,17 @@ class RepairingController extends \BaseController {
                 $ma_item->disabled = 0;
                 $ma_item->created_user = \Auth::user()->id;
                 $ma_item->save();
+
+                if (\Input::get('license_id')) {
+                    $license_item = \LicenseItem::find(\Input::get('license_id'));
+                    $license_item->status = 1;
+                    $license_item->save();
+
+                    $sl = new \SoftwareLicenser();
+                    $sl->software_id = \Input::get('software_id');
+                    $sl->license_id = \Input::get('license_id');
+                    $sl->save();
+                }
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,
