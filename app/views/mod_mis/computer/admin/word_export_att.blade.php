@@ -171,9 +171,35 @@
                                 <?php } ?>
                             </td>
                         </tr>
-                    <?php }
+                        <?php
+                    }
                 }
                 ?>
+            </table>
+            <h3>รายการ MA</h3>
+            <table border="0" width="100%" class="myTable">
+                <tr>
+                    <td><strong>ประเภทดำเนินการ</strong></td>
+                    <td><strong>กลุ่มปัญหา</strong></td>
+                    <td><strong>รายละเอียด</strong></td>
+                    <td><strong>วันที่</strong></td>
+                </tr>
+                @foreach($ma as $ma_item)
+                <tr>
+                    <td width="10%">
+                        {{$ma_item->title}}
+                    </td>
+                    <td width="20%">
+                        {{$ma_item->ptitle}}
+                    </td>
+                    <td width="20%">
+                        {{$ma_item->desc}}
+                    </td>
+                    <td width="20%">
+                        {{$ma_item->created_at}}
+                    </td>
+                </tr>
+                @endforeach
             </table>
         </div>
         <div id="footer">

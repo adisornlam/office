@@ -365,7 +365,10 @@ class RepairingController extends \BaseController {
         $repairing->select(array(
             'ma_item.id as id',
             'ma_item.id as item_id',
+            'ma_item.group_id as group_id',
             'repairing_publem.title as title',
+            'computer_item.serial_code as serial_code',
+            'computer_item.title as computer',
             'repairing_group.title as group_title',
             'company.title as company',
             'ma_item.status as status',
@@ -384,6 +387,14 @@ class RepairingController extends \BaseController {
                         ->edit_column('id', $link)
                         ->edit_column('title', function($result_obj) {
                             $str = '<a href="' . \URL::to('mis/repairing/ma/view/' . $result_obj->item_id . '') . '" title="ดูรายการ MA">' . $result_obj->title . '</a>';
+                            return $str;
+                        })
+                        ->edit_column('computer', function($result_obj) {
+                            if ($result_obj->group_id == 1) {
+                                $str = $result_obj->computer;
+                            } else {
+                                $str = '';
+                            }
                             return $str;
                         })
                         ->edit_column('created_user', function($result_obj) {
@@ -524,16 +535,20 @@ class RepairingController extends \BaseController {
                 $ma_item->status = \Input::get('status');
                 $ma_item->disabled = 0;
                 $ma_item->created_user = \Auth::user()->id;
+                $ma_item->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
                 $ma_item->save();
 
                 if (\Input::get('license_id')) {
-                    $license_item = \LicenseItem::find(\Input::get('license_id'));
-                    $license_item->status = 1;
-                    $license_item->save();
-
+                    if (\Input::get('license_group_id') == 1) {
+                        $license_item = \LicenseItem::find(\Input::get('license_id'));
+                        $license_item->status = 1;
+                        $license_item->save();
+                    }
                     $sl = new \SoftwareLicenser();
+                    $sl->computer_id = (\Input::get('group_id') <= 2 ? \Input::get('computer_id') : 0);
                     $sl->software_id = \Input::get('software_id');
                     $sl->license_id = \Input::get('license_id');
+                    $sl->sbit = \Input::get('sbit');
                     $sl->save();
                 }
                 return \Response::json(array(

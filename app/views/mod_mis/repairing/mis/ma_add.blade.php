@@ -73,7 +73,7 @@
                     <div class="col-sm-4">
                         {{ \Form::select('license_group_id', array('' => 'เลือก Software')+\DB::table('license_group')
                                     ->where('disabled',0)
-                                    ->select('id', \DB::raw('CONCAT(master_key_title," (",master_key_code,")") as title'))
+                                    ->select('id', \DB::raw('CONCAT(master_key_title," (",master_key_code,") ",total) as title'))
                                     ->lists('title', 'id'),null, array('class' => 'form-control', 'id' => 'license_group_id')); }}
                     </div>
                 </div>
@@ -83,16 +83,16 @@
                         {{ \Form::select('license_id', array('' => 'กรุณาเลือก License') , null, array('class' => 'form-control', 'id' => 'license_id')); }}
                     </div>
                 </div>
+                <div class="form-group">
+                    {{Form::label('sbit', 'BIT', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-1">
+                        {{Form::text('sbit', NULL,array('class'=>'form-control','id'=>'sbit','placeholder'=>'32/64'))}}
+                    </div>
+                </div>
                 <div class="form-group hidden">
                     {{Form::label('hsware_id', 'อะไหล่', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-3">
                         {{ \Form::select('hsware_id', array('' => 'กรุณาเลือกอะไหล่') , null, array('class' => 'form-control', 'id' => 'hsware_id')); }}
-                    </div>
-                </div>
-                <div class="form-group hidden">
-                    {{Form::label('license_group', 'Master License', array('class' => 'col-sm-2 control-label'))}}
-                    <div class="col-sm-3">
-                        {{ \Form::select('license_group_id', array('' => 'เลือก Master License') , null, array('class' => 'form-control', 'id' => 'license_group_id')); }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -111,6 +111,17 @@
                             </span>
                         </div>
                         <span class="help-block">LT ไม่ต้องกำหนด</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{Form::label('created_at', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-2">
+                        <div class="input-group date form_datetime-component">
+                            {{Form::text('created_at', date('Y-m-d'),array('class'=>'form-control datepicker','id'=>'created_at'))}}
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -185,7 +196,8 @@
             $('#software_id').parent().parent().addClass('hidden');
             $('#license_group_id').parent().parent().addClass('hidden');
             $('#license_id').parent().parent().addClass('hidden');
-            
+            $('#sbit').parent().parent().addClass('hidden');
+
             $.get("{{ url('get/hswareddl')}}",
                     {option: $(this).val(), company_id: <?php echo (\Input::get('company_id') ? \Input::get('company_id') : 0); ?>},
             function (data) {
@@ -198,10 +210,10 @@
             });
         } else {
             $('#hsware_id').parent().parent().addClass('hidden');
-
             $('#software_id').parent().parent().removeClass('hidden');
             $('#license_group_id').parent().parent().removeClass('hidden');
             $('#license_id').parent().parent().removeClass('hidden');
+            $('#sbit').parent().parent().removeClass('hidden');
         }
     });
 

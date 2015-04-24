@@ -76,7 +76,9 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
+                {"data": "title", "title": "รายการ", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "computer", "title": "คอมพิวเตอร์", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "คอมพิวเตอร์/อุปกรณ์", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "company", "title": "บริษัท", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "created_user", "title": "ผู้ดำเนินการ", "width": "15%", "sClass": "text-center", "orderable": true, "searchable": true},

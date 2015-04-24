@@ -22,7 +22,6 @@
     <h1>ระเบียนคอมพิวเตอร์ <small>จัดการระบบระเบียนคอมพิวเตอร์</small></h1>
 </div>
 <div class="row state-overview">
-    
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
         <section class="panel">
             <div class="symbol terques">
@@ -137,7 +136,59 @@
         </section>
     </div>
 </div>
-
+<div class="page-header">
+    <h1>MA <small>ดูแลและบำรุงรักษา</small></h1>
+</div>
+<div class="row state-overview">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_list">
+        <section class="panel">
+            <div class="symbol red">
+                <i class="fa fa-wrench"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count2">
+                    {{$repairing_count}}
+                </h1>
+                <p>รายการแจ้งซ่อมอุปกรณ์</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>แบบฟอร์มแจ้งซ่อม</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="ma_list">
+        <section class="panel">
+            <div class="symbol red">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count2">
+                    {{$ma_count}}
+                </h1>
+                <p>รายการ MA</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="ma_add">
+        <section class="panel">
+            <div class="symbol green">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="value">
+                <p>&nbsp;</p>
+                <p>เพิ่มรายการ MA</p>
+            </div>
+        </section>
+    </div>
+</div>
 <div class="page-header">
     <h1>Supplier <small>รายการรับมอบอุปกรณ์จากตัวแทนจำหน่าย</small></h1>
 </div>
@@ -221,35 +272,6 @@
             <div class="value">
                 <p>&nbsp;</p>
                 <p>เพิ่มรายการขอซื้อ</p>
-            </div>
-        </section>
-    </div>
-</div>
-<div class="page-header">
-    <h1>MA <small>ดูแลและบำรุงรักษา</small></h1>
-</div>
-<div class="row state-overview">
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_list">
-        <section class="panel">
-            <div class="symbol red">
-                <i class="fa fa-wrench"></i>
-            </div>
-            <div class="value">
-                <h1 class=" count2">
-                    {{$repairing_count}}
-                </h1>
-                <p>รายการแจ้งซ่อมอุปกรณ์</p>
-            </div>
-        </section>
-    </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="repairing_add">
-        <section class="panel">
-            <div class="symbol green">
-                <i class="fa fa-plus"></i>
-            </div>
-            <div class="value">
-                <p>&nbsp;</p>
-                <p>แบบฟอร์มแจ้งซ่อม</p>
             </div>
         </section>
     </div>
@@ -409,6 +431,18 @@
         };
         genModal(data);
     });
+    $('#ma_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/repairing/ma';
+    });
+    $('#ma_add').click(function () {
+        var data = {
+            url: 'mis/repairing/ma/dialog',
+            title: 'เพิ่มรายการ MA'
+        };
+        genModal(data);
+    });
+
+
     $('#deliver_list').click(function () {
         window.location.href = base_url + index_page + 'mis/deliver';
     });
