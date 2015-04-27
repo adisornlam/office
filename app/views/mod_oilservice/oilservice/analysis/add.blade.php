@@ -28,77 +28,26 @@
                 <header class="panel-heading">
                     {{$title}}
                 </header>
-                <div class="panel-body">                    
+                <div class="panel-body">
                     <div class="form-group">
-                        {{Form::label('viscosity', 'Viscosity', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',1)->get() as $item_viscosity)
-                            <label class="radio-inline">
-                                {{Form::radio('viscosity',$item_viscosity->wieht,(\Input::get('viscosity')==$item_viscosity->wieht?TRUE:FALSE))}} {{$item_viscosity->wieht}} ({{$item_viscosity->title2}})
-                            </label>
-                            @endforeach        
+                        {{Form::label('type_id', 'ประเภทน้ำมัน', array('class' => 'col-sm-2 control-label'))}}
+                        <div class="col-sm-2">
+                            {{ \Form::select('type_id', array('' => 'เลือกประเภทน้ำมัน') + \DB::table('oil_type_item')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'type_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
-                        {{Form::label('viscosity', 'NAS', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',2)->get() as $item_nas)
-                            <label class="radio-inline">
-                                {{Form::radio('nas',$item_nas->wieht,(\Input::get('nas')==$item_nas->wieht?TRUE:FALSE))}} {{$item_nas->wieht}} ({{$item_nas->title2}})
-                            </label>
-                            @endforeach        
+                        {{Form::label('machine_id', 'ระบบเครื่องจักร', array('class' => 'col-sm-2 control-label'))}}
+                        <div class="col-sm-2">
+                            {{ \Form::select('machine_id', array('' => 'เลือกประเภทเครื่องจักร') + \DB::table('oil_machine_type')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'machine_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
-                        {{Form::label('colour', 'Colour', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',3)->get() as $item_colour)
-                            <label class="radio-inline">
-                                {{Form::radio('colour',$item_colour->wieht,(\Input::get('colour')==$item_colour->wieht?TRUE:FALSE))}} {{$item_colour->wieht}} ({{$item_colour->title2}})
-                            </label>
-                            @endforeach        
+                        {{Form::label('nas', 'NAS', array('class' => 'col-sm-2 control-label'))}}
+                        <div class="col-sm-2">
+                            {{ \Form::select('nas', array('' => 'เลือกประเภทเครื่องจักร') +\DB::table('oil_status_item')->where('group_id',2)->lists('title2', 'id'), null, array('class' => 'form-control', 'id' => 'nas')); }}
                         </div>
                     </div>
-                    <div class="form-group">
-                        {{Form::label('moisture', 'Moisture', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',4)->get() as $item_moisture)
-                            <label class="radio-inline">
-                                {{Form::radio('moisture',$item_moisture->wieht,(\Input::get('moisture')==$item_moisture->wieht?TRUE:FALSE))}} {{$item_moisture->wieht}} ({{$item_moisture->title2}})
-                            </label>
-                            @endforeach        
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        {{Form::label('oxidation', 'Oxidation', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',5)->get() as $item_oxidation)
-                            <label class="radio-inline">
-                                {{Form::radio('oxidation',$item_oxidation->wieht,(\Input::get('oxidation')==$item_oxidation->wieht?TRUE:FALSE))}} {{$item_oxidation->wieht}} ({{$item_oxidation->title2}})
-                            </label>
-                            @endforeach        
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        {{Form::label('nitration', 'Nitration', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',6)->get() as $item_nitration)
-                            <label class="radio-inline">
-                                {{Form::radio('nitration',$item_nitration->wieht,(\Input::get('nitration')==$item_nitration->wieht?TRUE:FALSE))}} {{$item_nitration->wieht}} ({{$item_nitration->title2}})
-                            </label>
-                            @endforeach        
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        {{Form::label('tan', 'TAN', array('class' => 'col-sm-2 control-label req'))}}
-                        <div class="col-sm-9">
-                            @foreach(\DB::table('oil_status_item')->where('group_id',7)->get() as $item_tan)
-                            <label class="radio-inline">
-                                {{Form::radio('tan',$item_tan->wieht,(\Input::get('tan')==$item_tan->wieht?TRUE:FALSE))}} {{$item_tan->wieht}} ({{$item_tan->title2}})
-                            </label>
-                            @endforeach        
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-3">
                             {{Form::submit('แสดงผลการวิเคราะห์',array('class'=>'btn btn-primary btn-lg'))}}    

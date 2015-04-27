@@ -115,33 +115,28 @@
                 {"data": "oxidation", "title": "Oxidation", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "nitration", "title": "Mitration", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "tan", "title": "TAN", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "viscosity_text", "title": "Viscosity", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "nas_text", "title": "NAS", "width": "12%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "colour_text", "title": "Colour", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "moisture_text", "title": "Moisture", "width": "15%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "oxidation_text", "title": "Oxidation", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "nitration_text", "title": "Nitration", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "tan_text", "title": "TAN", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "diagnose", "title": "วินิจฉัย", "width": "15%", "orderable": false, "searchable": false},
-                {"data": "solve", "title": "การแก้ปัญหา", "width": "15%", "orderable": false, "searchable": false}                
+                {"data": "viscosity_text", "title": "Viscosity", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "nas_text", "title": "NAS", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "colour_text", "title": "Colour", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "moisture_text", "title": "Moisture", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "oxidation_text", "title": "Oxidation", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "nitration_text", "title": "Nitration", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "tan_text", "title": "TAN", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "diagnose", "title": "วินิจฉัย", "width": "30%", "orderable": false, "searchable": false},
+                {"data": "solve", "title": "การแก้ปัญหา", "width": "30%", "orderable": false, "searchable": false}
             ],
             dom: 'T<"clear">lfrtip',
             "tableTools": {
                 "sSwfPath": "../assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [
                     {
-                        "sExtends": "text",
-                        "sButtonText": "Edit",
-                        "bHeader": false
-                    },
-                    {
                         "sExtends": "copy",
-                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                         "bSelectedOnly": true
                     },
                     {
                         "sExtends": "xls",
-                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                         "sFileName": "Report_Analysis_" + $.now() + ".csv",
                         "bSelectedOnly": true
                     }
@@ -156,12 +151,6 @@
             } else {
                 oTable.fnDraw();
             }
-        });
-
-        $('#ToolTables_analysis-list_0').click(function () {
-            var rows = oTable.rows('.selected').indexes();
-            var data = oTable.rows(rows).data();
-            console.log(data);
         });
     });
 </script>

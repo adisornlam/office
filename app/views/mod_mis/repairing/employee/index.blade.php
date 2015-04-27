@@ -75,7 +75,6 @@
                     "defaultContent": ""
                 }],
             "columns": [
-                {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "title", "title": "รายการ", "width": "40%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่ม", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "created_at", "title": "วันที่สร้าง", "width": "10%", "orderable": true, "searchable": true},

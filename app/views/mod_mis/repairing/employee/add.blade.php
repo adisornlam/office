@@ -11,7 +11,7 @@
 </div>
 <div class="form-group">
     <div class="col-sm-12">
-        {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc','placeholder'=>'รายละเอียดการแจ้งซ่อม'))}}
+        {{Form::textarea('desc', NULL,array('class'=>'form-control','id'=>'desc','placeholder'=>'อาการเสีย/ชำรุดเบื้องต้น(ระบุให้ชัดเจน)'))}}
     </div>    
 </div>
 <span class="label label-danger">หมายเหตุ</span>
