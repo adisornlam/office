@@ -205,8 +205,8 @@ Route::group(array('prefix' => 'oilservice', 'before' => 'authen'), function() {
     Route::get('analysis', 'App\Controllers\OilController@analysis');
     Route::get('analysis/listall', 'App\Controllers\OilController@analysis_listall');
     Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\OilController@add'));
-    Route::post('analysis/save', 'App\Controllers\OilController@analysis_save');
     Route::match(array('GET', 'POST'), 'analysis/edit/{id}', array('uses' => 'App\Controllers\OilController@edit'));
+    Route::get('analysis/delete/{id}', 'App\Controllers\OilController@analysis_delete');
 });
 
 
@@ -360,6 +360,32 @@ Route::get('get/licenseddl', function() {
     $users->select(array(
         'id',
         \DB::raw('CONCAT(title," (",license_code,")") as title')
+    ));
+    return Response::json($users->get());
+});
+
+Route::get('get/getOilMachine', function() {
+    $input = Input::get('option');
+    $users = \DB::table('oil_machine_type')
+            ->where('type_id', $input);
+    $users->select(array(
+        'id',
+        'title'
+    ));
+    return Response::json($users->get());
+});
+
+Route::get('get/getOilNas', function() {
+    $input = Input::get('option');
+    $group_id = Input::get('group_id');
+    $type_id = Input::get('type_id');
+    $users = \DB::table('oil_status_item')
+            ->where('group_id', $group_id)
+            ->where('machine_id', $input)
+            ->where('type_id', $type_id);
+    $users->select(array(
+        'id',
+        \DB::raw('CONCAT(title2," (",title,")") as title')
     ));
     return Response::json($users->get());
 });

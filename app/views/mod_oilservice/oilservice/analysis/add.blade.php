@@ -30,97 +30,98 @@
                 </header>
                 <div class="panel-body">
                     <div class="form-group">
-                        {{Form::label('type_id', 'ประเภทน้ำมัน', array('class' => 'col-sm-2 control-label'))}}
+                        {{Form::label('type_id', 'ประเภทน้ำมัน', array('class' => 'col-sm-2 control-label req'))}}
                         <div class="col-sm-2">
                             {{ \Form::select('type_id', array('' => 'เลือกประเภทน้ำมัน') + \DB::table('oil_type_item')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'type_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
-                        {{Form::label('machine_id', 'ระบบเครื่องจักร', array('class' => 'col-sm-2 control-label'))}}
+                        {{Form::label('machine_id', 'ระบบเครื่องจักร', array('class' => 'col-sm-2 control-label req'))}}
                         <div class="col-sm-2">
                             {{ \Form::select('machine_id', array('' => 'เลือกประเภทเครื่องจักร') + \DB::table('oil_machine_type')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'machine_id')); }}
                         </div>
                     </div>
                     <div class="form-group">
-                        {{Form::label('nas', 'NAS', array('class' => 'col-sm-2 control-label'))}}
+                        {{Form::label('nas', 'NAS', array('class' => 'col-sm-2 control-label req'))}}
                         <div class="col-sm-2">
-                            {{ \Form::select('nas', array('' => 'เลือกประเภทเครื่องจักร') +\DB::table('oil_status_item')->where('group_id',2)->lists('title2', 'id'), null, array('class' => 'form-control', 'id' => 'nas')); }}
+                            {{ \Form::select('nas', array('' => 'เลือกรายการ NAS'), null, array('class' => 'form-control', 'id' => 'nas')); }}
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-3">
-                            {{Form::submit('แสดงผลการวิเคราะห์',array('class'=>'btn btn-primary btn-lg'))}}    
-                            {{Form::button('ล้างรายการใหม่',array('class'=>'btn btn-lg','id'=>'btnReset'))}}    
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>    
-    </div>
-
-    @if(\Request::isMethod('post'))
-    <div class="row">
-        <div class="col-lg-12">
-            <section class="panel">
-                <header class="panel-heading">
-                    ผลการวิเคราะห์
-                </header>
-                <div class="panel-body">                    
-                    <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">Viscosity</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$viscosity_rp}}
-                            </p>
+                    <div class="form-group" id="colour">
+                        {{Form::label('colour', 'Color', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',3)->get() as $item_tan)
+                            <label class="radio-inline">
+                                {{Form::radio('colour',$item_tan->id)}} {{$item_tan->title}}
+                            </label>
+                            @endforeach
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">NAS</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$nas_rp}}
-                            </p>
+                        {{Form::label('viscosity', 'Viscosity', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-2">
+                            {{ \Form::select('kind_id', array('' => 'เลือกชนิดน้ำมัน',32=>'32',46=>'46',68=>'68',100=>'100'), null, array('class' => 'form-control', 'id' => 'kind_id')); }}
+                            {{ \Form::select('viscosity', array('' => 'เลือกรายการ Viscosity')+ \DB::table('oil_status_item')->where('group_id',4)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'viscosity')); }}
+                        </div>
+                    </div>                    
+                    <div class="form-group">
+                        {{Form::label('tan', 'TAN', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',5)->get() as $item_tan)
+                            <label class="radio-inline">
+                                {{Form::radio('tan',$item_tan->id)}} {{$item_tan->title}}
+                            </label>
+                            @endforeach        
+                        </div>
+                    </div>                    
+                    <div class="form-group" id="moisture">
+                        {{Form::label('moisture', 'Moisture', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',6)->get() as $item_moisture)
+                            <label class="radio-inline">
+                                {{Form::radio('moisture',$item_moisture->id)}} {{$item_moisture->title}}
+                            </label>
+                            @endforeach        
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">Colour</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$colour_rp}}
-                            </p>
+                        {{Form::label('oxidation', 'Oxidation', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',7)->get() as $item_oxidation)
+                            <label class="radio-inline">
+                                {{Form::radio('oxidation',$item_oxidation->id)}} {{$item_oxidation->title}}
+                            </label>
+                            @endforeach        
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">Moisture</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$moisture_rp}}
-                            </p>
+                        {{Form::label('nitration', 'Nitration', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',8)->get() as $item_nitration)
+                            <label class="radio-inline">
+                                {{Form::radio('nitration',$item_nitration->id)}} {{$item_nitration->title}}
+                            </label>
+                            @endforeach        
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">Oxidation</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$oxidation_rp}}
-                            </p>
+                    <div class="form-group hidden" id="density">
+                        {{Form::label('density', 'Density', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',9)->get() as $item_nitration)
+                            <label class="radio-inline">
+                                {{Form::radio('density',$item_nitration->id)}} {{$item_nitration->title}}
+                            </label>
+                            @endforeach        
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">Nitration</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$nitration_rp}}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-sm-2 control-label">TAN</label>
-                        <div class="col-lg-6">
-                            <p class="form-control-static">
-                                {{$tan_rp}}
-                            </p>
+                    <div class="form-group hidden" id="intensity">
+                        {{Form::label('intensity', 'ความเข้มข้นของน้ำในน้ำมัน', array('class' => 'col-sm-2 control-label req'))}}
+                        <div class="col-sm-9">
+                            @foreach(\DB::table('oil_status_item')->where('group_id',10)->get() as $item_nitration)
+                            <label class="radio-inline">
+                                {{Form::radio('intensity',$item_nitration->id)}} {{$item_nitration->title}}
+                            </label>
+                            @endforeach        
                         </div>
                     </div>
                     <div class="form-group">
@@ -136,47 +137,92 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
+                        <div class="col-sm-offset-2 col-sm-3">
                             {{Form::button('บันทึกผลการวิเคราะห์',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
+                            {{Form::button('ล้างรายการใหม่',array('class'=>'btn btn-lg','id'=>'btnReset'))}}    
                         </div>
-                    </div>                         
+                    </div>
                 </div>
             </section>
-        </div>
+        </div>    
     </div>
-</form>
-@endif
-@stop
+    @stop
 
-@section('script')
-{{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
-{{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
-{{HTML::script('js/jquery.form.min.js')}}
-@stop
+    @section('script')
+    {{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
+    {{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
+    {{HTML::script('js/jquery.form.min.js')}}
+    @stop
 
-@section('script_code')
-<script type="text/javascript">
-    $('#btnReset').click(function () {
-        //$('input:radio').prop('checked', false);
-        window.location.href = window.location.href;
-    });
-    $(function () {
-        var options = {
-            url: base_url + index_page + "oilservice/analysis/save",
-            success: showResponse
-        };
-        $('#btnSave').click(function () {
-            $('#form-add, textarea').ajaxSubmit(options);
+    @section('script_code')
+    <script type="text/javascript">
+        $('#btnReset').click(function () {
+            //$('input:radio').prop('checked', false);
+            window.location.href = window.location.href;
         });
-    });
+        $(function () {
+            var options = {
+                url: base_url + index_page + "oilservice/analysis/add",
+                success: showResponse
+            };
+            $('#btnSave').click(function () {
+                $('#form-add, textarea').ajaxSubmit(options);
+            });
+        });
 
-    function showResponse(response, statusText, xhr, $form) {
-        if (response.error.status === false) {
-            $('#btnSave').removeAttr('disabled');
-            alert(response.error.message);
-        } else {
-            window.location.href = base_url + index_page + "oilservice/analysis";
+        function showResponse(response, statusText, xhr, $form) {
+            if (response.error.status === false) {
+                $('#btnSave').removeAttr('disabled');
+                alert(response.error.message);
+            } else {
+                window.location.href = base_url + index_page + "oilservice/analysis";
+            }
         }
-    }
-</script>
-@stop
+
+        $('#machine_id').change(function () {
+            $.get("{{ url('get/getOilNas')}}",
+                    {option: $(this).val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+                var nas = $('#nas');
+                nas.empty();
+                nas.append("<option value=''>เลือกรายการ NAS</option>");
+                $.each(data, function (index, element) {
+                    nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                });
+            });
+
+        });
+
+        $('#type_id').change(function () {
+            if ($(this).val() == 3) {
+                $('#density').removeClass('hidden');
+                $('#intensity').removeClass('hidden');
+                $('#colour').addClass('hidden');
+                $('#moisture').addClass('hidden');
+            } else {
+                $('#density').addClass('hidden');
+                $('#intensity').addClass('hidden');
+                $('#colour').removeClass('hidden');
+                $('#moisture').removeClass('hidden');
+            }
+            $.get("{{ url('get/getOilMachine')}}",
+                    {option: $(this).val()}, function (data) {
+                var machine = $('#machine_id');
+                machine.empty();
+                machine.append("<option value=''>เลือกประเภทเครื่องจักร</option>");
+                $.each(data, function (index, element) {
+                    machine.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                });
+            });
+
+            $.get("{{ url('get/getOilNas')}}",
+                    {option: $('#machine_id').val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+                var nas = $('#nas');
+                nas.empty();
+                nas.append("<option value=''>เลือกรายการ NAS</option>");
+                $.each(data, function (index, element) {
+                    nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                });
+            });
+        });
+    </script>
+    @stop

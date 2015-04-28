@@ -44,13 +44,18 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="pull-left">
-                    {{ \Form::select('viscosity', array(''=>'Viscosity',1=>'1',2=>'2',3=>'3'), null, array('class' => 'form-control', 'id' => 'viscosity')); }}
-                    {{ \Form::select('nas', array(''=>'NAS',1=>'1',2=>'2',3=>'3'), null, array('class' => 'form-control', 'id' => 'nas')); }}
-                    {{ \Form::select('colour', array(''=>'Colour',1=>'1',2=>'2',3=>'3'), null, array('class' => 'form-control', 'id' => 'colour')); }}
-                    {{ \Form::select('moisture', array(''=>'Moisture',1=>'1',2=>'2'), null, array('class' => 'form-control', 'id' => 'moisture')); }}
-                    {{ \Form::select('oxidation', array(''=>'Oxidation',1=>'1',2=>'2'), null, array('class' => 'form-control', 'id' => 'oxidation')); }}
-                    {{ \Form::select('nitration', array(''=>'Nitration',1=>'1',2=>'2'), null, array('class' => 'form-control', 'id' => 'nitration')); }}
-                    {{ \Form::select('tan', array(''=>'TAN',1=>'1',2=>'2'), null, array('class' => 'form-control', 'id' => 'tan')); }}
+                    {{ \Form::select('type_id', array('' => 'ประเภทน้ำมัน') + \DB::table('oil_type_item')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'type_id')); }}
+                    {{ \Form::select('machine_id', array('' => 'ประเภทเครื่องจักร') + \DB::table('oil_machine_type')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'machine_id')); }}
+                    {{ \Form::select('nas', array(''=>'NAS'), null, array('class' => 'form-control', 'id' => 'nas')); }}
+                    {{ \Form::select('colour', array(''=>'Colour')+ \DB::table('oil_status_item')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'colour')); }}
+                    {{ \Form::select('kind_id', array('' => 'เลือกชนิดน้ำมัน',32=>'32',46=>'46',68=>'68',100=>'100'), null, array('class' => 'form-control', 'id' => 'kind_id')); }}
+                    {{ \Form::select('viscosity', array(''=>'Viscosity')+\DB::table('oil_status_item')->where('group_id',4)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'viscosity')); }}                  
+                    {{ \Form::select('tan', array(''=>'TAN')+ \DB::table('oil_status_item')->where('group_id',5)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'tan')); }}
+                    {{ \Form::select('moisture', array(''=>'Moisture')+ \DB::table('oil_status_item')->where('group_id',6)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'moisture')); }}
+                    {{ \Form::select('oxidation', array(''=>'Oxidation')+\DB::table('oil_status_item')->where('group_id',7)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'oxidation')); }}
+                    {{ \Form::select('nitration', array(''=>'Nitration')+\DB::table('oil_status_item')->where('group_id',8)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'nitration')); }}
+                    {{ \Form::select('density', array(''=>'Density')+\DB::table('oil_status_item')->where('group_id',9)->lists('title', 'id'), null, array('class' => 'form-control hidden', 'id' => 'density')); }}
+                    {{ \Form::select('intensity', array(''=>'Intensity')+\DB::table('oil_status_item')->where('group_id',10)->lists('title', 'id'), null, array('class' => 'form-control hidden', 'id' => 'intensity')); }}
                 </div>
             </div>
         </div>
@@ -100,6 +105,11 @@
                     d.oxidation = $('#oxidation').val();
                     d.nitration = $('#nitration').val();
                     d.tan = $('#tan').val();
+                    d.type_id = $('#type_id').val();
+                    d.machine_id = $('#machine_id').val();
+                    d.kind_id = $('#kind_id').val();
+                    d.density = $('#density').val();
+                    d.intensity = $('#intensity').val();
                 }
             },
             "columnDefs": [{
@@ -108,20 +118,15 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "viscosity", "title": "Viscosity", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "nas", "title": "NAS", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "colour", "title": "Colour", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "moisture", "title": "Moisture", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "oxidation", "title": "Oxidation", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "nitration", "title": "Mitration", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "tan", "title": "TAN", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "nas_text", "title": "NAS", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "colour_text", "title": "Colour", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "viscosity_text", "title": "Viscosity", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "nas_text", "title": "NAS", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "colour_text", "title": "Colour", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "tan_text", "title": "TAN", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "moisture_text", "title": "Moisture", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "oxidation_text", "title": "Oxidation", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "nitration_text", "title": "Nitration", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "tan_text", "title": "TAN", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "density_text", "title": "Density", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
+                {"data": "intensity_text", "title": "Intensity", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "diagnose", "title": "วินิจฉัย", "width": "30%", "orderable": false, "searchable": false},
                 {"data": "solve", "title": "การแก้ปัญหา", "width": "30%", "orderable": false, "searchable": false}
             ],
@@ -151,6 +156,48 @@
             } else {
                 oTable.fnDraw();
             }
+        });
+    });
+
+    $('#machine_id').change(function () {
+        $.get("{{ url('get/getOilNas')}}",
+                {option: $(this).val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+            var nas = $('#nas');
+            nas.empty();
+            nas.append("<option value=''>NAS</option>");
+            $.each(data, function (index, element) {
+                nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+
+    });
+
+    $('#type_id').change(function () {
+        if ($(this).val() == 3) {
+            $('#density').removeClass('hidden');
+            $('#intensity').removeClass('hidden');
+        } else {
+            $('#density').addClass('hidden');
+            $('#intensity').addClass('hidden');
+        }
+        $.get("{{ url('get/getOilMachine')}}",
+                {option: $(this).val()}, function (data) {
+            var machine = $('#machine_id');
+            machine.empty();
+            machine.append("<option value=''>เลือกประเภทเครื่องจักร</option>");
+            $.each(data, function (index, element) {
+                machine.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+
+        $.get("{{ url('get/getOilNas')}}",
+                {option: $('#machine_id').val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+            var nas = $('#nas');
+            nas.empty();
+            nas.append("<option value=''>NAS</option>");
+            $.each(data, function (index, element) {
+                nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
         });
     });
 </script>

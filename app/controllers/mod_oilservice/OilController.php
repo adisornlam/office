@@ -46,11 +46,11 @@ class OilController extends \BaseController {
 
     public function analysis() {
         $data = array(
-            'title' => 'รายการวิเคราะห์น้ำมันไฮดรอลิค',
+            'title' => 'รายการวิเคราะห์น้ำมัน',
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่าย Oil Service' => 'oilservice',
-                'รายการวิเคราะห์น้ำมันไฮดรอลิค' => '#'
+                'รายการวิเคราะห์น้ำมัน' => '#'
             )
         );
 
@@ -62,12 +62,15 @@ class OilController extends \BaseController {
                 ->select(array(
             'oil_analysis_item.id as id',
             'oil_analysis_item.viscosity as viscosity',
+            'oil_analysis_item.kind_id as kind_id',
             'oil_analysis_item.nas as nas',
             'oil_analysis_item.colour as colour',
             'oil_analysis_item.moisture as moisture',
             'oil_analysis_item.oxidation as oxidation',
             'oil_analysis_item.nitration as nitration',
             'oil_analysis_item.tan as tan',
+            'oil_analysis_item.density as density',
+            'oil_analysis_item.intensity as intensity',
             'oil_analysis_item.diagnose as diagnose',
             'oil_analysis_item.solve as solve',
             'oil_analysis_item.created_at as created_at',
@@ -75,7 +78,18 @@ class OilController extends \BaseController {
         ));
 
         if (\Input::has('viscosity')) {
+            $analysis_item->where('oil_analysis_item.type_id', \Input::get('type_id'));
+        }
+        if (\Input::has('viscosity')) {
+            $analysis_item->where('oil_analysis_item.machine_id', \Input::get('machine_id'));
+        }
+
+        if (\Input::has('viscosity')) {
             $analysis_item->where('oil_analysis_item.viscosity', \Input::get('viscosity'));
+        }
+
+        if (\Input::has('viscosity')) {
+            $analysis_item->where('oil_analysis_item.kind_id', \Input::get('kind_id'));
         }
 
         if (\Input::has('nas')) {
@@ -102,6 +116,14 @@ class OilController extends \BaseController {
             $analysis_item->where('oil_analysis_item.tan', \Input::get('tan'));
         }
 
+        if (\Input::has('density')) {
+            $analysis_item->where('oil_analysis_item.density', \Input::get('density'));
+        }
+
+        if (\Input::has('intensity')) {
+            $analysis_item->where('oil_analysis_item.intensity', \Input::get('intensity'));
+        }
+
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
@@ -112,26 +134,36 @@ class OilController extends \BaseController {
 
         return \Datatables::of($analysis_item)
                         ->edit_column('id', $link)
-                        ->add_column('viscosity_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 1)->where('wieht', $result_obj->viscosity)->first();
-                            if ($oil_status_item) {
-                                $str = $oil_status_item->title;
-                            } else {
-                                $str = NULL;
-                            }
-                            return $str;
-                        })
                         ->add_column('nas_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 2)->where('wieht', $result_obj->nas)->first();
+                            $oil_status_item = \OilStatusItem::where('group_id', 1)->where('id', $result_obj->nas)->first();
                             if ($oil_status_item) {
-                                $str = $oil_status_item->title;
+                                $str = $oil_status_item->title2 . ' (' . $oil_status_item->title . ')';
                             } else {
                                 $str = NULL;
                             }
                             return $str;
                         })
                         ->add_column('colour_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 3)->where('wieht', $result_obj->colour)->first();
+                            $oil_status_item = \OilStatusItem::where('group_id', 3)->where('id', $result_obj->colour)->first();
+                            if ($oil_status_item) {
+                                $str = $oil_status_item->title;
+                            } else {
+                                $str = NULL;
+                            }
+                            return $str;
+                        })
+                        ->add_column('viscosity_text', function($result_obj) {
+                            $oil_status_item = \OilStatusItem::where('group_id', 4)->where('id', $result_obj->viscosity)->first();
+                            if ($oil_status_item) {
+                                $str = $oil_status_item->title . ' (' . $result_obj->kind_id . ')';
+                                ;
+                            } else {
+                                $str = NULL;
+                            }
+                            return $str;
+                        })
+                        ->add_column('tan_text', function($result_obj) {
+                            $oil_status_item = \OilStatusItem::where('group_id', 5)->where('id', $result_obj->tan)->first();
                             if ($oil_status_item) {
                                 $str = $oil_status_item->title;
                             } else {
@@ -140,7 +172,7 @@ class OilController extends \BaseController {
                             return $str;
                         })
                         ->add_column('moisture_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 4)->where('wieht', $result_obj->moisture)->first();
+                            $oil_status_item = \OilStatusItem::where('group_id', 6)->where('id', $result_obj->moisture)->first();
                             if ($oil_status_item) {
                                 $str = $oil_status_item->title;
                             } else {
@@ -149,7 +181,7 @@ class OilController extends \BaseController {
                             return $str;
                         })
                         ->add_column('oxidation_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 5)->where('wieht', $result_obj->oxidation)->first();
+                            $oil_status_item = \OilStatusItem::where('group_id', 7)->where('id', $result_obj->oxidation)->first();
                             if ($oil_status_item) {
                                 $str = $oil_status_item->title;
                             } else {
@@ -158,7 +190,7 @@ class OilController extends \BaseController {
                             return $str;
                         })
                         ->add_column('nitration_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 6)->where('wieht', $result_obj->nitration)->first();
+                            $oil_status_item = \OilStatusItem::where('group_id', 8)->where('id', $result_obj->nitration)->first();
                             if ($oil_status_item) {
                                 $str = $oil_status_item->title;
                             } else {
@@ -166,8 +198,17 @@ class OilController extends \BaseController {
                             }
                             return $str;
                         })
-                        ->add_column('tan_text', function($result_obj) {
-                            $oil_status_item = \OilStatusItem::where('group_id', 7)->where('wieht', $result_obj->tan)->first();
+                        ->add_column('density_text', function($result_obj) {
+                            $oil_status_item = \OilStatusItem::where('group_id', 9)->where('id', $result_obj->density)->first();
+                            if ($oil_status_item) {
+                                $str = $oil_status_item->title;
+                            } else {
+                                $str = NULL;
+                            }
+                            return $str;
+                        })
+                        ->add_column('intensity_text', function($result_obj) {
+                            $oil_status_item = \OilStatusItem::where('group_id', 10)->where('id', $result_obj->nitration)->first();
                             if ($oil_status_item) {
                                 $str = $oil_status_item->title;
                             } else {
@@ -180,7 +221,7 @@ class OilController extends \BaseController {
     }
 
     public function add() {
-        if (\Request::isMethod('post')) {
+        if (!\Request::isMethod('post')) {
             $oil_status_1 = \OilStatusItem::where('group_id', 1)->where('wieht', \Input::get('viscosity'))->first();
             $oil_status_2 = \OilStatusItem::where('group_id', 2)->where('wieht', \Input::get('nas'))->first();
             $oil_status_3 = \OilStatusItem::where('group_id', 3)->where('wieht', \Input::get('colour'))->first();
@@ -188,26 +229,71 @@ class OilController extends \BaseController {
             $oil_status_5 = \OilStatusItem::where('group_id', 5)->where('wieht', \Input::get('oxidation'))->first();
             $oil_status_6 = \OilStatusItem::where('group_id', 6)->where('wieht', \Input::get('nitration'))->first();
             $oil_status_7 = \OilStatusItem::where('group_id', 7)->where('wieht', \Input::get('tan'))->first();
+            $data = array(
+                'title' => 'เพิ่มรายการวิเคราะห์',
+                'breadcrumbs' => array(
+                    'ภาพรวมระบบ' => '',
+                    'ภาพรวมฝ่าย Oil Service' => 'oilservice',
+                    'รายการวิเคราะห์น้ำมัน' => 'oilservice/analysis',
+                    'เพิ่มรายการวิเคราะห์' => '#'
+                ),
+                'viscosity_rp' => (isset($oil_status_1->title) ? $oil_status_1->title : NULL),
+                'nas_rp' => (isset($oil_status_2->title) ? $oil_status_2->title : NULL),
+                'colour_rp' => (isset($oil_status_3->title) ? $oil_status_3->title : NULL),
+                'moisture_rp' => (isset($oil_status_4->title) ? $oil_status_4->title : NULL),
+                'oxidation_rp' => (isset($oil_status_5->title) ? $oil_status_5->title : NULL),
+                'nitration_rp' => (isset($oil_status_6->title) ? $oil_status_6->title : NULL),
+                'tan_rp' => (isset($oil_status_7->title) ? $oil_status_7->title : NULL)
+            );
+            return \View::make('mod_oilservice.oilservice.analysis.add', $data);
         } else {
-            
+            $analysis_count = \DB::table('oil_analysis_item')
+                    ->where('type_id', \Input::get('type_id'))
+                    ->where('machine_id', \Input::get('machine_id'))
+                    ->where('nas', \Input::get('nas'))
+                    ->where('colour', \Input::get('colour'))
+                    ->where('viscosity', \Input::get('viscosity'))
+                    ->where('kind_id', \Input::get('kind_id'))
+                    ->where('tan', \Input::get('tan'))
+                    ->where('moisture', \Input::get('moisture'))
+                    ->where('oxidation', \Input::get('oxidation'))
+                    ->where('nitration', \Input::get('nitration'))
+                    ->count();
+            if ($analysis_count <= 0) {
+                $oil_analysis_item = new \OilAnalysisItem();
+
+                $oil_analysis_item->type_id = \Input::get('type_id');
+                $oil_analysis_item->machine_id = \Input::get('machine_id');
+                $oil_analysis_item->nas = \Input::get('nas');
+                $oil_analysis_item->colour = \Input::get('colour');
+                $oil_analysis_item->viscosity = \Input::get('viscosity');
+                $oil_analysis_item->kind_id = \Input::get('kind_id');
+                $oil_analysis_item->tan = \Input::get('tan');
+                $oil_analysis_item->moisture = \Input::get('moisture');
+                $oil_analysis_item->oxidation = \Input::get('oxidation');
+                $oil_analysis_item->nitration = \Input::get('nitration');
+                $oil_analysis_item->diagnose = trim(\Input::get('diagnose'));
+                $oil_analysis_item->solve = trim(\Input::get('solve'));
+                $oil_analysis_item->save();
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
+            } else {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => 'ค่าที่กรอกนี้มีอยู่แล้ว กรุณาตรวจสอบอีกครั้ง !!!'
+                            ), 400));
+            }
+
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => TRUE,
+                            'message' => NULL
+                        ), 200));
         }
-        $data = array(
-            'title' => 'เพิ่มรายการวิเคราะห์',
-            'breadcrumbs' => array(
-                'ภาพรวมระบบ' => '',
-                'ภาพรวมฝ่าย Oil Service' => 'oilservice',
-                'รายการวิเคราะห์น้ำมันไฮดรอลิค' => 'oilservice/analysis',
-                'เพิ่มรายการวิเคราะห์' => '#'
-            ),
-            'viscosity_rp' => (isset($oil_status_1->title) ? $oil_status_1->title : NULL),
-            'nas_rp' => (isset($oil_status_2->title) ? $oil_status_2->title : NULL),
-            'colour_rp' => (isset($oil_status_3->title) ? $oil_status_3->title : NULL),
-            'moisture_rp' => (isset($oil_status_4->title) ? $oil_status_4->title : NULL),
-            'oxidation_rp' => (isset($oil_status_5->title) ? $oil_status_5->title : NULL),
-            'nitration_rp' => (isset($oil_status_6->title) ? $oil_status_6->title : NULL),
-            'tan_rp' => (isset($oil_status_7->title) ? $oil_status_7->title : NULL)
-        );
-        return \View::make('mod_oilservice.oilservice.analysis.add', $data);
     }
 
     public function edit($id = 0) {
@@ -237,48 +323,6 @@ class OilController extends \BaseController {
                             ), 200));
             }
         }
-    }
-
-    public function analysis_save() {
-        $analysis_count = \DB::table('oil_analysis_item')
-                ->where('viscosity', \Input::get('viscosity'))
-                ->where('nas', \Input::get('nas'))
-                ->where('colour', \Input::get('colour'))
-                ->where('moisture', \Input::get('moisture'))
-                ->where('oxidation', \Input::get('oxidation'))
-                ->where('nitration', \Input::get('nitration'))
-                ->where('tan', \Input::get('tan'))
-                ->count();
-        if ($analysis_count <= 0) {
-            $oil_analysis_item = new \OilAnalysisItem();
-            $oil_analysis_item->viscosity = \Input::get('viscosity');
-            $oil_analysis_item->nas = \Input::get('nas');
-            $oil_analysis_item->colour = \Input::get('colour');
-            $oil_analysis_item->moisture = \Input::get('moisture');
-            $oil_analysis_item->oxidation = \Input::get('oxidation');
-            $oil_analysis_item->nitration = \Input::get('nitration');
-            $oil_analysis_item->tan = \Input::get('tan');
-            $oil_analysis_item->diagnose = trim(\Input::get('diagnose'));
-            $oil_analysis_item->solve = trim(\Input::get('solve'));
-            $oil_analysis_item->save();
-            return \Response::json(array(
-                        'error' => array(
-                            'status' => TRUE,
-                            'message' => NULL
-                        ), 200));
-        } else {
-            return \Response::json(array(
-                        'error' => array(
-                            'status' => FALSE,
-                            'message' => 'ค่าที่กรอกนี้มีอยู่แล้ว กรุณาตรวจสอบอีกครั้ง !!!'
-                        ), 400));
-        }
-
-        return \Response::json(array(
-                    'error' => array(
-                        'status' => TRUE,
-                        'message' => NULL
-                    ), 200));
     }
 
     public function analysis_delete($param) {

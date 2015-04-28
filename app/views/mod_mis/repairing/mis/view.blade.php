@@ -112,6 +112,33 @@
                     </div>
                 </div>   
                 <div class="form-group hidden">
+                    {{Form::label('software_id', 'Software', array('class' => 'col-sm-2 control-label'));}}
+                    <div class="col-sm-3">
+                        {{ \Form::select('software_id', array('' => 'เลือก Software')+\SoftwareItem::where('free',1)->where('disabled',0)->lists('title', 'id'),null, array('class' => 'form-control', 'id' => 'software_id')); }}
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    {{Form::label('license_group_id', 'Master License', array('class' => 'col-sm-2 control-label'));}}
+                    <div class="col-sm-4">
+                        {{ \Form::select('license_group_id', array('' => 'เลือก Software')+\DB::table('license_group')
+                                    ->where('disabled',0)
+                                    ->select('id', \DB::raw('CONCAT(master_key_title," (",master_key_code,") ",total) as title'))
+                                    ->lists('title', 'id'),null, array('class' => 'form-control', 'id' => 'license_group_id')); }}
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    {{Form::label('license_id', 'License', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-4">
+                        {{ \Form::select('license_id', array('' => 'กรุณาเลือก License') , null, array('class' => 'form-control', 'id' => 'license_id')); }}
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    {{Form::label('sbit', 'BIT', array('class' => 'col-sm-2 control-label'))}}
+                    <div class="col-sm-1">
+                        {{Form::text('sbit', NULL,array('class'=>'form-control','id'=>'sbit','placeholder'=>'32/64'))}}
+                    </div>
+                </div>
+                <div class="form-group hidden">
                     {{Form::label('hsware_id', 'อะไหล่', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-3">
                         {{ \Form::select('hsware_id', array('' => 'กรุณาเลือกอะไหล่') , null, array('class' => 'form-control', 'id' => 'hsware_id')); }}
@@ -284,14 +311,40 @@
     });
 
     $('#publem_id').change(function () {
-        $.get("{{ url('get/hswareddl')}}",
-                {option: $(this).val(), company_id:<?php echo (isset($receive_user->company_id) ? $receive_user->company_id : 0); ?>},
+        if ($(this).val() != 31) {
+            $('#software_id').parent().parent().addClass('hidden');
+            $('#license_group_id').parent().parent().addClass('hidden');
+            $('#license_id').parent().parent().addClass('hidden');
+            $('#sbit').parent().parent().addClass('hidden');
+
+            $.get("{{ url('get/hswareddl')}}",
+                    {option: $(this).val(), company_id: <?php echo (\Input::get('company_id') ? \Input::get('company_id') : 0); ?>},
+            function (data) {
+                var hsware_id = $('#hsware_id');
+                hsware_id.empty();
+                hsware_id.append("<option value=''>กรุณาเลือกอะไหล่</option>");
+                $.each(data, function (index, element) {
+                    hsware_id.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                });
+            });
+        } else {
+            $('#hsware_id').parent().parent().addClass('hidden');
+            $('#software_id').parent().parent().removeClass('hidden');
+            $('#license_group_id').parent().parent().removeClass('hidden');
+            $('#license_id').parent().parent().removeClass('hidden');
+            $('#sbit').parent().parent().removeClass('hidden');
+        }
+    });
+
+    $('#license_group_id').change(function () {
+        $.get("{{ url('get/licenseddl')}}",
+                {option: $(this).val()},
         function (data) {
-            var hsware_id = $('#hsware_id');
-            hsware_id.empty();
-            hsware_id.append("<option value=''>กรุณาเลือกอะไหล่</option>");
+            var license_id = $('#license_id');
+            license_id.empty();
+            license_id.append("<option value=''>กรุณาเลือก License</option>");
             $.each(data, function (index, element) {
-                hsware_id.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                license_id.append("<option value='" + element.id + "'>" + element.title + "</option>");
             });
         });
     });

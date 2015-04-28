@@ -163,31 +163,7 @@
                 <p>แบบฟอร์มแจ้งซ่อม</p>
             </div>
         </section>
-    </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="ma_list">
-        <section class="panel">
-            <div class="symbol red">
-                <i class="fa fa-list"></i>
-            </div>
-            <div class="value">
-                <h1 class=" count2">
-                    {{$ma_count}}
-                </h1>
-                <p>รายการ MA</p>
-            </div>
-        </section>
-    </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="ma_add">
-        <section class="panel">
-            <div class="symbol green">
-                <i class="fa fa-plus"></i>
-            </div>
-            <div class="value">
-                <p>&nbsp;</p>
-                <p>เพิ่มรายการ MA</p>
-            </div>
-        </section>
-    </div>
+    </div>     
 </div>
 <div class="page-header">
     <h1>Supplier <small>รายการรับมอบอุปกรณ์จากตัวแทนจำหน่าย</small></h1>
