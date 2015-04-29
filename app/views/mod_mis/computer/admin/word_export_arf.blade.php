@@ -17,9 +17,6 @@
                 min-height:100%;
                 position:relative;
             }
-            #header {
-                padding:10px;
-            }
             #content {
                 padding:10px;
                 padding-bottom:80px;   /* Height of the footer element */
@@ -40,7 +37,7 @@
             <table border="0" width="100%">
                 <tr>
                     <td align="left">
-                        {{HTML::image('img/arf/logo_arf.jpg',null,array('width'=>450))}}
+                        {{HTML::image('img/arf/logo_arf.jpg',null,array('width'=>300))}}
                     </td>
                     <td align="right">
                         {{HTML::image('img/arf/address_arf.jpg',null)}}
@@ -173,8 +170,39 @@
                                 <?php } ?>
                             </td>
                         </tr>
-                    <?php }
-                } ?>
+                        <?php
+                    }
+                }
+                ?>
+            </table>    
+            <h3>รายการ MA</h3>
+            <table border="0" width="100%" class="myTable">
+                <tr>
+                    <td><strong>อุปกรณ์</strong></td>
+                    <td><strong>ประเภทดำเนินการ</strong></td>
+                    <td><strong>กลุ่มปัญหา</strong></td>
+                    <td><strong>รายละเอียด</strong></td>
+                    <td><strong>วันที่</strong></td>
+                </tr>
+                @foreach($ma as $ma_item)
+                <tr>
+                    <td width="5%">
+                        {{$ma_item->group_title}}
+                    </td>
+                    <td width="5%">
+                        {{$ma_item->type_title}}
+                    </td>
+                    <td width="5%">
+                        {{$ma_item->publem_title}}
+                    </td>
+                    <td width="20%">
+                        {{$ma_item->title}}
+                    </td>
+                    <td width="10%">
+                        {{$ma_item->created_at}}
+                    </td>
+                </tr>
+                @endforeach
             </table>
         </div>
         <div id="footer">

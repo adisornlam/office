@@ -1209,18 +1209,7 @@ class ComputerController extends \BaseController {
                 ))
                 ->first();
 
-        $ma_item = \DB::table('ma_item')
-                ->join('ma_type', 'ma_item.type_id', '=', 'ma_type.id')
-                ->join('repairing_publem', 'ma_item.publem_id', '=', 'repairing_publem.id')
-                ->where('ma_item.computer_id', $param)
-                ->select(array(
-                    'ma_item.id as id',
-                    'ma_type.title as title',
-                    'repairing_publem.title as ptitle',
-                    'ma_item.desc as desc',
-                    'ma_item.created_at as created_at'
-                ))
-                ->get();
+        $ma_item = \DB::select('call getRepairingList(' . $param . ')');
         $data = array(
             'item' => $item,
             'ma' => $ma_item

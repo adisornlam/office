@@ -17,7 +17,6 @@
                 min-height:100%;
                 position:relative;
             }
-
             #content {
                 padding:10px;
                 padding-bottom:80px;   /* Height of the footer element */
@@ -179,6 +178,7 @@
             <h3>รายการ MA</h3>
             <table border="0" width="100%" class="myTable">
                 <tr>
+                    <td><strong>อุปกรณ์</strong></td>
                     <td><strong>ประเภทดำเนินการ</strong></td>
                     <td><strong>กลุ่มปัญหา</strong></td>
                     <td><strong>รายละเอียด</strong></td>
@@ -186,16 +186,19 @@
                 </tr>
                 @foreach($ma as $ma_item)
                 <tr>
-                    <td width="10%">
+                    <td width="5%">
+                        {{$ma_item->group_title}}
+                    </td>
+                    <td width="5%">
+                        {{$ma_item->type_title}}
+                    </td>
+                    <td width="5%">
+                        {{$ma_item->publem_title}}
+                    </td>
+                    <td width="20%">
                         {{$ma_item->title}}
                     </td>
-                    <td width="20%">
-                        {{$ma_item->ptitle}}
-                    </td>
-                    <td width="20%">
-                        {{$ma_item->desc}}
-                    </td>
-                    <td width="20%">
+                    <td width="10%">
                         {{$ma_item->created_at}}
                     </td>
                 </tr>

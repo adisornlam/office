@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-sm-2 control-label">ผู้แจ้งเรื่อง</label>
                         <div class="col-lg-6">
-                            <p class="form-control-static">{{$user->firstname}} {{$user->lastname}}</p>
+                            <p class="form-control-static">@if($user) {{$user->firstname}} {{$user->lastname}} @endif</p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -120,7 +120,7 @@
                 <div class="form-group hidden">
                     {{Form::label('license_group_id', 'Master License', array('class' => 'col-sm-2 control-label'));}}
                     <div class="col-sm-4">
-                        {{ \Form::select('license_group_id', array('' => 'เลือก Software')+\DB::table('license_group')
+                        {{ \Form::select('license_group_id', array('' => 'เลือก Master License')+\DB::table('license_group')
                                     ->where('disabled',0)
                                     ->select('id', \DB::raw('CONCAT(master_key_title," (",master_key_code,") ",total) as title'))
                                     ->lists('title', 'id'),null, array('class' => 'form-control', 'id' => 'license_group_id')); }}
@@ -132,10 +132,15 @@
                         {{ \Form::select('license_id', array('' => 'กรุณาเลือก License') , null, array('class' => 'form-control', 'id' => 'license_id')); }}
                     </div>
                 </div>
-                <div class="form-group hidden">
-                    {{Form::label('sbit', 'BIT', array('class' => 'col-sm-2 control-label'))}}
-                    <div class="col-sm-1">
-                        {{Form::text('sbit', NULL,array('class'=>'form-control','id'=>'sbit','placeholder'=>'32/64'))}}
+                <div class="form-group hidden" id="sbit">
+                    {{Form::label('sbit', 'BIT', array('class' => 'col-sm-2 control-label req'))}}
+                    <div class="col-sm-5">
+                        <label class="radio-inline">
+                            <input type="radio" name="sbit" value="32" checked="checked"> 32 BIT
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sbit" value="64"> 64 BIT
+                        </label>
                     </div>
                 </div>
                 <div class="form-group hidden">
@@ -190,6 +195,7 @@
                         {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
                     </div>
                 </div>
+                {{Form::hidden('group_id',$item->group_id)}}
                 {{ Form::close() }}
             </div>
         </section>
@@ -315,7 +321,7 @@
             $('#software_id').parent().parent().addClass('hidden');
             $('#license_group_id').parent().parent().addClass('hidden');
             $('#license_id').parent().parent().addClass('hidden');
-            $('#sbit').parent().parent().addClass('hidden');
+            $('#sbit').addClass('hidden');
 
             $.get("{{ url('get/hswareddl')}}",
                     {option: $(this).val(), company_id: <?php echo (\Input::get('company_id') ? \Input::get('company_id') : 0); ?>},
@@ -332,7 +338,7 @@
             $('#software_id').parent().parent().removeClass('hidden');
             $('#license_group_id').parent().parent().removeClass('hidden');
             $('#license_id').parent().parent().removeClass('hidden');
-            $('#sbit').parent().parent().removeClass('hidden');
+            $('#sbit').removeClass('hidden');
         }
     });
 

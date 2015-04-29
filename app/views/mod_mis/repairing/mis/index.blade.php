@@ -31,7 +31,6 @@
                 <div class="pull-left">
                     <div class="btn-group">
                         <a href="javascript:;" rel="mis/repairing/add" class="btn btn-primary link_dialog" title="เพิ่มรายการแจ้งซ่อม" role="button"><i class="fa fa-plus"></i> เพิ่มรายการแจ้งซ่อม (F8)</a>
-                        <a href="{{URL::to('mis/repairing/ma')}}" class="btn btn-primary" title="รายการ MA" role="button"><i class="fa fa-list"></i> รายการ MA</a>
                     </div>
                 </div>
             </div>
