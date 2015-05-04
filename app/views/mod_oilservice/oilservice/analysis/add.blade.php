@@ -64,7 +64,7 @@
                             {{ \Form::select('viscosity', array('' => 'เลือกรายการ Viscosity')+ \DB::table('oil_status_item')->where('group_id',4)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'viscosity')); }}
                         </div>
                     </div>                    
-                    <div class="form-group">
+                    <div class="form-group" id="tan">
                         {{Form::label('tan', 'TAN', array('class' => 'col-sm-2 control-label req'))}}
                         <div class="col-sm-9">
                             @foreach(\DB::table('oil_status_item')->where('group_id',5)->get() as $item_tan)
@@ -198,11 +198,13 @@
                 $('#intensity').removeClass('hidden');
                 $('#colour').addClass('hidden');
                 $('#moisture').addClass('hidden');
+                $('#tan').addClass('hidden');
             } else {
                 $('#density').addClass('hidden');
                 $('#intensity').addClass('hidden');
                 $('#colour').removeClass('hidden');
                 $('#moisture').removeClass('hidden');
+                $('#tan').removeClass('hidden');
             }
             $.get("{{ url('get/getOilMachine')}}",
                     {option: $(this).val()}, function (data) {

@@ -136,17 +136,36 @@ class RepairingController extends \BaseController {
                                 'message' => $validator->errors()->toArray()
                             ), 400));
             } else {
-                $repairing = new \RepairingItem();
-                $repairing->group_id = \Input::get('group_id');
-                $repairing->company_id = \Input::get('company_id');
-                $repairing->desc = \Input::get('desc');
-                $repairing->created_user = (\Input::get('user_id') ? \Input::get('user_id') : \Auth::user()->id);
-                if (\Input::get('created_at')) {
-                    $repairing->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
-                }
-                $repairing->save();
-                $repairing_id = $repairing->id;
+                if ($check->is('mis')) {
+                    $repairing = new \RepairingItem();
+                    $repairing->group_id = \Input::get('group_id');
+                    $repairing->company_id = \Input::get('company_id');
+                    $repairing->desc = \Input::get('desc');
+                    $repairing->created_user = \Input::get('user_id');
+                    if (\Input::get('created_at')) {
+                        $repairing->created_at = \Input::get('created_at') . ' ' . date('H:i:s');
+                    }
+                    $repairing->save();
+                    $repairing_id = $repairing->id;
+                } else {
+                    $repairing = new \RepairingItem();
+                    $repairing->group_id = \Input::get('group_id');
+                    $repairing->company_id = \Input::get('company_id');
+                    $repairing->desc = \Input::get('desc');
+                    $repairing->created_user = \Auth::user()->id;
+                    $repairing->save();
+                    $repairing_id = $repairing->id;
 
+                    $val_email = array(
+                        'fullname' => \Auth::user()->firstname . ' ' . \Auth::user()->lastname,
+                        'desc' => \Input::get('desc'),
+                        'id' => $repairing_id,
+                        'created_at' => date('Y-m-d H:i:s')
+                    );
+                    \Mail::send('mod_mis.repairing.email.mail_notification_new_repairing', $val_email, function($message) {
+                        $message->to('mis.support@aerofluid.com', 'MIS AEROFLUID')->subject('มีรายการแจ้งซ่อมใหม่!');
+                    });
+                }
                 return \Response::json(array(
                             'error' => array(
                                 'status' => TRUE,

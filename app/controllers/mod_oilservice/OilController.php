@@ -272,6 +272,8 @@ class OilController extends \BaseController {
                 $oil_analysis_item->moisture = \Input::get('moisture');
                 $oil_analysis_item->oxidation = \Input::get('oxidation');
                 $oil_analysis_item->nitration = \Input::get('nitration');
+                $oil_analysis_item->density = \Input::get('density');
+                $oil_analysis_item->intensity = \Input::get('intensity');
                 $oil_analysis_item->diagnose = trim(\Input::get('diagnose'));
                 $oil_analysis_item->solve = trim(\Input::get('solve'));
                 $oil_analysis_item->save();

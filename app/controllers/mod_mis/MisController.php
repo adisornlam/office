@@ -19,7 +19,7 @@ class MisController extends \BaseController {
         $this->beforeFilter('auth', array('except' => '/login'));
     }
 
-    public function index() {
+    public function index() {      
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
             'title' => 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ',
@@ -49,9 +49,13 @@ class MisController extends \BaseController {
             return \View::make('mod_mis.home.mis.index', $data);
         } elseif ($check->is('hr')) {
             return \View::make('mod_mis.home.hr.index', $data);
-        }else{
+        } else {
             return \View::make('mod_mis.home.shared.index', $data);
         }
+    }
+
+    function send_mail() {
+        
     }
 
 }

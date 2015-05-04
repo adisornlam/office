@@ -45,7 +45,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     {{ \Form::select('type_id', array('' => 'ประเภทน้ำมัน') + \DB::table('oil_type_item')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'type_id')); }}
-                    {{ \Form::select('machine_id', array('' => 'ประเภทเครื่องจักร') + \DB::table('oil_machine_type')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'machine_id')); }}
+                    {{ \Form::select('machine_id', array('' => 'ประเภทเครื่องจักร'), null, array('class' => 'form-control', 'id' => 'machine_id')); }}
                     {{ \Form::select('nas', array(''=>'NAS'), null, array('class' => 'form-control', 'id' => 'nas')); }}
                     {{ \Form::select('colour', array(''=>'Colour')+ \DB::table('oil_status_item')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'colour')); }}
                     {{ \Form::select('kind_id', array('' => 'เลือกชนิดน้ำมัน',32=>'32',46=>'46',68=>'68',100=>'100'), null, array('class' => 'form-control', 'id' => 'kind_id')); }}
@@ -176,9 +176,15 @@
         if ($(this).val() == 3) {
             $('#density').removeClass('hidden');
             $('#intensity').removeClass('hidden');
+            $('#colour').addClass('hidden');
+            $('#moisture').addClass('hidden');
+            $('#tan').addClass('hidden');
         } else {
             $('#density').addClass('hidden');
             $('#intensity').addClass('hidden');
+            $('#colour').removeClass('hidden');
+            $('#moisture').removeClass('hidden');
+            $('#tan').removeClass('hidden');
         }
         $.get("{{ url('get/getOilMachine')}}",
                 {option: $(this).val()}, function (data) {
