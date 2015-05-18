@@ -19,13 +19,14 @@
                 <ul class="sub">
                     @foreach(\DB::table('menu')
                     ->join('menu_role', 'menu_role.menu_id', '=', 'menu.id')
-                    ->where('menu_role.role_id', '=', $item->role_id)
+                    ->join('role_user', 'menu_role.role_id', '=', 'role_user.role_id')
+                    ->where('role_user.user_id', '=', \Auth::user()->id)
                     ->where('menu.sub_id', '!=', 0)
-                    ->where('menu.sub_id', '=', $item->id)
                     ->select('menu.id', 'menu.title', 'menu.url', 'menu.icon', 'menu.module')
+                    ->distinct()
                     ->orderBy('menu.rank', 'asc')
                     ->get() as $item2)
-                    <li class="{{($item2->url == \Request::path() ? 'active' : '')}}"><a  href="{{URL::to($item2->url)}}">{{$item2->title}}</a></li>
+                    <li class="{{($item2->url == \Request::path() ? 'active' : '')}}"><a  href="{{URL::to($item2->url)}}">{{$item2->title}}xx</a></li>
                     @endforeach
                 </ul>
             </li>

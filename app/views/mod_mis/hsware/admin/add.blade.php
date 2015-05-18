@@ -104,6 +104,12 @@
                                     {{Form::text('serial_code', NULL,array('class'=>'form-control','id'=>'serial_code'))}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{Form::label('serial_no', 'Serial Number', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-3">
+                                    {{Form::text('serial_no',null,array('class'=>'form-control','id'=>'serial_no'))}}
+                                </div>
+                            </div>
                             @if(in_array(\Input::get('group_id'), array(11,12,13,14,15,20,24)))
                             <div class="form-group">
                                 {{Form::label('access_no', 'ACC NO', array('class' => 'col-sm-2 control-label'))}}
@@ -132,6 +138,12 @@
                                 </div>
                             </div>
                             @endif 
+                            <div class="form-group">
+                                {{Form::label('supplier_id', 'ตัวแทนจำหน่าย', array('class' => 'col-sm-2 control-label'));}}
+                                <div class="col-sm-3">
+                                    {{ \Form::select('supplier_id', array('0'=>'เลือกตัวแทนจำหน่าย')+\SupplierItem::lists('title','id'), null, array('class' => 'form-control', 'id' => 'supplier_id')); }}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">

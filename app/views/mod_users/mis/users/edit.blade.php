@@ -112,6 +112,12 @@
                         {{Form::text('username', $item->username,array('class'=>'form-control','id'=>'username'))}}
                     </div>
                 </div>
+                <div class="form-group">
+                    {{Form::label('password', 'รหัสผ่าน', array('class' => 'col-sm-3 control-label'))}}
+                    <div class="col-sm-6">
+                        {{Form::password('password',array('class' => 'form-control'))}}
+                    </div>
+                </div>
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="avatar">

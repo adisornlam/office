@@ -152,7 +152,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[2][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',2)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id2')); }}
+                                        {{ \Form::select('model_id[2][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',2)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id2')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=2" class="btn btn-primary link_dialog" title="เพิ่มยี่ห้ออุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -165,7 +165,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[2][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model2'));}}
+                                        {{ \Form::select('sub_model[2][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model2'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel2" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -179,7 +179,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[2][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -214,7 +214,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[8][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',8)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id8')); }}
+                                        {{ \Form::select('model_id[8][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',8)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id8')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=8" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -227,7 +227,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[8][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model8'));}}
+                                        {{ \Form::select('sub_model[8][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model8'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel8" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -241,7 +241,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[8][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -276,7 +276,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22')); }}
+                                        {{ \Form::select('model_id[22][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id22')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=22" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -290,7 +290,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[22][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -308,7 +308,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[22][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control')); }}
+                                        {{ \Form::select('model_id[22][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',22)->lists('title', 'id'), null, array('class' => 'form-control')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         &nbsp;
@@ -322,7 +322,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[22][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -357,7 +357,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[3][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id3')); }}
+                                        {{ \Form::select('model_id[3][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id3')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=3" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -371,7 +371,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[3][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -389,7 +389,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[3][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control')); }}
+                                        {{ \Form::select('model_id[3][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',3)->lists('title', 'id'), null, array('class' => 'form-control')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         &nbsp;
@@ -403,7 +403,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[3][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -438,7 +438,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[6][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',6)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id6')); }}
+                                        {{ \Form::select('model_id[6][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',6)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id6')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=6" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -451,7 +451,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[6][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model6'));}}
+                                        {{ \Form::select('sub_model[6][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model6'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel6" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -481,7 +481,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[5][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',5)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id5')); }}
+                                        {{ \Form::select('model_id[5][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',5)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id5')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=5" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -494,7 +494,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[5][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model5'));}}
+                                        {{ \Form::select('sub_model[5][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model5'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel5" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -524,7 +524,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[7][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',7)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id7')); }}
+                                        {{ \Form::select('model_id[7][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',7)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id7')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=7" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -537,7 +537,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[7][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model7'));}}
+                                        {{ \Form::select('sub_model[7][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model7'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel7" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -551,7 +551,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[7][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -586,7 +586,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[26][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',26)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id26')); }}
+                                        {{ \Form::select('model_id[26][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',26)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id26')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=26" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -599,7 +599,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[26][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model26'));}}
+                                        {{ \Form::select('sub_model[26][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model26'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel26" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -629,7 +629,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[14][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',14)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id14')); }}
+                                        {{ \Form::select('model_id[14][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',14)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id14')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=14" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -642,7 +642,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('sub_model[14][]', array('' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model14'));}}
+                                        {{ \Form::select('sub_model[14][]', array('0' =>'กรุณาเลือกรุ่น'), null, array('class' => 'form-control', 'id' => 'sub_model14'));}}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" id="btnAddSubModel14" rel="" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มรุ่นอุปกรณ์</a>
@@ -656,7 +656,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[14][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)
@@ -691,7 +691,7 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        {{ \Form::select('model_id[13][]',array('' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',13)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id13')); }}
+                                        {{ \Form::select('model_id[13][]',array('0' => 'เลือกยี่ห้อ') +  \DB::table('hsware_model')->where('group_id',13)->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'model_id13')); }}
                                     </div>
                                     <div class="col-sm-2">
                                         <a href="javascript:;" rel="mis/hsware/group/model/dialog/wizard/add?group_id=13" class="btn btn-primary link_dialog" title="เพิ่มรุ่นอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มยี่ห้ออุปกรณ์</a>
@@ -705,7 +705,7 @@
                             <div class="col-sm-3">              
                                 @if($item_label->option_id>0)
                                 {{Form::select($item_label->name.'[13][]',
-                                                array('' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
+                                                array('0' => 'กรุณาเลือกรายการ') +\DB::table('hsware_spec_option')
                                                 ->join('hsware_spec_option_item', 'hsware_spec_option.id', '=', 'hsware_spec_option_item.option_id')
                                                 ->select('hsware_spec_option_item.title','hsware_spec_option_item.id')
                                                 ->where('option_id',$item_label->option_id)

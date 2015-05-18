@@ -44,4 +44,28 @@ class HswareItem extends \Eloquent {
         return $rs;
     }
 
+    protected function get_gencode($company_id, $group_id) {
+        $item = \DB::table('hsware_item')
+                ->where('company_id', $company_id)
+                ->where('group_id', $group_id)
+                ->where('deleted_at', null)
+                ->orderBy('id', 'desc')
+                ->first();
+
+        if ($item) {
+            if ($item->serial_code != NULL) {
+                $str = explode("-", $item->serial_code);
+                $sl = $str[2] + 1;
+            } else {
+                $sl = 1;
+            }
+        } else {
+            $sl = 1;
+        }
+        $company = \Company::find($company_id);
+        $group = \HswareGroup::find($group_id);
+
+        return $company->company_code . '-' . $group->code_no . '-' . str_pad($sl, 3, "0", STR_PAD_LEFT);
+    }
+
 }

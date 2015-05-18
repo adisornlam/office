@@ -212,7 +212,6 @@
                                                         foreach (\DB::table('hsware_item')
                                                                 ->join('hsware_model', 'hsware_model.id', '=', 'hsware_item.model_id')
                                                                 ->where('hsware_item.group_id', $group_item2->id)
-                                                                ->where('hsware_item.spare', 0)
                                                                 ->where('hsware_item.status', 0)
                                                                 ->select(array(
                                                                     'hsware_item.id as id',
@@ -220,6 +219,7 @@
                                                                     'hsware_item.serial_code as codes',
                                                                     'hsware_model.title as title',
                                                                     'hsware_item.status as status',
+                                                                    'hsware_item.spare as spare'
                                                                 ))
                                                                 ->get() as $hs_item2) {
                                                             ?>
@@ -228,6 +228,9 @@
                                                                     {{Form::checkbox('hsware_item[]', $hs_item2->id,($hs_item2->status==1?TRUE:FALSE))}}
                                                                     {{$hs_item2->codes}} {{$hs_item2->title}}  {{\HswareItem::get_hsware($hs_item2->id)}}
                                                                 </label>
+                                                                @if($hs_item2->spare==1)
+                                                                <span class="label label-warning">Spare</span>
+                                                                @endif
                                                             </div>
                                                         <?php }
                                                         ?>

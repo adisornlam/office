@@ -30,8 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" rel="mis/hsware/dialog" class="btn btn-primary link_dialog" title="เลือกกลุ่มอุปกรณ์" role="button"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์ (F8)</a>
-                        <a href="{{URL::to('mis/hsware/group')}}" class="btn btn-primary" role="button"><i class="fa fa-list"></i> กลุ่มอุปกรณ์</a>
+                        <a href="javascript:;" rel="mis/formonline/add" class="btn btn-primary link_dialog" title="เพิ่ม รายการ" role="button"><i class="fa fa-plus"></i> เพิ่ม รายการ (F8)</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +45,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="hsware-list" class="table table-striped table-bordered"></table>
+                    <table id="supplier-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -64,19 +63,28 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        $("#hsware-list").dataTable({
+        var oTable = $("#supplier-list").dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": base_url + index_page + "whs/listall",
+            "ajax": {
+                "url": base_url + index_page + "mis/supplier/listall"
+            },
             "columnDefs": [{
                     "targets": "_all",
                     "defaultContent": ""
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "desc", "title": "DESC", "width": "50%", "orderable": false, "searchable": true}
+                {"data": "title", "title": "รายการ", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "address", "title": "ที่อยู่", "width": "30%", "orderable": false, "searchable": true},
+                {"data": "phone", "title": "เบอร์ติดต่อ", "width": "10%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "fax", "title": "แฟกซ์", "width": "10%", "orderable": false, "searchable": true},
+                {"data": "remark", "title": "หมายเหตุ", "width": "20%", "orderable": false, "searchable": true},
+                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
         });
     });
+
+
 </script>
 @stop

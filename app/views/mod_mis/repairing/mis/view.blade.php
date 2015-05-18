@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('desc2', 'รายละเอียด', array('class' => 'col-sm-2 control-label'))}}
+                    {{Form::label('desc2', 'รายละเอียดดำเนินการ', array('class' => 'col-sm-2 control-label'))}}
                     <div class="col-sm-4">
                         {{Form::textarea('desc2', NULL,array('class'=>'form-control','id'=>'desc2','rows'=>10))}}
                     </div>

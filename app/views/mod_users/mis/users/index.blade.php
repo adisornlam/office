@@ -45,7 +45,7 @@
                             {{ \Form::select('company_id', array(''=>'เลือกบริษัท')+$company, (isset($_COOKIE['user_company_id'])?$_COOKIE['user_company_id']:null), array('class' => 'form-control', 'id' => 'company_id')); }}
                         </div>
                     </div>              
-                    <div class="form-group hidden">
+                    <div class="form-group">
                         <div class="col-sm-5">
                             {{ \Form::select('department_id', array('' => 'เลือกฝ่าย/แผนก'),null , array('class' => 'form-control', 'id' => 'department_id')); }}
                         </div>
@@ -173,6 +173,17 @@
             } else {
                 oTable.fnDraw();
             }
+        });
+
+        $.get("{{ url('get/department')}}",
+                {option: $('#company_id').val()}, function (data) {
+            var department = $('#department_id');
+            department.parent().parent().removeClass('hidden');
+            department.empty();
+            department.append("<option value=''>กรุณาเลือกฝ่าย/แผนก</option>");
+            $.each(data, function (index, element) {
+                department.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
         });
     });
 </script>

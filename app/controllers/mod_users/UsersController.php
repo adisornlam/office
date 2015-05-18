@@ -196,6 +196,9 @@ class UsersController extends \BaseController {
                 $user->email = trim(\Input::get('email'));
                 $user->mobile = trim(\Input::get('mobile'));
                 $user->username = trim(\Input::get('username'));
+                if (\Input::has('password')) {
+                    $user->password = trim(\Input::get('password'));
+                }
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
                 $user->verified = (\Input::has('verified') ? 1 : 0);
                 $user->save();

@@ -19,7 +19,7 @@ class MisController extends \BaseController {
         $this->beforeFilter('auth', array('except' => '/login'));
     }
 
-    public function index() {      
+    public function index() {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $data = array(
             'title' => 'ภาพรวมฝ่ายเทคโนโลยีสารเทศ',
@@ -37,7 +37,8 @@ class MisController extends \BaseController {
             'hsware_model_count' => \HswareModel::where('disabled', '=', 0)->count(),
             'repairing_count' => \RepairingItem::where('disabled', '=', 0)->count(),
             'software_count' => \SoftwareItem::where('disabled', '=', 0)->count(),
-            'ma_count' => \MaItem::where('disabled', '=', 0)->count()
+            'ma_count' => \MaItem::where('disabled', '=', 0)->count(),
+            'spare_count' => \HswareItem::where('spare', 1)->where('disabled', 0)->count()
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);

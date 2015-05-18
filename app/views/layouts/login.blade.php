@@ -37,7 +37,6 @@
                     <div class="modal-body">
                         <p>Enter your e-mail address below to reset your password.</p>
                         <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
-
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
@@ -51,5 +50,10 @@
         {{HTML::script('js/jquery.js')}}
         {{HTML::script('js/bootstrap.min.js')}}
         @yield('script_code')
+        <script type="text/javascript">
+            Notification.requestPermission(function (status) {
+                var n = new Notification("Welcome to MIS Office V1.0", {body: "ยินดีต้อนรับเข้าสู่ระบบจัดการข้อมูลออนไลน์"});
+            });
+        </script>
     </body>
 </html>

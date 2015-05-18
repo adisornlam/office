@@ -48,6 +48,24 @@
         </section>
     </div>
 </div>
+<div class="page-header">
+    <h1>แบบฟอร์ม <small>รายการแบบฟอร์มเอกสารออนไลน์ต่างๆ</small></h1>
+</div>
+<div class="row state-overview">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="register_list">
+        <section class="panel">
+            <div class="symbol orage">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class="purchase_request_count">
+                    0
+                </h1>
+                <p>แบบฟอร์มขอลงทะเบียน-ยกเลิก</p>
+            </div>
+        </section>
+    </div>
+</div>
 @stop
 
 @section('script_code')

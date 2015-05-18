@@ -53,6 +53,9 @@ class HswareController extends \BaseController {
         if (\Input::has('status')) {
             $hsware_item->where('hsware_item.status', \Input::get('status'));
         }
+        if (\Input::has('spare')) {
+            $hsware_item->where('hsware_item.spare', 1);
+        }
         $hsware_item->select(array(
             'hsware_item.id as id',
             'hsware_item.id as item_id',
@@ -593,6 +596,7 @@ class HswareController extends \BaseController {
                 $hsware_item->access_no = trim(\Input::get('access_no'));
                 $hsware_item->model_id = \Input::get('model_id');
                 $hsware_item->sub_model = \Input::get('sub_model');
+                $hsware_item->supplier_id = \Input::get('supplier_id');
                 $hsware_item->title = trim(\Input::get('title'));
                 $hsware_item->spec_value_1 = trim(\Input::get('spec_value_1'));
                 $hsware_item->spec_value_2 = trim(\Input::get('spec_value_2'));
@@ -895,6 +899,56 @@ class HswareController extends \BaseController {
         } else {
             return \View::make('mod_mis.hsware.admin.word_export_att', $data);
         }
+    }
+
+    public function spare_export() {
+        \Excel::create('Spare', function($excel) {
+
+            $excel->sheet('Spare List', function($sheet) {
+                $hsware_item = \DB::table('hsware_item')
+                        ->join('hsware_group', 'hsware_item.group_id', '=', 'hsware_group.id')
+                        ->join('hsware_model', 'hsware_item.model_id', '=', 'hsware_model.id')
+                        ->join('company', 'hsware_item.company_id', '=', 'company.id')
+                        ->leftJoin('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                        ->leftJoin('computer_item', 'computer_item.id', '=', 'computer_hsware.computer_id')
+                        ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
+                        ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                        ->leftJoin('place', 'hsware_item.locations', '=', 'place.id')
+                        ->select(array(
+                            'hsware_item.id as id',
+                            'hsware_item.sub_model as sub_model_id ',
+                            'hsware_item.serial_code as serial_code',
+                            'hsware_model.title as title',
+                            'computer_item.title as computer_title',
+                            \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
+                            'company.title as company',
+                            'hsware_group.title as group_title',
+                            'hsware_item.warranty_date as warranty_date',
+                            'hsware_item.register_date as register_date',
+                            'hsware_item.created_user as created_user',
+                            'hsware_item.updated_user as updated_user',
+                            'place.title as locations',
+                            'hsware_item.spare as spare',
+                            'hsware_item.disabled as disabled',
+                            'hsware_item.status as status'
+                        ))
+                        ->where('spare', 1)
+                        ->get();
+
+                foreach ($hsware_item as $item) {
+                    $arr[] = array(
+                        'id' => $item->id,
+                        'serial_code' => $item->serial_code,
+                        'title' => $item->title . ' ' . $this->get_submodel($item->sub_model_id) . ' ' . $this->option_item($item->id),
+                        'group' => $item->group_title,
+                        'locations' => $item->locations,
+                        'warranty' => ($item->warranty_date == "0000-00-00" ? 'LT' : $item->warranty_date )
+                    );
+                }
+
+                $sheet->fromArray($arr);
+            });
+        })->export('xlsx');
     }
 
     private function upload_photo($file, $path) {

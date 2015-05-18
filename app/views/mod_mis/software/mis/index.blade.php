@@ -4,6 +4,7 @@
 {{HTML::style('assets/advanced-datatable/media/css/demo_page.css')}}
 {{HTML::style('assets/advanced-datatable/media/css/demo_table.css')}}
 {{HTML::style('assets/data-tables/DT_bootstrap.css')}}
+{{HTML::style('assets/datatables/extensions/TableTools/css/dataTables.tableTools.min.css')}}
 @stop
 
 @section('content')
@@ -59,6 +60,7 @@
 {{HTML::script('assets/datatables/1.10.4/js/jquery.dataTables.min.js')}}
 {{HTML::script('assets/datatables/1.10.4/js/dataTables.bootstrap.js')}}
 {{HTML::script('assets/data-tables/DT_bootstrap.js')}}
+{{HTML::script('assets/datatables/extensions/TableTools/js/dataTables.tableTools.min.js')}}
 @stop
 
 @section('script_code')
@@ -81,7 +83,22 @@
                 {"data": "bit_os", "title": "Bit", "width": "5%", "orderable": false, "searchable": true},
                 {"data": "free", "title": "Free", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true},
                 {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
-            ]
+            ],
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "../assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "mColumns": [1, 2, 3, 4]
+                    },
+                    {
+                        "sExtends": "xls",
+                        "mColumns": [1, 2, 3, 4],
+                        "sFileName": "export_hardware-software_" + $.now() + ".csv"
+                    }
+                ]
+            }
         });
     });
 </script>

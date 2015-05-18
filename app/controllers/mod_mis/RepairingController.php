@@ -59,6 +59,16 @@ class RepairingController extends \BaseController {
             'repairing_item.rating as rating',
             'repairing_item.created_at as created_at'
         ));
+        if (\Input::has('repairing_group_id')) {
+            $repairing->where('repairing_item.group_id', \Input::get('repairing_group_id'));
+        }
+        if (\Input::has('created_at_from')) {
+            $repairing->where('repairing_item.created_at', '>=', \Input::get('created_at_from') . ' 00:00:01');
+        }
+        if (\Input::has('created_at_to')) {
+            $repairing->where('repairing_item.created_at', '<=', \Input::get('created_at_to') . ' 23:59:59');
+        }
+
         $repairing->orderBy('repairing_item.id', 'desc');
 
         $link = '<div class="dropdown">';
@@ -85,9 +95,14 @@ class RepairingController extends \BaseController {
                             return $str;
                         })
                         ->edit_column('created_user', function($result_obj) {
-                            $user = \User::find($result_obj->created_user);
+//                            $user = \User::find($result_obj->created_user);
+                            $user = \DB::table('users')
+                                    ->leftJoin('department_item', 'users.department_id', '=', 'department_item.id')
+                                    ->where('users.id', $result_obj->created_user)
+                                    ->select(array('users.codes', 'users.firstname', 'users.lastname', 'department_item.title as department'))
+                                    ->first();
                             if ($user) {
-                                $str = $user->firstname . ' ' . $user->lastname;
+                                $str = $user->codes . ' ' . $user->firstname . ' ' . $user->lastname . ' (' . $user->department . ')';
                             } else {
                                 $str = '';
                             }

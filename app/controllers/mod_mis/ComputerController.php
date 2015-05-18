@@ -20,6 +20,8 @@ class ComputerController extends \BaseController {
     }
 
     public function index() {
+        $serial_code22 = \HswareItem::get_gencode(1, 22);
+        //echo $serial_code22;
         $data = array(
             'title' => 'ระเบียนคอมพิวเตอร์',
             'breadcrumbs' => array(
@@ -37,6 +39,7 @@ class ComputerController extends \BaseController {
         $computer_item = \DB::table('computer_item')
                 ->leftJoin('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
                 ->leftJoin('users', 'users.id', '=', 'computer_user.user_id')
+                ->leftJoin('department_item', 'users.department_id', '=', 'department_item.id')
                 ->join('computer_type', 'computer_item.type_id', '=', 'computer_type.id')
                 ->join('company', 'computer_item.company_id', '=', 'company.id')
                 ->select(array(
@@ -44,7 +47,7 @@ class ComputerController extends \BaseController {
             'computer_item.id as item_id',
             'computer_item.serial_code as serial_code',
             'computer_item.title as title',
-            \DB::raw('CONCAT(users.codes," ",users.firstname," ",users.lastname) as fullname'),
+            \DB::raw('CONCAT(users.codes," ",users.firstname," ",users.lastname," (",department_item.title,")") as fullname'),
             'computer_item.ip_address as ip_address',
             'company.title as company',
             'computer_item.disabled as disabled'
@@ -247,10 +250,12 @@ class ComputerController extends \BaseController {
                     }
                 }
 
-                if (isset($model[2][0])) {
+                if ($model[2][0] > 0) {
+                    $serial_code2 = \HswareItem::get_gencode(\Input::get('company_id'), 2);
                     $hsware_item2 = new \HswareItem();
                     $hsware_item2->group_id = 2;
                     $hsware_item2->company_id = \Input::get('company_id');
+                    $hsware_item2->serial_code = $serial_code2;
                     $hsware_item2->model_id = (isset($model[2][0]) ? $model[2][0] : 0);
                     $hsware_item2->sub_model = (isset($sub_model[2][0]) ? $sub_model[2][0] : 0);
                     $hsware_item2->spec_value_1 = (isset($spec_value_1[2][0]) ? $spec_value_1[2][0] : NULL);
@@ -261,6 +266,7 @@ class ComputerController extends \BaseController {
                     $hsware_item2->register_date = trim(\Input::get('register_date'));
                     $hsware_item2->warranty_date = (isset($warranty_date[2][0]) != '' ? trim($warranty_date[2][0]) : NULL);
                     $hsware_item2->status = 1;
+                    $hsware_item2->spare = 0;
                     $hsware_item2->disabled = 0;
                     $hsware_item2->created_user = \Auth::user()->id;
                     $hsware_item2->save();
@@ -276,10 +282,12 @@ class ComputerController extends \BaseController {
                     $hslog2->save();
                 }
 
-                if (isset($model[8][0])) {
+                if ($model[8][0] > 0) {
+                    $serial_code8 = \HswareItem::get_gencode(\Input::get('company_id'), 8);
                     $hsware_item8 = new \HswareItem();
                     $hsware_item8->group_id = 8;
                     $hsware_item8->company_id = \Input::get('company_id');
+                    $hsware_item8->serial_code = $serial_code8;
                     $hsware_item8->model_id = (isset($model[8][0]) ? $model[8][0] : 0);
                     $hsware_item8->sub_model = (isset($sub_model[8][0]) ? $sub_model[8][0] : 0);
                     $hsware_item8->spec_value_12 = (isset($spec_value_12[8][0]) ? $spec_value_12[8][0] : NULL);
@@ -289,6 +297,7 @@ class ComputerController extends \BaseController {
                     $hsware_item8->register_date = trim(\Input::get('register_date'));
                     $hsware_item8->warranty_date = (isset($warranty_date[8][0]) != '' ? trim($warranty_date[8][0]) : NULL);
                     $hsware_item8->status = 1;
+                    $hsware_item8->spare = 0;
                     $hsware_item8->disabled = 0;
                     $hsware_item8->created_user = \Auth::user()->id;
                     $hsware_item8->save();
@@ -304,16 +313,19 @@ class ComputerController extends \BaseController {
                     $hslog8->save();
                 }
 
-                if (isset($model[22][0])) {
+                if ($model[22][0] > 0) {
+                    $serial_code22 = \HswareItem::get_gencode(\Input::get('company_id'), 22);
                     $hsware_item22 = new \HswareItem();
                     $hsware_item22->group_id = 22;
                     $hsware_item22->company_id = \Input::get('company_id');
+                    $hsware_item22->serial_code = $serial_code22;
                     $hsware_item22->model_id = (isset($model[22][0]) ? $model[22][0] : 0);
                     $hsware_item22->spec_value_4 = (isset($spec_value_4[22][0]) ? $spec_value_4[22][0] : NULL);
                     $hsware_item22->locations = trim(\Input::get('locations'));
                     $hsware_item22->register_date = trim(\Input::get('register_date'));
                     $hsware_item22->warranty_date = (isset($warranty_date[22][0]) != '' ? trim($warranty_date[22][0]) : NULL);
                     $hsware_item22->status = 1;
+                    $hsware_item22->spare = 0;
                     $hsware_item22->disabled = 0;
                     $hsware_item22->created_user = \Auth::user()->id;
                     $hsware_item22->save();
@@ -329,16 +341,19 @@ class ComputerController extends \BaseController {
                     $hslog22->save();
                 }
 
-                if (isset($model[22][1])) {
+                if ($model[22][1] > 0) {
+                    $serial_code222 = \HswareItem::get_gencode(\Input::get('company_id'), 22);
                     $hsware_item222 = new \HswareItem();
                     $hsware_item222->group_id = 22;
                     $hsware_item222->company_id = \Input::get('company_id');
+                    $hsware_item222->serial_code = $serial_code222;
                     $hsware_item222->model_id = (isset($model[22][1]) ? $model[22][1] : 0);
                     $hsware_item222->spec_value_4 = (isset($spec_value_4[22][1]) ? $spec_value_4[22][1] : NULL);
                     $hsware_item222->locations = trim(\Input::get('locations'));
                     $hsware_item222->register_date = trim(\Input::get('register_date'));
                     $hsware_item222->warranty_date = (isset($warranty_date[22][1]) != '' ? trim($warranty_date[22][1]) : NULL);
                     $hsware_item222->status = 1;
+                    $hsware_item222->spare = 0;
                     $hsware_item222->disabled = 0;
                     $hsware_item222->created_user = \Auth::user()->id;
                     $hsware_item222->save();
@@ -354,10 +369,12 @@ class ComputerController extends \BaseController {
                     $hslog222->save();
                 }
 
-                if (isset($model[3][0])) {
+                if ($model[3][0] > 0) {
+                    $serial_code3 = \HswareItem::get_gencode(\Input::get('company_id'), 3);
                     $hsware_item3 = new \HswareItem();
                     $hsware_item3->group_id = 3;
                     $hsware_item3->company_id = \Input::get('company_id');
+                    $hsware_item3->serial_code = $serial_code3;
                     $hsware_item3->model_id = (isset($model[3][0]) ? $model[3][0] : 0);
                     $hsware_item3->spec_value_2 = (isset($spec_value_2[3][0]) ? $spec_value_2[3][0] : NULL);
                     $hsware_item3->spec_value_4 = (isset($spec_value_4[3][0]) ? $spec_value_4[3][0] : NULL);
@@ -366,6 +383,7 @@ class ComputerController extends \BaseController {
                     $hsware_item3->register_date = trim(\Input::get('register_date'));
                     $hsware_item3->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
                     $hsware_item3->status = 1;
+                    $hsware_item3->spare = 0;
                     $hsware_item3->disabled = 0;
                     $hsware_item3->created_user = \Auth::user()->id;
                     $hsware_item3->save();
@@ -381,10 +399,12 @@ class ComputerController extends \BaseController {
                     $hslog3->save();
                 }
 
-                if (isset($model[3][1])) {
+                if ($model[3][1] > 0) {
+                    $serial_code31 = \HswareItem::get_gencode(\Input::get('company_id'), 3);
                     $hsware_item31 = new \HswareItem();
                     $hsware_item31->group_id = 3;
                     $hsware_item31->company_id = \Input::get('company_id');
+                    $hsware_item31->serial_code = $serial_code31;
                     $hsware_item31->model_id = (isset($model[3][1]) ? $model[3][1] : 0);
                     $hsware_item31->spec_value_2 = (isset($spec_value_2[3][1]) ? $spec_value_2[3][1] : NULL);
                     $hsware_item31->spec_value_4 = (isset($spec_value_4[3][1]) ? $spec_value_4[3][1] : NULL);
@@ -393,6 +413,7 @@ class ComputerController extends \BaseController {
                     $hsware_item31->register_date = trim(\Input::get('register_date'));
                     $hsware_item31->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
                     $hsware_item31->status = 1;
+                    $hsware_item31->spare = 0;
                     $hsware_item31->disabled = 0;
                     $hsware_item31->created_user = \Auth::user()->id;
                     $hsware_item31->save();
@@ -408,15 +429,18 @@ class ComputerController extends \BaseController {
                     $hslog31->save();
                 }
 
-                if (isset($model[6][0])) {
+                if ($model[6][0] > 0) {
+                    $serial_code6 = \HswareItem::get_gencode(\Input::get('company_id'), 6);
                     $hsware_item6 = new \HswareItem();
                     $hsware_item6->group_id = 6;
                     $hsware_item6->company_id = \Input::get('company_id');
+                    $hsware_item6->serial_code = $serial_code6;
                     $hsware_item6->model_id = (isset($model[6][0]) ? $model[6][0] : 0);
                     $hsware_item6->locations = trim(\Input::get('locations'));
                     $hsware_item6->register_date = trim(\Input::get('register_date'));
                     $hsware_item6->warranty_date = (isset($warranty_date[6][0]) != '' ? trim($warranty_date[6][0]) : NULL);
                     $hsware_item6->status = 1;
+                    $hsware_item6->spare = 0;
                     $hsware_item6->disabled = 0;
                     $hsware_item6->created_user = \Auth::user()->id;
                     $hsware_item6->save();
@@ -432,15 +456,18 @@ class ComputerController extends \BaseController {
                     $hslog6->save();
                 }
 
-                if (isset($model[5][0])) {
+                if ($model[5][0] > 0) {
+                    $serial_code5 = \HswareItem::get_gencode(\Input::get('company_id'), 5);
                     $hsware_item5 = new \HswareItem();
                     $hsware_item5->group_id = 5;
                     $hsware_item5->company_id = \Input::get('company_id');
+                    $hsware_item5->serial_code = $serial_code5;
                     $hsware_item5->model_id = (isset($model[5][0]) ? $model[5][0] : 0);
                     $hsware_item5->locations = trim(\Input::get('locations'));
                     $hsware_item5->register_date = trim(\Input::get('register_date'));
                     $hsware_item5->warranty_date = (isset($warranty_date[5][0]) != '' ? trim($warranty_date[5][0]) : NULL);
                     $hsware_item5->status = 1;
+                    $hsware_item5->spare = 0;
                     $hsware_item5->disabled = 0;
                     $hsware_item5->created_user = \Auth::user()->id;
                     $hsware_item5->save();
@@ -456,16 +483,19 @@ class ComputerController extends \BaseController {
                     $hslog5->save();
                 }
 
-                if (isset($model[7][0])) {
+                if ($model[7][0] > 0) {
+                    $serial_code7 = \HswareItem::get_gencode(\Input::get('company_id'), 7);
                     $hsware_item7 = new \HswareItem();
                     $hsware_item7->group_id = 7;
                     $hsware_item7->company_id = \Input::get('company_id');
+                    $hsware_item7->serial_code = $serial_code7;
                     $hsware_item7->model_id = (isset($model[7][0]) ? $model[7][0] : 0);
                     $hsware_item31->spec_value_11 = (isset($spec_value_11[7][0]) ? $spec_value_11[7][0] : NULL);
                     $hsware_item7->locations = trim(\Input::get('locations'));
                     $hsware_item7->register_date = trim(\Input::get('register_date'));
                     $hsware_item7->warranty_date = (isset($warranty_date[7][0]) != '' ? trim($warranty_date[7][0]) : NULL);
                     $hsware_item7->status = 1;
+                    $hsware_item7->spare = 0;
                     $hsware_item7->disabled = 0;
                     $hsware_item7->created_user = \Auth::user()->id;
                     $hsware_item7->save();
@@ -481,15 +511,18 @@ class ComputerController extends \BaseController {
                     $hslog7->save();
                 }
 
-                if (isset($model[26][0])) {
+                if ($model[26][0] > 0) {
+                    $serial_code26 = \HswareItem::get_gencode(\Input::get('company_id'), 26);
                     $hsware_item26 = new \HswareItem();
                     $hsware_item26->group_id = 26;
                     $hsware_item26->company_id = \Input::get('company_id');
+                    $hsware_item26->serial_code = $serial_code26;
                     $hsware_item26->model_id = (isset($model[26][0]) ? $model[26][0] : 0);
                     $hsware_item26->locations = trim(\Input::get('locations'));
                     $hsware_item26->register_date = trim(\Input::get('register_date'));
                     $hsware_item26->warranty_date = (isset($warranty_date[26][0]) != '' ? trim($warranty_date[26][0]) : NULL);
                     $hsware_item26->status = 1;
+                    $hsware_item26->spare = 0;
                     $hsware_item26->disabled = 0;
                     $hsware_item26->created_user = \Auth::user()->id;
                     $hsware_item26->save();
@@ -505,10 +538,12 @@ class ComputerController extends \BaseController {
                     $hslog26->save();
                 }
 
-                if (isset($model[14][0])) {
+                if ($model[14][0] > 0) {
+                    $serial_code14 = \HswareItem::get_gencode(\Input::get('company_id'), 14);
                     $hsware_item14 = new \HswareItem();
                     $hsware_item14->group_id = 14;
                     $hsware_item14->company_id = \Input::get('company_id');
+                    $hsware_item14->serial_code = $serial_code14;
                     $hsware_item14->model_id = (isset($model[14][0]) ? $model[14][0] : 0);
                     $hsware_item14->sub_model = (isset($sub_model[14][0]) ? $sub_model[14][0] : 0);
                     $hsware_item14->spec_value_19 = (isset($spec_value_19[14][0]) ? $spec_value_19[14][0] : NULL);
@@ -517,6 +552,7 @@ class ComputerController extends \BaseController {
                     $hsware_item14->register_date = trim(\Input::get('register_date'));
                     $hsware_item14->warranty_date = (isset($warranty_date[14][0]) != '' ? trim($warranty_date[14][0]) : NULL);
                     $hsware_item14->status = 1;
+                    $hsware_item14->spare = 0;
                     $hsware_item14->disabled = 0;
                     $hsware_item14->created_user = \Auth::user()->id;
                     $hsware_item14->save();
@@ -532,16 +568,19 @@ class ComputerController extends \BaseController {
                     $hslog14->save();
                 }
 
-                if (isset($model[13][0])) {
+                if ($model[13][0] > 0) {
+                    $serial_code13 = \HswareItem::get_gencode(\Input::get('company_id'), 13);
                     $hsware_item13 = new \HswareItem();
                     $hsware_item13->group_id = 13;
                     $hsware_item13->company_id = \Input::get('company_id');
+                    $hsware_item13->serial_code = $serial_code13;
                     $hsware_item13->model_id = (isset($model[13][0]) ? $model[13][0] : 0);
                     $hsware_item13->spec_value_18 = (isset($spec_value_18[13][0]) ? $spec_value_18[13][0] : NULL);
                     $hsware_item13->locations = trim(\Input::get('locations'));
                     $hsware_item13->register_date = trim(\Input::get('register_date'));
                     $hsware_item13->warranty_date = (isset($warranty_date[13][0]) != '' ? trim($warranty_date[13][0]) : NULL);
                     $hsware_item13->status = 1;
+                    $hsware_item13->spare = 0;
                     $hsware_item13->disabled = 0;
                     $hsware_item13->created_user = \Auth::user()->id;
                     $hsware_item13->save();
@@ -659,11 +698,13 @@ class ComputerController extends \BaseController {
                     }
                 }
 
-                if (isset($model[8][0])) {
+                if ($model[8][0] > 0) {
+                    $serial_code8 = \HswareItem::get_gencode(\Input::get('company_id'), 8);
                     $hsware_item8 = new \HswareItem();
                     $hsware_item8->group_id = 8;
                     $hsware_item8->type_id = 2;
                     $hsware_item8->company_id = \Input::get('company_id');
+                    $hsware_item8->serial_code = $serial_code8;
                     $hsware_item8->model_id = (isset($model[8][0]) ? $model[8][0] : 0);
                     $hsware_item8->sub_model = (isset($sub_model[8][0]) ? $sub_model[8][0] : 0);
                     $hsware_item8->spec_value_12 = (isset($spec_value_12[8][0]) ? $spec_value_12[8][0] : NULL);
@@ -673,6 +714,7 @@ class ComputerController extends \BaseController {
                     $hsware_item8->register_date = trim(\Input::get('register_date'));
                     $hsware_item8->warranty_date = (isset($warranty_date[8][0]) != '' ? trim($warranty_date[8][0]) : NULL);
                     $hsware_item8->status = 1;
+                    $hsware_item8->spare = 0;
                     $hsware_item8->disabled = 0;
                     $hsware_item8->created_user = \Auth::user()->id;
                     $hsware_item8->save();
@@ -688,17 +730,20 @@ class ComputerController extends \BaseController {
                     $hslog8->save();
                 }
 
-                if (isset($model[22][0])) {
+                if ($model[22][0] > 0) {
+                    $serial_code22 = \HswareItem::get_gencode(\Input::get('company_id'), 22);
                     $hsware_item22 = new \HswareItem();
                     $hsware_item22->group_id = 22;
                     $hsware_item22->type_id = 2;
                     $hsware_item22->company_id = \Input::get('company_id');
+                    $hsware_item22->serial_code = $serial_code22;
                     $hsware_item22->model_id = (isset($model[22][0]) ? $model[22][0] : 0);
                     $hsware_item22->spec_value_4 = (isset($spec_value_4[22][0]) ? $spec_value_4[22][0] : NULL);
                     $hsware_item22->locations = trim(\Input::get('locations'));
                     $hsware_item22->register_date = trim(\Input::get('register_date'));
                     $hsware_item22->warranty_date = (isset($warranty_date[22][0]) != '' ? trim($warranty_date[22][0]) : NULL);
                     $hsware_item22->status = 1;
+                    $hsware_item22->spare = 0;
                     $hsware_item22->disabled = 0;
                     $hsware_item22->created_user = \Auth::user()->id;
                     $hsware_item22->save();
@@ -714,17 +759,20 @@ class ComputerController extends \BaseController {
                     $hslog22->save();
                 }
 
-                if (isset($model[22][1])) {
+                if ($model[22][1] > 0) {
+                    $serial_code222 = \HswareItem::get_gencode(\Input::get('company_id'), 22);
                     $hsware_item222 = new \HswareItem();
                     $hsware_item222->group_id = 22;
                     $hsware_item222->type_id = 2;
                     $hsware_item222->company_id = \Input::get('company_id');
+                    $hsware_item222->serial_code = $serial_code222;
                     $hsware_item222->model_id = (isset($model[22][1]) ? $model[22][1] : 0);
                     $hsware_item222->spec_value_4 = (isset($spec_value_4[22][1]) ? $spec_value_4[22][1] : NULL);
                     $hsware_item222->locations = trim(\Input::get('locations'));
                     $hsware_item222->register_date = trim(\Input::get('register_date'));
                     $hsware_item222->warranty_date = (isset($warranty_date[22][1]) != '' ? trim($warranty_date[22][1]) : NULL);
                     $hsware_item222->status = 1;
+                    $hsware_item222->spare = 0;
                     $hsware_item222->disabled = 0;
                     $hsware_item222->created_user = \Auth::user()->id;
                     $hsware_item222->save();
@@ -740,10 +788,12 @@ class ComputerController extends \BaseController {
                     $hslog222->save();
                 }
 
-                if (isset($model[3][0])) {
+                if ($model[3][0] > 0) {
+                    $serial_code3 = \HswareItem::get_gencode(\Input::get('company_id'), 3);
                     $hsware_item3 = new \HswareItem();
                     $hsware_item3->group_id = 3;
                     $hsware_item3->company_id = \Input::get('company_id');
+                    $hsware_item3->serial_code = $serial_code3;
                     $hsware_item3->type_id = 2;
                     $hsware_item3->model_id = (isset($model[3][0]) ? $model[3][0] : 0);
                     $hsware_item3->spec_value_2 = (isset($spec_value_2[3][0]) ? $spec_value_2[3][0] : NULL);
@@ -753,6 +803,7 @@ class ComputerController extends \BaseController {
                     $hsware_item3->register_date = trim(\Input::get('register_date'));
                     $hsware_item3->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
                     $hsware_item3->status = 1;
+                    $hsware_item3->spare = 0;
                     $hsware_item3->disabled = 0;
                     $hsware_item3->created_user = \Auth::user()->id;
                     $hsware_item3->save();
@@ -768,10 +819,12 @@ class ComputerController extends \BaseController {
                     $hslog3->save();
                 }
 
-                if (isset($model[3][1])) {
+                if ($model[3][1] > 0) {
+                    $serial_code31 = \HswareItem::get_gencode(\Input::get('company_id'), 3);
                     $hsware_item31 = new \HswareItem();
                     $hsware_item31->group_id = 3;
                     $hsware_item31->company_id = \Input::get('company_id');
+                    $hsware_item31->serial_code = $serial_code31;
                     $hsware_item31->type_id = 2;
                     $hsware_item31->model_id = (isset($model[3][1]) ? $model[3][1] : 0);
                     $hsware_item31->spec_value_2 = (isset($spec_value_2[3][1]) ? $spec_value_2[3][1] : NULL);
@@ -781,6 +834,7 @@ class ComputerController extends \BaseController {
                     $hsware_item31->register_date = trim(\Input::get('register_date'));
                     $hsware_item31->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
                     $hsware_item31->status = 1;
+                    $hsware_item31->spare = 0;
                     $hsware_item31->disabled = 0;
                     $hsware_item31->created_user = \Auth::user()->id;
                     $hsware_item31->save();
@@ -918,6 +972,7 @@ class ComputerController extends \BaseController {
                     foreach (\Input::get('hsware_item') as $item) {
                         $hsware_item = \HswareItem::find($item);
                         $hsware_item->status = 1;
+                        $hsware_item->spare = 0;
                         $hsware_item->save();
 
                         $hslog = new \HswareComputerLog();
@@ -1115,24 +1170,31 @@ class ComputerController extends \BaseController {
                     ->delete();
         }
 
-        if (\DB::table('hsware_item')
+//        if (\DB::table('hsware_item')
+//                        ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+//                        ->where('computer_hsware.computer_id', $param)->count() > 0) {
+
+        $hsware_item = \DB::table('hsware_item')
                         ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                        ->where('computer_hsware.computer_id', $param)->count() > 0) {
+                        ->where('computer_hsware.computer_id', $param)->first();
 
-            $hsware_item = \DB::table('hsware_item')
-                            ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                            ->where('computer_hsware.computer_id', $param)->first();
+        \DB::table('hsware_item')
+                ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
+                ->where('computer_hsware.computer_id', $param)
+                ->update(array('hsware_item.status' => 0));
 
-            \DB::table('hsware_item')
-                    ->join('computer_hsware', 'hsware_item.id', '=', 'computer_hsware.hsware_id')
-                    ->where('computer_hsware.computer_id', $param)
-                    ->update(array('hsware_item.status' => 0));
+        \DB::table('computer_hsware')
+                ->where('computer_id', $param)
+                ->delete();
+//        }
 
-            \DB::table('computer_hsware')
+        if (\DB::table('computer_software')
+                        ->where('computer_id', $param)->count() > 0) {
+            \DB::table('computer_software')
                     ->where('computer_id', $param)
-                    ->where('hsware_id', $hsware_item->hsware_id)
                     ->delete();
         }
+
         $computer_item->delete();
         return \Response::json(array(
                     'error' => array(

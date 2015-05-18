@@ -85,6 +85,19 @@
             </div>
         </section>
     </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="spare_export">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="fa fa-list"></i>
+            </div>
+            <div class="value">
+                <h1 class="spare_count">
+                    {{$spare_count}}
+                </h1>
+                <p>อะไหล่</p>
+            </div>
+        </section>
+    </div>
     <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="hsware_add_spare">
         <section class="panel">
             <div class="symbol green">
@@ -378,6 +391,9 @@
     });
     $('#hsware_list').click(function () {
         window.location.href = base_url + index_page + 'mis/hsware';
+    });
+    $('#spare_export').click(function () {
+        window.location.href = base_url + index_page + 'mis/hsware/spare/export';
     });
     $('#hsware_add_spare').click(function () {
         //window.location.href = base_url + index_page + 'mis/hsware/add?group_id=2&spare=1';

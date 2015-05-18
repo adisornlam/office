@@ -74,6 +74,7 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('hsware/group/model/sub/delete/{id}', 'App\Controllers\HswareController@model_sub_delete');
 
     Route::get('hsware/export/{id}', 'App\Controllers\HswareController@export');
+    Route::get('hsware/spare/export', 'App\Controllers\HswareController@spare_export');
 
     //Testing
     Route::get('testing', 'App\Controllers\TestingController@group');
@@ -116,6 +117,13 @@ Route::group(array('prefix' => 'mis', 'before' => 'authen'), function() {
     Route::get('repairing/ma/listall', 'App\Controllers\RepairingController@ma_listall');
     Route::get('repairing/ma/dialog', 'App\Controllers\RepairingController@ma_dialog');
     Route::match(array('GET', 'POST'), 'repairing/ma/add', array('uses' => 'App\Controllers\RepairingController@ma_add'));
+
+    //formonline
+    Route::get('formonline', 'App\Controllers\FormOnlineController@index');
+    Route::get('formonline/listall', 'App\Controllers\FormOnlineController@listall');
+    Route::match(array('GET', 'POST'), 'formonline/add', array('uses' => 'App\Controllers\FormOnlineController@add'));
+    Route::match(array('GET', 'POST'), 'formonline/edit/{id}', array('uses' => 'App\Controllers\FormOnlineController@edit'));
+    Route::get('formonline/delete/{id}', 'App\Controllers\FormOnlineController@delete');
 });
 
 //WHS
@@ -155,7 +163,6 @@ Route::group(array('prefix' => 'users', 'before' => 'authen'), function() {
     Route::get('view/{id}', 'App\Controllers\UsersController@view');
     Route::get('edit/{id}', 'App\Controllers\UsersController@edit');
 });
-
 
 //Domain
 Route::group(array('prefix' => 'domain', 'before' => 'authen'), function() {
@@ -207,6 +214,16 @@ Route::group(array('prefix' => 'oilservice', 'before' => 'authen'), function() {
     Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\OilController@add'));
     Route::match(array('GET', 'POST'), 'analysis/edit/{id}', array('uses' => 'App\Controllers\OilController@edit'));
     Route::get('analysis/delete/{id}', 'App\Controllers\OilController@analysis_delete');
+});
+
+//Warehos
+Route::group(array('prefix' => 'warehouse', 'before' => 'authen'), function() {
+    Route::get('', 'App\Controllers\WarehouseController@index');
+    Route::get('deadstock', 'App\Controllers\WarehouseController@deadstock');
+    Route::get('deadstock/listall', 'App\Controllers\WarehouseController@deadstock_listall');
+    Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\WarehouseController@add'));
+    Route::match(array('GET', 'POST'), 'analysis/edit/{id}', array('uses' => 'App\Controllers\WarehouseController@edit'));
+    Route::get('analysis/delete/{id}', 'App\Controllers\WarehouseController@analysis_delete');
 });
 
 
@@ -390,7 +407,7 @@ Route::get('get/getOilNas', function() {
     return Response::json($users->get());
 });
 
-// Display all SQL executed in Eloquent
+ //Display all SQL executed in Eloquent
 //Event::listen('illuminate.query', function($query) {
 //    var_dump($query);
 //});

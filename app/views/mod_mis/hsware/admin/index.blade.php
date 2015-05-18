@@ -108,7 +108,7 @@
                     d.group_id = $('#group_id').val();
                     d.company_id = $('#company_id').val();
                     d.status = $('#status').val();
-                    d.spare = $('#spare').val();
+                    d.spare = $("#spare").is(':checked') ? 1 : null;
                 }
             },
             "columnDefs": [{
@@ -123,7 +123,7 @@
                 {"data": "fullname", "title": "ผู้ใช้งาน", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "locations", "title": "Location", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": true},
                 {"data": "group_title", "title": "กลุ่มอุปกรณ์", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "10%", "orderable": false, "searchable": false},
+                {"data": "warranty_date", "title": "วันหมดประกัน", "sClass": "text-center", "width": "12%", "orderable": false, "searchable": false},
                 {"data": "spare", "title": "อะไหล่", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false},
                 {"data": "status", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": false}
             ],
@@ -173,6 +173,12 @@
             } else {
                 oTable.fnDraw();
             }
+        });
+
+        $('#spare').click(function () {
+            delay(function () {
+                oTable.fnDraw();
+            }, 500);
         });
     });
 </script>
