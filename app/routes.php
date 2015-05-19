@@ -221,8 +221,12 @@ Route::group(array('prefix' => 'warehouse', 'before' => 'authen'), function() {
     Route::get('', 'App\Controllers\WarehouseController@index');
     Route::get('deadstock', 'App\Controllers\WarehouseController@deadstock');
     Route::get('deadstock/listall', 'App\Controllers\WarehouseController@deadstock_listall');
-    Route::match(array('GET', 'POST'), 'analysis/add', array('uses' => 'App\Controllers\WarehouseController@add'));
-    Route::match(array('GET', 'POST'), 'analysis/edit/{id}', array('uses' => 'App\Controllers\WarehouseController@edit'));
+    Route::match(array('GET', 'POST'), 'deadstock/import_dialog', array('uses' => 'App\Controllers\WarehouseController@import_dialog'));
+    Route::get('deadstock/import_temp', 'App\Controllers\WarehouseController@deadstock_temp');
+    Route::get('deadstock/import_temp/listall', 'App\Controllers\WarehouseController@deadstock_temp_listall');
+
+    Route::match(array('GET', 'POST'), 'deadstock/add', array('uses' => 'App\Controllers\WarehouseController@add'));
+    Route::match(array('GET', 'POST'), 'deadstock/edit/{id}', array('uses' => 'App\Controllers\WarehouseController@edit'));
     Route::get('analysis/delete/{id}', 'App\Controllers\WarehouseController@analysis_delete');
 });
 
@@ -295,13 +299,16 @@ Route::get('get/hswareddl', function() {
     $input = Input::get('option');
     $company_id = Input::get('company_id');
     $reparing_publem = \RepairingPublem::find($input);
-    $hsware_item = \DB::table('hsware_item')
-            ->where('group_id', $reparing_publem->group_ref_id)
-            ->where('spare', 1)
+    $hsware_item = \DB::table('hsware_item');
+
+    if ($input != 0) {
+        $hsware_item->where('group_id', $reparing_publem->group_ref_id);
+    }
+    $hsware_item->where('spare', 1)
             ->where('company_id', $company_id);
     $hsware_item->select(array(
         'id',
-        \DB::raw('CONCAT(serial_code) as title')
+        \DB::raw('CONCAT(serial_code," ",serial_no) as title')
     ));
     return Response::json($hsware_item->get());
 });
@@ -407,7 +414,7 @@ Route::get('get/getOilNas', function() {
     return Response::json($users->get());
 });
 
- //Display all SQL executed in Eloquent
+//Display all SQL executed in Eloquent
 //Event::listen('illuminate.query', function($query) {
 //    var_dump($query);
 //});

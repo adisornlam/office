@@ -311,6 +311,17 @@
     $('.type_id').click(function () {
         if ($(this).val() == 2) {
             $('#hsware_id').parent().parent().removeClass('hidden');
+            
+            $.get("{{ url('get/hswareddl')}}",
+                    {option: 0, company_id: <?php echo $user->company_id; ?>},
+            function (data) {
+                var hsware_id = $('#hsware_id');
+                hsware_id.empty();
+                hsware_id.append("<option value=''>กรุณาเลือกอะไหล่</option>");
+                $.each(data, function (index, element) {
+                    hsware_id.append("<option value='" + element.id + "'>" + element.title + "</option>");
+                });
+            });
         } else {
             $('#hsware_id').parent().parent().addClass('hidden');
         }
@@ -324,7 +335,7 @@
             $('#sbit').addClass('hidden');
 
             $.get("{{ url('get/hswareddl')}}",
-                    {option: $(this).val(), company_id: <?php echo (\Input::get('company_id') ? \Input::get('company_id') : 0); ?>},
+                    {option: $(this).val(), company_id: <?php echo $user->company_id; ?>},
             function (data) {
                 var hsware_id = $('#hsware_id');
                 hsware_id.empty();

@@ -31,26 +31,13 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="{{URL::to('oilservice/analysis/add')}}" class="btn btn-primary" title="เพิ่มรายการวิเคราะห์" role="button"><i class="fa fa-cloud-upload"></i> นำเข้าไฟล์</a>
+                        <a href="javascript:;" rel="warehouse/deadstock/import_dialog" class="btn btn-primary link_dialog" title="นำเข้าข้อมูล" role="button"><i class="fa fa-cloud-upload"></i> นำเข้าข้อมูล</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{{Form::open(array('name'=>'form-search','id'=>'form-search','method' => 'POST','role'=>'form','class'=>'form-inline'))}}
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel">
-            <div class="panel-body">
-                <div class="pull-left">
-                    {{ \Form::select('type_id', array('' => 'ประเภทน้ำมัน') + \DB::table('oil_type_item')->lists('title', 'id'), null, array('class' => 'form-control', 'id' => 'type_id')); }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{{ Form::close() }}
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
@@ -59,7 +46,7 @@
             </header>
             <div class="panel-body">
                 <div class="adv-table">
-                    <table id="analysis-list" class="table table-bordered hover"></table>
+                    <table id="deadstock-list" class="table table-striped table-bordered"></table>
                 </div>
             </div>
         </section>
@@ -78,7 +65,7 @@
 <script type="text/javascript">
     $(function () {
         $('.dropdown-toggle').dropdown();
-        var oTable = $("#analysis-list").dataTable({
+        var oTable = $("#deadstock-list").dataTable({
             "processing": true,
             "serverSide": true,
             "scrollX": true,
@@ -99,7 +86,7 @@
                 {"data": "type_title", "title": "Type", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "brand", "title": "Brand", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "code_no", "title": "Code", "width": "7%", "orderable": false, "searchable": false},
-                {"data": "description", "title": "Description", "width": "7%", "orderable": false, "searchable": false},
+                {"data": "description", "title": "Description", "width": "20%", "orderable": false, "searchable": false},
                 {"data": "xp5", "title": "XP 5", "width": "5%", "orderable": false, "searchable": false},
                 {"data": "xp51_12", "title": "XP5  1-12", "width": "5%", "orderable": false, "searchable": false},
                 {"data": "xp5a", "title": "XPA", "width": "5%", "orderable": false, "searchable": false},
@@ -108,7 +95,7 @@
                 {"data": "dead2", "title": "2-3 Year 366-731 Day", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "dead3", "title": "2-3 Year 732-1097 Day", "width": "10%", "orderable": false, "searchable": false},
                 {"data": "dead4", "title": "3 Year Up 1097 Day", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "10%", "orderable": false, "searchable": false}
+                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "12%", "orderable": false, "searchable": false}
             ],
             dom: 'T<"clear">lfrtip',
             "tableTools": {

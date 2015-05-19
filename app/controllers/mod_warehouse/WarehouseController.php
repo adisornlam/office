@@ -52,14 +52,14 @@ class WarehouseController extends \BaseController {
         return \View::make('mod_warehouse.warehouse.deadstock.index', $data);
     }
 
-    public function analysis_listall() {
+    public function deadstock_listall() {
         $analysis_item = \DB::table('warehouse_deadstock_item')
-                ->join('warehouse_deadstock_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_deadstock_type.id')
-                ->join('warehouse_deadstock_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_deadstock_brand.id')
+                ->join('warehouse_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_type.id')
+                ->join('warehouse_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_brand.id')
                 ->select(array(
             'warehouse_deadstock_item.id as id',
-            'warehouse_deadstock_type.title as type_title',
-            'warehouse_deadstock_brand.code_no as brand',
+            'warehouse_type.title as type_title',
+            'warehouse_brand.code_no as brand',
             'warehouse_deadstock_item.description as description',
             'warehouse_deadstock_item.xp5 as xp5',
             'warehouse_deadstock_item.xp51_12 as xp51_12',
@@ -71,21 +71,104 @@ class WarehouseController extends \BaseController {
             'warehouse_deadstock_item.dead5 as dead5'
         ));
 
-        if (\Input::has('viscosity')) {
-            $analysis_item->where('oil_analysis_item.type_id', \Input::get('type_id'));
-        }
+//        if (\Input::has('viscosity')) {
+//            $analysis_item->where('warehouse_deadstock_item.type_id', \Input::get('type_id'));
+//        }
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;"  rel="oilservice/analysis/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="oilservice/analysis/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;"  rel="warehouse/deadstock/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
         return \Datatables::of($analysis_item)
                         ->edit_column('id', $link)
                         ->make(true);
+    }
+
+    public function import_dialog() {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_warehouse.warehouse.deadstock.import_dialog');
+        } else {
+            $destinationPath = 'uploads/warehouse/deadstock/';
+            $files = \Request::file('deadstock_file');
+            $extension = $files->getClientOriginalExtension();
+            $newfilename = time() . '.' . $extension;
+            $files->move($destinationPath, $newfilename);
+
+            $fullpath = $destinationPath . $newfilename;
+            $file = fopen($fullpath, "r");
+            while (!feof($file)) {
+                $item = fgetcsv($file);
+                $temp_import = new \WarehouseDeadstockTempImport();
+                $temp_import->type = $item[0];
+                $temp_import->brand = $item[1];
+                $temp_import->code_no = $item[2];
+                $temp_import->description = $item[3];
+                $temp_import->xp5 = $item[4];
+                $temp_import->xp51_12 = $item[5];
+                $temp_import->xp5a = $item[6];
+                $temp_import->unit = $item[7];
+                $temp_import->price_per_unit = $item[8];
+                $temp_import->total_value = $item[9];
+                $temp_import->dead1 = $item[10];
+                $temp_import->dead2 = $item[11];
+                $temp_import->dead3 = $item[12];
+                $temp_import->dead4 = $item[13];
+                $temp_import->dead5 = $item[14];
+                $temp_import->summary = $item[15];
+                $temp_import->import_date = \Input::get('import_date');
+                $temp_import->save();
+            }
+            fclose($file);
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => TRUE,
+                            'message' => NULL
+                        ), 200));
+        }
+    }
+
+    public function deadstock_temp_listall() {
+        $deadstock_temp_item = \DB::table('warehouse_deadstock_temp_import')
+                ->select(array(
+            'warehouse_deadstock_temp_import.id as id',
+            'warehouse_deadstock_temp_import.type as type',
+            'warehouse_deadstock_temp_import.brand as brand',
+            'warehouse_deadstock_temp_import.code_no as code_no',
+            'warehouse_deadstock_temp_import.description as description',
+            'warehouse_deadstock_temp_import.xp5 as xp5',
+            'warehouse_deadstock_temp_import.xp51_12 as xp51_12',
+            'warehouse_deadstock_temp_import.xp5a as xp5a',
+            'warehouse_deadstock_temp_import.unit as unit',
+            'warehouse_deadstock_temp_import.price_per_unit as price_per_unit',
+            'warehouse_deadstock_temp_import.total_value as total_value',
+            'warehouse_deadstock_temp_import.dead1 as dead1',
+            'warehouse_deadstock_temp_import.dead2 as dead2',
+            'warehouse_deadstock_temp_import.dead3 as dead3',
+            'warehouse_deadstock_temp_import.dead4 as dead4',
+            'warehouse_deadstock_temp_import.dead5 as dead5',
+            'warehouse_deadstock_temp_import.summary as summary'
+        ));
+
+        return \Datatables::of($deadstock_temp_item)
+                        ->make(true);
+    }
+
+    public function deadstock_temp() {
+        $data = array(
+            'title' => 'รายการนำเข้าข้อมูล',
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายคลังสินค้า' => 'warehouse',
+                'รายการสินค้าคงค้าง' => 'warehouse/deadstock',
+                'รายการนำเข้าข้อมูล' => '#'
+            )
+        );
+
+        return \View::make('mod_warehouse.warehouse.deadstock.import_temp', $data);
     }
 
     public function add() {
