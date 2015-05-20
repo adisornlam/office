@@ -23,16 +23,29 @@
     <h1>Dead Stock <small>Report</small></h1>
 </div>
 <div class="row state-overview">
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="warehouse_report_list">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="warehouse_deadstock_list">
         <section class="panel">
             <div class="symbol red">
                 <i class="fa fa-cubes"></i>
             </div>
             <div class="value">
                 <h1 class=" count2">
-                    0
+                    {{$deadstock_count}}
                 </h1>
                 <p>รายการสินค้าคงค้าง</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="warehouse_deadstock_report_list">
+        <section class="panel">
+            <div class="symbol blue">
+                <i class="fa fa-bar-chart"></i>
+            </div>
+            <div class="value">
+                <h1 class=" count2">
+                    0
+                </h1>
+                <p>ประวัติรายการ Dead Stock</p>
             </div>
         </section>
     </div>
@@ -41,12 +54,12 @@
 
 @section('script_code')
 <script type="text/javascript">
-    $('#warehouse_report_list').click(function () {
+    $('#warehouse_deadstock_list').click(function () {
         window.location.href = base_url + index_page + 'warehouse/deadstock';
     });
 
-    $('#oilservice_analysis_report_add').click(function () {
-        window.location.href = base_url + index_page + 'oilservice/analysis/add';
+    $('#warehouse_deadstock_report_list').click(function () {
+        window.location.href = base_url + index_page + 'oilservice/deadstock/report';
     });
 //    $('#oilservice_analysis_report_add').click(function () {
 //        var data = {

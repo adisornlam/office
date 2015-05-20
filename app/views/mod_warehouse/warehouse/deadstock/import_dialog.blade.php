@@ -41,6 +41,12 @@
         $('#btnDialogSave').click(function () {
             $('#btnDialogSave').attr('disabled', 'disabled');
             $('#form-add').ajaxSubmit(options);
+            var data = {
+                title: 'Loading',
+                type: 'alert',
+                text: '<div class="text-center"><p><i class="fa fa-spinner fa-spin fa-2x"></i></p></div>'
+            };
+            genModal(data);
         });
     });
 

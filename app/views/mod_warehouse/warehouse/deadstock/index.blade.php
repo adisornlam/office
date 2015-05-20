@@ -38,6 +38,20 @@
         </div>
     </div>
 </div>
+{{Form::open(array('name'=>'form-search','id'=>'form-search','method' => 'POST','role'=>'form','class'=>'form-inline'))}}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="pull-left">      
+                    {{ \Form::select('type_id', array(''=>'Type')+\DB::table('warehouse_type')->select(array('code_no as id',\DB::raw('CONCAT("(",code_no,") ",title) as title')))->lists('title','id'),null, array('class' => 'form-control', 'id' => 'type_id')); }}
+                    {{ \Form::select('brand_id', array(''=>'Brand')+\DB::table('warehouse_brand')->select(array('code_no as id',\DB::raw('CONCAT("(",code_no,") ",title) as title')))->lists('title','id'), null, array('class' => 'form-control', 'id' => 'brand_id')); }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ Form::close() }}
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
@@ -74,7 +88,8 @@
             "ajax": {
                 "url": base_url + index_page + "warehouse/deadstock/listall",
                 "data": function (d) {
-                    d.viscosity = $('#viscosity').val();
+                    d.type_id = $('#type_id').val();
+                    d.brand_id = $('#brand_id').val();
                 }
             },
             "columnDefs": [{
@@ -83,19 +98,20 @@
                 }],
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "type_title", "title": "Type", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "brand", "title": "Brand", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "code_no", "title": "Code", "width": "7%", "orderable": false, "searchable": false},
-                {"data": "description", "title": "Description", "width": "20%", "orderable": false, "searchable": false},
+                {"data": "type_title", "title": "Type", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "brand", "title": "Brand", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": true},
+                {"data": "code_no", "title": "Code", "width": "7%", "orderable": false, "searchable": true},
+                {"data": "description", "title": "Description", "width": "20%", "orderable": false, "searchable": true},
                 {"data": "xp5", "title": "XP 5", "width": "5%", "orderable": false, "searchable": false},
                 {"data": "xp51_12", "title": "XP5  1-12", "width": "5%", "orderable": false, "searchable": false},
                 {"data": "xp5a", "title": "XPA", "width": "5%", "orderable": false, "searchable": false},
                 {"data": "unit", "title": "Unit", "width": "5%", "orderable": false, "searchable": false},
-                {"data": "dead1", "title": "1 Year 1-365 Day", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "dead2", "title": "2-3 Year 366-731 Day", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "dead3", "title": "2-3 Year 732-1097 Day", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "dead4", "title": "3 Year Up 1097 Day", "width": "10%", "orderable": false, "searchable": false},
-                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "12%", "orderable": false, "searchable": false}
+                {"data": "dead1", "title": "1 Year 1-365 Day", "orderable": false, "searchable": false},
+                {"data": "dead2", "title": "2-3 Year 366-731 Day", "orderable": false, "searchable": false},
+                {"data": "dead3", "title": "2-3 Year 732-1097 Day", "orderable": false, "searchable": false},
+                {"data": "dead4", "title": "3 Year Up 1097 Day", "orderable": false, "searchable": false},
+                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "orderable": false, "searchable": false},
+                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ],
             dom: 'T<"clear">lfrtip',
             "tableTools": {
@@ -115,7 +131,16 @@
                 ]
             }
         });
-        $('#viscosity').on('change', function () {
+        $('#type_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#brand_id').on('change', function () {
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();

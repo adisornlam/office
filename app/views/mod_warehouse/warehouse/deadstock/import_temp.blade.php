@@ -30,7 +30,7 @@
             <div class="panel-body">
                 <div class="pull-left">
                     <div class="btn-group">
-                        <a href="javascript:;" class="btn btn-primary" title="บันทึกการนำเข้าข้อมูล" role="button" id="btnImportSave"><i class="fa fa-save"></i> บันทึกการนำเข้าข้อมูล</a>
+                        <button name="btnImportSave" id="btnImportSave" class="btn btn-primary btn-lg"><i class="fa fa-save"></i> บันทึกการนำเข้าข้อมูล</button>
                     </div>
                 </div>
             </div>
@@ -95,9 +95,35 @@
             ]
         });
     });
-
     $('#btnImportSave').click(function () {
-
+        $('#btnDialogSave').attr('disabled', 'disabled');
+        var data = {
+            title: 'Loading',
+            type: 'alert',
+            text: '<div class="text-center"><p><i class="fa fa-spinner fa-spin fa-2x"></i></p></div>'
+        };
+        genModal(data);
+        $.ajax({
+            type: "post",
+            url: base_url + index_page + 'warehouse/deadstock/import_save',
+            data: {check: 1},
+            cache: false,
+            async: false,
+            success: function (result) {
+                try {
+                    if (result.error.status === true) {
+                        window.location.href = base_url + index_page + "warehouse/deadstock";
+                    } else {
+                        window.location.href = base_url + index_page + "warehouse/deadstock/import_temp";
+                    }
+                } catch (e) {
+                    alert('Exception while request..');
+                }
+            },
+            error: function (e) {
+                alert('Error while request..');
+            }
+        });
     });
 </script>
 @stop

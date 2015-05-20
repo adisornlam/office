@@ -178,6 +178,13 @@ $('body').on('click', '.link_dialog', function () {
                 title: $(this).attr('title')
             };
             deleteData(data);
+        } else if ($(this).hasClass('confirm')) {
+            var data = {
+                url: $(this).attr('rel'),
+                title: $(this).attr('title'),
+                type: 'confirm'
+            };
+            genModal(data);
         } else {
             var data = {
                 url: $(this).attr('rel'),

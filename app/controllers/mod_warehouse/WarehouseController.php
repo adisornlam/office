@@ -26,7 +26,8 @@ class WarehouseController extends \BaseController {
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายคลังสินค้า' => '#'
-            )
+            ),
+            'deadstock_count' => \WarehouseDeadstockItem::count(),
         );
         if ($check->is('administrator')) {
             return \View::make('mod_mis.home.admin.index', $data);
@@ -54,26 +55,33 @@ class WarehouseController extends \BaseController {
 
     public function deadstock_listall() {
         $analysis_item = \DB::table('warehouse_deadstock_item')
-                ->join('warehouse_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_type.id')
-                ->join('warehouse_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_brand.id')
+                ->leftJoin('warehouse_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_type.code_no')
+                ->leftJoin('warehouse_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_brand.code_no')
                 ->select(array(
             'warehouse_deadstock_item.id as id',
             'warehouse_type.title as type_title',
-            'warehouse_brand.code_no as brand',
+            'warehouse_brand.title as brand',
+            'warehouse_deadstock_item.code_no as code_no',
             'warehouse_deadstock_item.description as description',
             'warehouse_deadstock_item.xp5 as xp5',
             'warehouse_deadstock_item.xp51_12 as xp51_12',
             'warehouse_deadstock_item.xp5a as xp5a',
+            'warehouse_deadstock_item.unit as unit',
             'warehouse_deadstock_item.dead1 as dead1',
             'warehouse_deadstock_item.dead2 as dead2',
             'warehouse_deadstock_item.dead3 as dead3',
             'warehouse_deadstock_item.dead4 as dead4',
-            'warehouse_deadstock_item.dead5 as dead5'
+            'warehouse_deadstock_item.dead5 as dead5',
+            'warehouse_deadstock_item.disabled as disabled'
         ));
 
-//        if (\Input::has('viscosity')) {
-//            $analysis_item->where('warehouse_deadstock_item.type_id', \Input::get('type_id'));
-//        }
+        if (\Input::has('type_id')) {
+            $analysis_item->where('warehouse_deadstock_item.type_id', \Input::get('type_id'));
+        }
+
+        if (\Input::has('brand_id')) {
+            $analysis_item->where('warehouse_deadstock_item.brand_id', \Input::get('brand_id'));
+        }
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -85,6 +93,39 @@ class WarehouseController extends \BaseController {
 
         return \Datatables::of($analysis_item)
                         ->edit_column('id', $link)
+                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->edit_column('xp5', function($result_obj) {
+                            $str = ($result_obj->xp5 != '0.00' ? $result_obj->xp5 : '');
+                            return $str;
+                        })
+                        ->edit_column('xp51_12', function($result_obj) {
+                            $str = ($result_obj->xp51_12 != '0.00' ? $result_obj->xp51_12 : '');
+                            return $str;
+                        })
+                        ->edit_column('xp5a', function($result_obj) {
+                            $str = ($result_obj->xp5a != '0.00' ? $result_obj->xp5a : '');
+                            return $str;
+                        })
+                        ->edit_column('dead1', function($result_obj) {
+                            $str = ($result_obj->dead1 != '0.00' ? number_format($result_obj->dead1, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead2', function($result_obj) {
+                            $str = ($result_obj->dead2 != '0.00' ? number_format($result_obj->dead2, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead3', function($result_obj) {
+                            $str = ($result_obj->dead3 != '0.00' ? number_format($result_obj->dead3, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead4', function($result_obj) {
+                            $str = ($result_obj->dead4 != '0.00' ? number_format($result_obj->dead4, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead5', function($result_obj) {
+                            $str = ($result_obj->dead5 != '0.00' ? number_format($result_obj->dead5, 2) : '');
+                            return $str;
+                        })
                         ->make(true);
     }
 
@@ -102,25 +143,27 @@ class WarehouseController extends \BaseController {
             $file = fopen($fullpath, "r");
             while (!feof($file)) {
                 $item = fgetcsv($file);
-                $temp_import = new \WarehouseDeadstockTempImport();
-                $temp_import->type = $item[0];
-                $temp_import->brand = $item[1];
-                $temp_import->code_no = $item[2];
-                $temp_import->description = $item[3];
-                $temp_import->xp5 = $item[4];
-                $temp_import->xp51_12 = $item[5];
-                $temp_import->xp5a = $item[6];
-                $temp_import->unit = $item[7];
-                $temp_import->price_per_unit = $item[8];
-                $temp_import->total_value = $item[9];
-                $temp_import->dead1 = $item[10];
-                $temp_import->dead2 = $item[11];
-                $temp_import->dead3 = $item[12];
-                $temp_import->dead4 = $item[13];
-                $temp_import->dead5 = $item[14];
-                $temp_import->summary = $item[15];
-                $temp_import->import_date = \Input::get('import_date');
-                $temp_import->save();
+                if ($item[0] != '') {
+                    $temp_import = new \WarehouseDeadstockTempImport();
+                    $temp_import->type = trim($item[0]);
+                    $temp_import->brand = trim($item[1]);
+                    $temp_import->code_no = trim($item[2]);
+                    $temp_import->description = trim($item[3]);
+                    $temp_import->xp5 = trim($item[4]);
+                    $temp_import->xp51_12 = trim($item[5]);
+                    $temp_import->xp5a = trim($item[6]);
+                    $temp_import->unit = trim($item[7]);
+                    $temp_import->price_per_unit = trim($item[8]);
+                    $temp_import->total_value = trim($item[9]);
+                    $temp_import->dead1 = trim($item[10]);
+                    $temp_import->dead2 = trim($item[11]);
+                    $temp_import->dead3 = trim($item[12]);
+                    $temp_import->dead4 = trim($item[13]);
+                    $temp_import->dead5 = trim($item[14]);
+                    $temp_import->summary = trim($item[15]);
+                    $temp_import->import_date = \Input::get('import_date');
+                    $temp_import->save();
+                }
             }
             fclose($file);
             return \Response::json(array(
@@ -169,6 +212,111 @@ class WarehouseController extends \BaseController {
         );
 
         return \View::make('mod_warehouse.warehouse.deadstock.import_temp', $data);
+    }
+
+    public function import_save() {
+        \DB::table('warehouse_deadstock_item')->truncate();
+        \DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_item();'));
+        \DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_log();'));
+        \DB::table('warehouse_deadstock_temp_import')->truncate();
+        return \Response::json(array(
+                    'error' => array(
+                        'status' => TRUE,
+                        'message' => NULL
+                    ), 200));
+    }
+
+    public function deadstock_report_listall() {
+        $analysis_item = \DB::table('warehouse_deadstock_item_log')
+                ->leftJoin('warehouse_type', 'warehouse_deadstock_item_log.type_id', '=', 'warehouse_type.code_no')
+                ->leftJoin('warehouse_brand', 'warehouse_deadstock_item_log.brand_id', '=', 'warehouse_brand.code_no')
+                ->select(array(
+            'warehouse_deadstock_item_log.id as id',
+            'warehouse_type.title as type_title',
+            'warehouse_brand.title as brand',
+            'warehouse_deadstock_item_log.code_no as code_no',
+            'warehouse_deadstock_item_log.description as description',
+            'warehouse_deadstock_item_log.xp5 as xp5',
+            'warehouse_deadstock_item_log.xp51_12 as xp51_12',
+            'warehouse_deadstock_item_log.xp5a as xp5a',
+            'warehouse_deadstock_item_log.unit as unit',
+            'warehouse_deadstock_item_log.dead1 as dead1',
+            'warehouse_deadstock_item_log.dead2 as dead2',
+            'warehouse_deadstock_item_log.dead3 as dead3',
+            'warehouse_deadstock_item_log.dead4 as dead4',
+            'warehouse_deadstock_item_log.dead5 as dead5',
+            'warehouse_deadstock_item_log.disabled as disabled'
+        ));
+
+        if (\Input::has('type_id')) {
+            $analysis_item->where('warehouse_deadstock_item_log.type_id', \Input::get('type_id'));
+        }
+
+        if (\Input::has('brand_id')) {
+            $analysis_item->where('warehouse_deadstock_item_log.brand_id', \Input::get('brand_id'));
+        }
+
+        $link = '<div class="dropdown">';
+        $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
+        $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="javascript:;"  rel="warehouse/deadstock/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
+        $link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '</ul>';
+        $link .= '</div>';
+
+        return \Datatables::of($analysis_item)
+                        ->edit_column('id', $link)
+                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->edit_column('xp5', function($result_obj) {
+                            $str = ($result_obj->xp5 != '0.00' ? $result_obj->xp5 : '');
+                            return $str;
+                        })
+                        ->edit_column('xp51_12', function($result_obj) {
+                            $str = ($result_obj->xp51_12 != '0.00' ? $result_obj->xp51_12 : '');
+                            return $str;
+                        })
+                        ->edit_column('xp5a', function($result_obj) {
+                            $str = ($result_obj->xp5a != '0.00' ? $result_obj->xp5a : '');
+                            return $str;
+                        })
+                        ->edit_column('dead1', function($result_obj) {
+                            $str = ($result_obj->dead1 != '0.00' ? number_format($result_obj->dead1, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead2', function($result_obj) {
+                            $str = ($result_obj->dead2 != '0.00' ? number_format($result_obj->dead2, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead3', function($result_obj) {
+                            $str = ($result_obj->dead3 != '0.00' ? number_format($result_obj->dead3, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead4', function($result_obj) {
+                            $str = ($result_obj->dead4 != '0.00' ? number_format($result_obj->dead4, 2) : '');
+                            return $str;
+                        })
+                        ->edit_column('dead5', function($result_obj) {
+                            $str = ($result_obj->dead5 != '0.00' ? number_format($result_obj->dead5, 2) : '');
+                            return $str;
+                        })
+                        ->make(true);
+    }
+
+    public function deadstock_report() {
+        $import_date = \DB::table('warehouse_deadstock_item_log')
+                ->orderBy('import_date', 'ASC')
+                ->groupBy('import_date')
+                ->get();
+        $data = array(
+            'title' => 'ประวัติรายการ Dead Stock',
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายคลังสินค้า' => 'warehouse',
+                'ประวัติรายการ Dead Stock' => '#'
+            )
+        );
+
+        return \View::make('mod_warehouse.warehouse.deadstock.index', $data);
     }
 
     public function add() {
