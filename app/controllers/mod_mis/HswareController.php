@@ -61,6 +61,7 @@ class HswareController extends \BaseController {
             'hsware_item.id as item_id',
             'hsware_item.sub_model as sub_model_id ',
             'hsware_item.serial_code as serial_code',
+            'hsware_item.serial_no as serial_no',
             'hsware_model.title as title',
             'computer_item.title as computer_title',
             \DB::raw('CONCAT(users.firstname," ",users.lastname) as fullname'),
@@ -532,6 +533,7 @@ class HswareController extends \BaseController {
         } else {
             $rules = array(
                 'group_id' => 'required',
+                'serial_no' => 'unique:hsware_item,serial_no',
                 'photo1' => 'image|mimes:jpeg,png|max:512',
                 'photo2' => 'image|mimes:jpeg,png|max:512',
                 'photo3' => 'image|mimes:jpeg,png|max:512',

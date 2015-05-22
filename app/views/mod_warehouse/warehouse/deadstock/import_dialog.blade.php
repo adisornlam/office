@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="form-group">
-    {{Form::label('company_id', 'เลือกไฟล์อัพโหลด', array('class' => 'col-sm-3 control-label'));}}
+    {{Form::label('deadstock_file', 'เลือกไฟล์อัพโหลด', array('class' => 'col-sm-3 control-label'));}}
     <div class="col-sm-8">
         <input type="file" class="default" name="deadstock_file" />
     </div>
@@ -52,7 +52,13 @@
 
     function showResponse(response, statusText, xhr, $form) {
         if (response.error.status === false) {
-
+            $('#form-add .form-group').removeClass('has-error');
+            $('#form-add .help-block').remove();
+            $('#form-add #btnDialogSave').removeAttr('disabled');
+            $.each(response.error.message, function (key, value) {
+                $('#' + key).parent().parent().addClass('has-error');
+                $('#' + key).after('<p class="help-block">' + value + '</p>');
+            });
         } else {
             window.location.href = base_url + index_page + "warehouse/deadstock/import_temp";
         }

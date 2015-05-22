@@ -102,8 +102,8 @@
                 <div class="form-group">
                     {{Form::label('role_id', 'กลุ่ม', array('class' => 'col-sm-3 control-label req'));}}
                     <div class="col-sm-5">
-                        {{ \Form::select('role_id', array('' => 'เลือกกลุ่ม') + DB::table('roles')
-                                ->lists('name', 'id'), $role_id, array('class' => 'form-control', 'id' => 'role_id')); }}
+                        {{ \Form::select('role_id[]', \DB::table('roles')
+                                ->lists('name', 'id'), $role_id, array('class' => 'form-control', 'id' => 'role_id','multiple' => true)); }}
                     </div>
                 </div>
                 <div class="form-group">

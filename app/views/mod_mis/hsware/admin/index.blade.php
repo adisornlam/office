@@ -118,6 +118,7 @@
             "columns": [
                 {"data": "id", "width": "2%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "serial_code", "title": "เลขระเบียน", "width": "10%", "orderable": true, "searchable": true},
+                {"data": "serial_no", "title": "S/N", "width": "10%", "orderable": true, "searchable": true},
                 {"data": "title", "title": "รายการ", "width": "30%", "orderable": false, "searchable": true},
                 {"data": "computer_title", "title": "ชื่อเครื่อง", "width": "15%", "orderable": false, "searchable": true},
                 {"data": "fullname", "title": "ผู้ใช้งาน", "width": "15%", "orderable": false, "searchable": true},

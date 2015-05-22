@@ -156,7 +156,7 @@ class UsersController extends \BaseController {
                     'แก้ไขข้อมูลส่วนตัว' => '#'
                 ),
                 'item' => $item,
-                'role_id' => ($role->role_id)
+                'role_id' => (isset($role->role_id) ? $role->role_id : 0)
             );
             if ($check->is('administrator')) {
                 return \View::make('mod_users.admin.users.edit', $data);
@@ -167,8 +167,7 @@ class UsersController extends \BaseController {
             $rules = array(
                 'company_id' => 'required',
                 'firstname' => 'required',
-                'lastname' => 'required',
-                'role_id' => 'required'
+                'lastname' => 'required'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -203,7 +202,8 @@ class UsersController extends \BaseController {
                 $user->verified = (\Input::has('verified') ? 1 : 0);
                 $user->save();
 
-                $user->roles()->sync(array(\Input::get('role_id')));
+
+                $user->roles()->sync(\Input::get('role_id'));
 
                 return \Response::json(array(
                             'error' => array(

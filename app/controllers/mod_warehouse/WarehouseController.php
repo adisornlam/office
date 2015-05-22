@@ -54,7 +54,7 @@ class WarehouseController extends \BaseController {
     }
 
     public function deadstock_listall() {
-        $analysis_item = \DB::table('warehouse_deadstock_item')
+        $deadstock_item = \DB::table('warehouse_deadstock_item')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_brand.code_no')
                 ->select(array(
@@ -74,26 +74,30 @@ class WarehouseController extends \BaseController {
             'warehouse_deadstock_item.dead5 as dead5',
             'warehouse_deadstock_item.disabled as disabled'
         ));
-
         if (\Input::has('type_id')) {
-            $analysis_item->where('warehouse_deadstock_item.type_id', \Input::get('type_id'));
+            $deadstock_item->where('warehouse_deadstock_item.type_id', \Input::get('type_id'));
         }
 
         if (\Input::has('brand_id')) {
-            $analysis_item->where('warehouse_deadstock_item.brand_id', \Input::get('brand_id'));
+            $deadstock_item->where('warehouse_deadstock_item.brand_id', \Input::get('brand_id'));
         }
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
-        $link .= '<li><a href="javascript:;"  rel="warehouse/deadstock/edit/{{$id}}" class="link_dialog" title="แก้ไขรายการ"><i class="fa fa-pencil-square-o"></i> แก้ไขรายการ</a></li>';
-        $link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
+        $link .= '<li><a href="javascript:;"  rel="warehouse/deadstock/upload/photo/{{$id}}" class="link_dialog" title="เพิ่มรูปภาพ {{$code_no}}"><i class="fa fa-picture-o"></i> เพิ่มรูปภาพ</a></li>';
+        //$link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
 
-        return \Datatables::of($analysis_item)
+        return \Datatables::of($deadstock_item)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->add_column('cover', function($result_obj) {
+                            $photo = \WarehouseDeadstockPhotoItem::where('deadstock_code_no', '=', $result_obj->code_no)->where('photo_cover', '=', 1)->first();
+                            $str = (isset($photo->photo_resize) ? $photo->photo_resize : null);
+                            return $str;
+                        })
                         ->edit_column('xp5', function($result_obj) {
                             $str = ($result_obj->xp5 != '0.00' ? $result_obj->xp5 : '');
                             return $str;
@@ -133,44 +137,56 @@ class WarehouseController extends \BaseController {
         if (!\Request::isMethod('post')) {
             return \View::make('mod_warehouse.warehouse.deadstock.import_dialog');
         } else {
-            $destinationPath = 'uploads/warehouse/deadstock/';
-            $files = \Request::file('deadstock_file');
-            $extension = $files->getClientOriginalExtension();
-            $newfilename = time() . '.' . $extension;
-            $files->move($destinationPath, $newfilename);
+            $rules = array(
+                'import_date' => 'required'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $destinationPath = 'uploads/warehouse/deadstock/';
+                $files = \Request::file('deadstock_file');
+                $extension = $files->getClientOriginalExtension();
+                $newfilename = time() . '.' . $extension;
+                $files->move($destinationPath, $newfilename);
 
-            $fullpath = $destinationPath . $newfilename;
-            $file = fopen($fullpath, "r");
-            while (!feof($file)) {
-                $item = fgetcsv($file);
-                if ($item[0] != '') {
-                    $temp_import = new \WarehouseDeadstockTempImport();
-                    $temp_import->type = trim($item[0]);
-                    $temp_import->brand = trim($item[1]);
-                    $temp_import->code_no = trim($item[2]);
-                    $temp_import->description = trim($item[3]);
-                    $temp_import->xp5 = trim($item[4]);
-                    $temp_import->xp51_12 = trim($item[5]);
-                    $temp_import->xp5a = trim($item[6]);
-                    $temp_import->unit = trim($item[7]);
-                    $temp_import->price_per_unit = trim($item[8]);
-                    $temp_import->total_value = trim($item[9]);
-                    $temp_import->dead1 = trim($item[10]);
-                    $temp_import->dead2 = trim($item[11]);
-                    $temp_import->dead3 = trim($item[12]);
-                    $temp_import->dead4 = trim($item[13]);
-                    $temp_import->dead5 = trim($item[14]);
-                    $temp_import->summary = trim($item[15]);
-                    $temp_import->import_date = \Input::get('import_date');
-                    $temp_import->save();
+                $fullpath = $destinationPath . $newfilename;
+                $file = fopen($fullpath, "r");
+                while (!feof($file)) {
+                    $item = fgetcsv($file);
+                    if ($item[0] != '') {
+                        $temp_import = new \WarehouseDeadstockTempImport();
+                        $temp_import->type = trim($item[0]);
+                        $temp_import->brand = trim($item[1]);
+                        $temp_import->code_no = trim($item[2]);
+                        $temp_import->description = trim($item[3]);
+                        $temp_import->xp5 = trim($item[4]);
+                        $temp_import->xp51_12 = trim($item[5]);
+                        $temp_import->xp5a = trim($item[6]);
+                        $temp_import->unit = trim($item[7]);
+                        $temp_import->price_per_unit = trim($item[8]);
+                        $temp_import->total_value = trim($item[9]);
+                        $temp_import->dead1 = trim($item[10]);
+                        $temp_import->dead2 = trim($item[11]);
+                        $temp_import->dead3 = trim($item[12]);
+                        $temp_import->dead4 = trim($item[13]);
+                        $temp_import->dead5 = trim($item[14]);
+                        $temp_import->summary = trim($item[15]);
+                        $temp_import->import_date = \Input::get('import_date');
+                        $temp_import->save();
+                    }
                 }
+                fclose($file);
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => TRUE,
+                                'message' => NULL
+                            ), 200));
             }
-            fclose($file);
-            return \Response::json(array(
-                        'error' => array(
-                            'status' => TRUE,
-                            'message' => NULL
-                        ), 200));
         }
     }
 
@@ -227,6 +243,7 @@ class WarehouseController extends \BaseController {
     }
 
     public function deadstock_report_listall() {
+        
         $analysis_item = \DB::table('warehouse_deadstock_item_log')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item_log.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item_log.brand_id', '=', 'warehouse_brand.code_no')
@@ -247,13 +264,9 @@ class WarehouseController extends \BaseController {
             'warehouse_deadstock_item_log.dead5 as dead5',
             'warehouse_deadstock_item_log.disabled as disabled'
         ));
-
-        if (\Input::has('type_id')) {
-            $analysis_item->where('warehouse_deadstock_item_log.type_id', \Input::get('type_id'));
-        }
-
-        if (\Input::has('brand_id')) {
-            $analysis_item->where('warehouse_deadstock_item_log.brand_id', \Input::get('brand_id'));
+        
+        if (\Input::has('import_date_from')) {
+            $analysis_item->whereBetween('warehouse_deadstock_item_log.import_date', array(\Input::get('import_date_from'), (\Input::get('import_date_to') ? \Input::get('import_date_to') : date('Y-m-d'))));
         }
 
         $link = '<div class="dropdown">';
@@ -267,6 +280,11 @@ class WarehouseController extends \BaseController {
         return \Datatables::of($analysis_item)
                         ->edit_column('id', $link)
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
+                        ->add_column('cover', function($result_obj) {
+                            $photo = \WarehouseDeadstockPhotoItem::where('deadstock_code_no', '=', $result_obj->code_no)->where('photo_cover', '=', 1)->first();
+                            $str = (isset($photo->photo_resize) ? $photo->photo_resize : null);
+                            return $str;
+                        })
                         ->edit_column('xp5', function($result_obj) {
                             $str = ($result_obj->xp5 != '0.00' ? $result_obj->xp5 : '');
                             return $str;
@@ -304,19 +322,102 @@ class WarehouseController extends \BaseController {
 
     public function deadstock_report() {
         $import_date = \DB::table('warehouse_deadstock_item_log')
-                ->orderBy('import_date', 'ASC')
                 ->groupBy('import_date')
-                ->get();
+                ->select(array('import_date'))
+                ->lists('import_date', 'import_date');
         $data = array(
             'title' => 'ประวัติรายการ Dead Stock',
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายคลังสินค้า' => 'warehouse',
                 'ประวัติรายการ Dead Stock' => '#'
-            )
+            ),
+            'import_date_from' => $import_date,
+            'import_date_to' => $import_date
         );
 
-        return \View::make('mod_warehouse.warehouse.deadstock.index', $data);
+        return \View::make('mod_warehouse.warehouse.deadstock.report', $data);
+    }
+
+    public function upload_dialog($param) {
+        if (!\Request::isMethod('post')) {
+            return \View::make('mod_warehouse.warehouse.deadstock.upload_dialog', array('id' => $param));
+        } else {
+            $rules = array(
+                'deadstock_photo1' => 'image|mimes:jpeg,png|max:512',
+                'deadstock_photo2' => 'image|mimes:jpeg,png|max:512',
+                'deadstock_photo3' => 'image|mimes:jpeg,png|max:512',
+                'deadstock_photo4' => 'image|mimes:jpeg,png|max:512',
+                'deadstock_photo5' => 'image|mimes:jpeg,png|max:512'
+            );
+            $validator = \Validator::make(\Input::all(), $rules);
+            if ($validator->fails()) {
+                return \Response::json(array(
+                            'error' => array(
+                                'status' => FALSE,
+                                'message' => $validator->errors()->toArray()
+                            ), 400));
+            } else {
+                $photo1 = \Input::file('deadstock_photo1');
+                $photo2 = \Input::file('deadstock_photo2');
+                $photo3 = \Input::file('deadstock_photo3');
+                $photo4 = \Input::file('deadstock_photo4');
+                $photo5 = \Input::file('deadstock_photo5');
+
+                $destinationPath = 'uploads/warehouse/deadstock/' . date('Ymd') . '/';
+                $deadstock_item = \WarehouseDeadstockItem::find($param);
+                if ($photo1) {
+                    $up1 = $this->upload_photo($photo1, $destinationPath);
+                    $photo_item1 = new \WarehouseDeadstockPhotoItem();
+                    $photo_item1->deadstock_code_no = $deadstock_item->code_no;
+                    $photo_item1->photo_full = $up1['full'];
+                    $photo_item1->photo_resize = $up1['resize'];
+                    $photo_item1->photo_cover = 1;
+                    $photo_item1->save();
+                }
+
+                if ($photo2) {
+                    $up2 = $this->upload_photo($photo2, $destinationPath);
+                    $photo_item2 = new \WarehouseDeadstockPhotoItem();
+                    $photo_item2->deadstock_code_no = $deadstock_item->code_no;
+                    $photo_item2->photo_full = $up2['full'];
+                    $photo_item2->photo_resize = $up2['resize'];
+                    $photo_item2->save();
+                }
+
+                if ($photo3) {
+                    $up3 = $this->upload_photo($photo3, $destinationPath);
+                    $photo_item3 = new \WarehouseDeadstockPhotoItem();
+                    $photo_item3->deadstock_code_no = $deadstock_item->code_no;
+                    $photo_item3->photo_full = $up3['full'];
+                    $photo_item3->photo_resize = $up3['resize'];
+                    $photo_item3->save();
+                }
+
+                if ($photo4) {
+                    $up4 = $this->upload_photo($photo4, $destinationPath);
+                    $photo_item4 = new \WarehouseDeadstockPhotoItem();
+                    $photo_item4->deadstock_code_no = $deadstock_item->code_no;
+                    $photo_item4->photo_full = $up4['full'];
+                    $photo_item4->photo_resize = $up4['resize'];
+                    $photo_item4->save();
+                }
+
+                if ($photo5) {
+                    $up5 = $this->upload_photo($photo5, $destinationPath);
+                    $photo_item5 = new \WarehouseDeadstockPhotoItem();
+                    $photo_item5->deadstock_code_no = $deadstock_item->code_no;
+                    $photo_item5->photo_full = $up5['full'];
+                    $photo_item5->photo_resize = $up5['resize'];
+                    $photo_item5->save();
+                }
+            }
+            return \Response::json(array(
+                        'error' => array(
+                            'status' => TRUE,
+                            'message' => NULL
+                        ), 200));
+        }
     }
 
     public function add() {
@@ -438,6 +539,20 @@ class WarehouseController extends \BaseController {
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    private function upload_photo($file, $path) {
+        $extension = $file->getClientOriginalExtension();
+        $filename = str_random(32) . '.' . $extension;
+        $smallfile = 'cover_' . $filename;
+        $file->move($path, $filename);
+        $img = \Image::make($path . $filename);
+        $img->resize(150, null)->save($path . $smallfile);
+        $photo = array(
+            'full' => $path . $filename,
+            'resize' => $path . $smallfile
+        );
+        return $photo;
     }
 
 }

@@ -314,7 +314,7 @@ class RepairingController extends \BaseController {
             $repairing_item->publem_id = \Input::get('publem_id');
             $repairing_item->type_id = \Input::get('type_id');
             $repairing_item->computer_id = (\Input::get('group_id') <= 2 ? \Input::get('computer_id') : 0);
-            $repairing_item->hsware_id = (\Input::get('group_id') > 2 ? \Input::get('group_id') : 0);
+            $repairing_item->hsware_id = (\Input::get('hsware_id') > 0 ? \Input::get('hsware_id') : 0);
             $repairing_item->software_id = \Input::get('software_id');
             $repairing_item->license_group_id = \Input::get('license_group_id');
             $repairing_item->license_id = \Input::get('license_id');
@@ -324,6 +324,10 @@ class RepairingController extends \BaseController {
             $repairing_item->status = 2;
             $repairing_item->success_at = \Input::get('success_at') . ' ' . date('H:i:s');
             $repairing_item->save();
+
+            if (\Input::get('hsware_id') > 0) {
+                
+            }
 
             if (\Input::get('license_id')) {
                 if (\Input::get('license_group_id') == 1) {
@@ -338,6 +342,7 @@ class RepairingController extends \BaseController {
                 $sl->sbit = \Input::get('sbit');
                 $sl->save();
             }
+
             return \Response::json(array(
                         'error' => array(
                             'status' => TRUE,

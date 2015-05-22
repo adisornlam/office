@@ -42,9 +42,6 @@
                 <i class="fa fa-bar-chart"></i>
             </div>
             <div class="value">
-                <h1 class=" count2">
-                    0
-                </h1>
                 <p>ประวัติรายการ Dead Stock</p>
             </div>
         </section>
@@ -59,7 +56,7 @@
     });
 
     $('#warehouse_deadstock_report_list').click(function () {
-        window.location.href = base_url + index_page + 'oilservice/deadstock/report';
+        window.location.href = base_url + index_page + 'warehouse/deadstock/report';
     });
 //    $('#oilservice_analysis_report_add').click(function () {
 //        var data = {

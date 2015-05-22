@@ -228,6 +228,8 @@ Route::group(array('prefix' => 'warehouse', 'before' => 'authen'), function() {
     
     Route::get('deadstock/report', 'App\Controllers\WarehouseController@deadstock_report');
     Route::get('deadstock/report/listall', 'App\Controllers\WarehouseController@deadstock_report_listall');
+    
+    Route::match(array('GET', 'POST'), 'deadstock/upload/photo/{id}', array('uses' => 'App\Controllers\WarehouseController@upload_dialog'));
 
     Route::match(array('GET', 'POST'), 'deadstock/add', array('uses' => 'App\Controllers\WarehouseController@add'));
     Route::match(array('GET', 'POST'), 'deadstock/edit/{id}', array('uses' => 'App\Controllers\WarehouseController@edit'));
