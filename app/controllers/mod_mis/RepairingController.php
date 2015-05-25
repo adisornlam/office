@@ -325,8 +325,16 @@ class RepairingController extends \BaseController {
             $repairing_item->success_at = \Input::get('success_at') . ' ' . date('H:i:s');
             $repairing_item->save();
 
-            if (\Input::get('hsware_id') > 0) {
-                
+            if (\Input::get('hsware_id') > 0 && \Input::get('computer_id') > 0) {
+                $hs_com = new \ComputerHsware();
+                $hs_com->computer_id = \Input::get('computer_id');
+                $hs_com->hsware_id = \Input::get('hsware_id');
+                $hs_com->save();
+                $hslog = new \HswareComputerLog();
+                $hslog->hsware_id = \Input::get('hsware_id');
+                $hslog->computer_id = \Input::get('computer_id');
+                $hslog->created_user = \Auth::user()->id;
+                $hslog->save();
             }
 
             if (\Input::get('license_id')) {

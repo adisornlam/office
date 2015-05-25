@@ -112,6 +112,18 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
+                            <div class="col-sm-2">
+                                <div class="input-group date form_datetime-component">
+                                    {{Form::text('warranty_date', NULL,array('class'=>'form-control datepicker'))}}
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="help-block">LT ไม่ต้องกำหนด</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             {{Form::label('register_date', 'วันที่ลงทะเบียน', array('class' => 'col-sm-2 control-label'))}}
                             <div class="col-sm-2">
                                 <div class="input-group date form_datetime-component">
@@ -211,18 +223,6 @@
                             </div>
                         </div>
                         @endforeach
-                        <div class="form-group">
-                            {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
-                            <div class="col-sm-2">
-                                <div class="input-group date form_datetime-component">
-                                    {{Form::text('warranty_date[8][]', NULL,array('class'=>'form-control datepicker'))}}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
-                                    </span>
-                                </div>
-                                <span class="help-block">LT ไม่ต้องกำหนด</span>
-                            </div>
-                        </div>
                     </div>
                 </fieldset>
                 <fieldset title="HDD" class="step" id="default-step-3" >
@@ -292,18 +292,6 @@
                             </div>
                         </div>
                         @endforeach
-                        <div class="form-group">
-                            {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
-                            <div class="col-sm-2">
-                                <div class="input-group date form_datetime-component">
-                                    {{Form::text('warranty_date[22][]', NULL,array('class'=>'form-control datepicker'))}}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
-                                    </span>
-                                </div>
-                                <span class="help-block">LT ไม่ต้องกำหนด</span>
-                            </div>
-                        </div>
                     </div>
                 </fieldset>
                 <fieldset title="RAM" class="step" id="default-step-4" >
@@ -373,18 +361,6 @@
                             </div>
                         </div>
                         @endforeach
-                        <div class="form-group">
-                            {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
-                            <div class="col-sm-2">
-                                <div class="input-group date form_datetime-component">
-                                    {{Form::text('warranty_date[3][]', NULL,array('class'=>'form-control datepicker'))}}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
-                                    </span>
-                                </div>
-                                <span class="help-block">LT ไม่ต้องกำหนด</span>
-                            </div>
-                        </div>
                     </div>
                 </fieldset>      
                 <fieldset title="SOFTWARE" class="step" id="default-step-5" >

@@ -68,6 +68,8 @@ class ComputerController extends \BaseController {
         if (\Input::has('department_id')) {
             $computer_item->where('users.department_id', \Input::get('department_id'));
         }
+        
+        $computer_item->orderBy('computer_item.serial_code','ASC');
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -678,6 +680,7 @@ class ComputerController extends \BaseController {
                 $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
                 $computer_item->locations = \Input::get('locations');
                 $computer_item->register_date = trim(\Input::get('register_date'));
+                $computer_item->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->created_user = \Auth::user()->id;
                 $computer_item->save();
@@ -712,7 +715,7 @@ class ComputerController extends \BaseController {
                     $hsware_item8->spec_value_29 = (isset($spec_value_29[8][0]) ? $spec_value_29[8][0] : NULL);
                     $hsware_item8->locations = trim(\Input::get('locations'));
                     $hsware_item8->register_date = trim(\Input::get('register_date'));
-                    $hsware_item8->warranty_date = (isset($warranty_date[8][0]) != '' ? trim($warranty_date[8][0]) : NULL);
+                    $hsware_item8->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                     $hsware_item8->status = 1;
                     $hsware_item8->spare = 0;
                     $hsware_item8->disabled = 0;
@@ -741,7 +744,7 @@ class ComputerController extends \BaseController {
                     $hsware_item22->spec_value_4 = (isset($spec_value_4[22][0]) ? $spec_value_4[22][0] : NULL);
                     $hsware_item22->locations = trim(\Input::get('locations'));
                     $hsware_item22->register_date = trim(\Input::get('register_date'));
-                    $hsware_item22->warranty_date = (isset($warranty_date[22][0]) != '' ? trim($warranty_date[22][0]) : NULL);
+                    $hsware_item22->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                     $hsware_item22->status = 1;
                     $hsware_item22->spare = 0;
                     $hsware_item22->disabled = 0;
@@ -770,7 +773,7 @@ class ComputerController extends \BaseController {
                     $hsware_item222->spec_value_4 = (isset($spec_value_4[22][1]) ? $spec_value_4[22][1] : NULL);
                     $hsware_item222->locations = trim(\Input::get('locations'));
                     $hsware_item222->register_date = trim(\Input::get('register_date'));
-                    $hsware_item222->warranty_date = (isset($warranty_date[22][1]) != '' ? trim($warranty_date[22][1]) : NULL);
+                    $hsware_item222->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                     $hsware_item222->status = 1;
                     $hsware_item222->spare = 0;
                     $hsware_item222->disabled = 0;
@@ -801,7 +804,7 @@ class ComputerController extends \BaseController {
                     $hsware_item3->spec_value_5 = (isset($spec_value_5[3][0]) ? $spec_value_5[3][0] : NULL);
                     $hsware_item3->locations = trim(\Input::get('locations'));
                     $hsware_item3->register_date = trim(\Input::get('register_date'));
-                    $hsware_item3->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
+                    $hsware_item3->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                     $hsware_item3->status = 1;
                     $hsware_item3->spare = 0;
                     $hsware_item3->disabled = 0;
@@ -832,7 +835,7 @@ class ComputerController extends \BaseController {
                     $hsware_item31->spec_value_5 = (isset($spec_value_5[3][1]) ? $spec_value_5[3][1] : NULL);
                     $hsware_item31->locations = trim(\Input::get('locations'));
                     $hsware_item31->register_date = trim(\Input::get('register_date'));
-                    $hsware_item31->warranty_date = (isset($warranty_date[3][0]) != '' ? trim($warranty_date[3][0]) : NULL);
+                    $hsware_item31->warranty_date = (isset($warranty_date) != '' ? trim($warranty_date) : NULL);
                     $hsware_item31->status = 1;
                     $hsware_item31->spare = 0;
                     $hsware_item31->disabled = 0;

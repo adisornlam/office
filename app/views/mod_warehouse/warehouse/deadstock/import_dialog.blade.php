@@ -1,7 +1,7 @@
 {{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal','files'=>true))}}
 <div class="form-group">
-    {{Form::label('import_date', 'วันที่นำเข้าข้อมูล', array('class' => 'col-sm-3 control-label'))}}
+    {{Form::label('import_date', 'วันที่ของข้อมูล', array('class' => 'col-sm-3 control-label'))}}
     <div class="col-sm-4">
         <div class="input-group date form_datetime-component">
             {{Form::text('import_date', NULL,array('class'=>'form-control datepicker','id'=>'import_date'))}}

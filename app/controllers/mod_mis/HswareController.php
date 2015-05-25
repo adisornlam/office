@@ -76,7 +76,7 @@ class HswareController extends \BaseController {
             'hsware_item.disabled as disabled',
             'hsware_item.status as status'
         ));
-
+        $hsware_item->orderBy('hsware_item.serial_code', 'ASC');
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
@@ -92,7 +92,6 @@ class HswareController extends \BaseController {
                         ->edit_column('spare', '@if($spare==1) <span class="label label-success">Yes</span> @endif')
                         ->edit_column('warranty_date', '@if($warranty_date=="0000-00-00") LT @elseif($warranty_date) {{$warranty_date}} @else LT @endif')
                         ->edit_column('title', function($result_obj) {
-                            //$str = '<a href="' . \URL::to('mis/hsware/view/' . $result_obj->item_id . '') . '">' . $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id) . '</a>';
                             $str = $result_obj->title . ' ' . $this->get_submodel($result_obj->sub_model_id) . ' ' . $this->option_item($result_obj->item_id);
                             return $str;
                         })

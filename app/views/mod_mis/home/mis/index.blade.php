@@ -253,14 +253,16 @@
         </section>
     </div>
 
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="purchase_request_add">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="form_online_list">
         <section class="panel">
-            <div class="symbol green">
-                <i class="fa fa-plus"></i>
+            <div class="symbol purple">
+                <i class="fa fa-list"></i>
             </div>
             <div class="value">
-                <p>&nbsp;</p>
-                <p>เพิ่มรายการขอซื้อ</p>
+                <h1 class="form_online_count">
+                    0
+                </h1>
+                <p>เอกสารออนไลน์</p>
             </div>
         </section>
     </div>
@@ -379,6 +381,7 @@
 
 @section('script_code')
 <script type="text/javascript">
+    //Computer icon
     $('#computer_list').click(function () {
         window.location.href = base_url + index_page + 'mis/computer';
     });
@@ -396,7 +399,6 @@
         window.location.href = base_url + index_page + 'mis/hsware/spare/export';
     });
     $('#hsware_add_spare').click(function () {
-        //window.location.href = base_url + index_page + 'mis/hsware/add?group_id=2&spare=1';
         var data = {
             url: 'mis/hsware/dialog',
             title: 'เลือกกลุ่มอุปกรณ์',
@@ -413,6 +415,7 @@
     $('#software_list').click(function () {
         window.location.href = base_url + index_page + 'mis/software';
     });
+    //Ma icon
     $('#repairing_list').click(function () {
         window.location.href = base_url + index_page + 'mis/repairing';
     });
@@ -434,7 +437,7 @@
         genModal(data);
     });
 
-
+    //Supplier icon
     $('#deliver_list').click(function () {
         window.location.href = base_url + index_page + 'mis/deliver';
     });
@@ -451,12 +454,15 @@
         };
         genModal(data);
     });
+    //Form icon
     $('#purchase_request_list').click(function () {
         window.location.href = base_url + index_page + 'mis/purchaserequest';
     });
-    $('#purchase_request_add').click(function () {
-        window.location.href = base_url + index_page + 'mis/purchaserequest/add';
+    $('#form_online_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/formonline';
     });
+    
+    
     $('#block5').click(function () {
         window.location.href = base_url + index_page + 'users';
     });

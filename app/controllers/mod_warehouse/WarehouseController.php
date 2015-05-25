@@ -231,9 +231,64 @@ class WarehouseController extends \BaseController {
     }
 
     public function import_save() {
-        \DB::table('warehouse_deadstock_item')->truncate();
-        \DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_item();'));
-        \DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_log();'));
+        //\DB::table('warehouse_deadstock_item')->truncate();
+        \DB::statement(\DB::raw('CALL not_exists_insert_deadstock_temp_to_item();'));
+        //\DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_item();'));
+        //\DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_log();'));
+
+        $temp_import_item = \WarehouseDeadstockTempImport::all();
+        foreach ($temp_import_item as $temp_item) {
+            if (\WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->count() > 0) {
+                $deadstock_item = \WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->first();
+                if ($temp_item->xp5 > 0) {
+                    if ($temp_item->dead1 != $deadstock_item->dead1) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array('dead1' => $temp_import_item->dead1));
+                    }
+                    if ($temp_item->dead2 != $deadstock_item->dead2) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array('dead2' => $temp_import_item->dead2));
+                    }
+                    if ($temp_item->dead3 != $deadstock_item->dead3) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array('dead3' => $temp_import_item->dead3));
+                    }
+                    if ($temp_item->dead4 != $deadstock_item->dead4) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array('dead4' => $temp_import_item->dead4));
+                    }
+                    if ($temp_item->dead5 != $deadstock_item->dead5) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array('dead5' => $temp_import_item->dead5));
+                    }
+//                    $deadstock_item = new \WarehouseDeadstockItem();
+//                    $deadstock_item->type_id = $item_temp->type;
+//                    $deadstock_item->brand_id = $item_temp->brand;
+//                    $deadstock_item->code_no = $item_temp->code_no;
+//                    $deadstock_item->description = $item_temp->description;
+//                    $deadstock_item->xp5 = $item_temp->xp5;
+//                    $deadstock_item->xp51_12 = $item_temp->xp51_12;
+//                    $deadstock_item->xp5a = $item_temp->xp5a;
+//                    $deadstock_item->unit = $item_temp->unit;
+//                    $deadstock_item->price_per_unit = $item_temp->price_per_unit;
+//                    $deadstock_item->total_value = $item_temp->total_value;
+//                    $deadstock_item->dead1 = $item_temp->dead1;
+//                    $deadstock_item->dead2 = $item_temp->dead2;
+//                    $deadstock_item->dead3 = $item_temp->dead3;
+//                    $deadstock_item->dead4 = $item_temp->dead4;
+//                    $deadstock_item->dead5 = $item_temp->dead5;
+//                    $deadstock_item->summary = floatval(str_replace(",", "", $item_temp->summary));
+//                    $deadstock_item->import_date = $item_temp->import_date;
+//                    $deadstock_item->save();
+                }
+            }
+        }
+
         \DB::table('warehouse_deadstock_temp_import')->truncate();
         return \Response::json(array(
                     'error' => array(
@@ -243,7 +298,7 @@ class WarehouseController extends \BaseController {
     }
 
     public function deadstock_report_listall() {
-        
+
         $analysis_item = \DB::table('warehouse_deadstock_item_log')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item_log.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item_log.brand_id', '=', 'warehouse_brand.code_no')
@@ -264,7 +319,7 @@ class WarehouseController extends \BaseController {
             'warehouse_deadstock_item_log.dead5 as dead5',
             'warehouse_deadstock_item_log.disabled as disabled'
         ));
-        
+
         if (\Input::has('import_date_from')) {
             $analysis_item->whereBetween('warehouse_deadstock_item_log.import_date', array(\Input::get('import_date_from'), (\Input::get('import_date_to') ? \Input::get('import_date_to') : date('Y-m-d'))));
         }
