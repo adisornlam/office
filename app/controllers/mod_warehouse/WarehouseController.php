@@ -231,64 +231,79 @@ class WarehouseController extends \BaseController {
     }
 
     public function import_save() {
-        //\DB::table('warehouse_deadstock_item')->truncate();
-        \DB::statement(\DB::raw('CALL not_exists_insert_deadstock_temp_to_item();'));
-        //\DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_item();'));
-        //\DB::statement(\DB::raw('CALL synchronize_deadstock_temp_to_log();'));
+        if (\WarehouseDeadstockItem::count() > 0) {
+            \DB::statement(\DB::raw('CALL not_exists_insert_deadstock_temp_to_item();'));
+            $temp_import_item = \WarehouseDeadstockTempImport::all();
+            foreach ($temp_import_item as $temp_item) {
+                if (\WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->count() > 0) {
+                    $deadstock_item = \WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->first();
+                    if ($temp_item->xp5 > 0) {
+                        \DB::table('warehouse_deadstock_item')
+                                ->where('code_no', $temp_item->code_no)
+                                ->update(array(
+                                    'xp5' => $temp_item->xp5,
+                                    'xp51_12' => $temp_item->xp51_12,
+                                    'xp5a' => $temp_item->xp5a,
+                                    'total_value' => ($temp_item->xp5 * $temp_item->price_per_unit),
+                                    'dead1' => ($temp_item->dead1 != $deadstock_item->dead1 ? $temp_item->dead1 : $deadstock_item->dead1),
+                                    'dead2' => ($temp_item->dead2 != $deadstock_item->dead2 ? $temp_item->dead2 : $deadstock_item->dead2),
+                                    'dead3' => ($temp_item->dead3 != $deadstock_item->dead3 ? $temp_item->dead3 : $deadstock_item->dead3),
+                                    'dead4' => ($temp_item->dead4 != $deadstock_item->dead4 ? $temp_item->dead4 : $deadstock_item->dead4),
+                                    'dead5' => ($temp_item->dead5 != $deadstock_item->dead5 ? $temp_item->dead5 : $deadstock_item->dead5),
+                                    'import_date' => ($temp_item->xp5 < $temp_item->xp5 ? $temp_item->import_date : $deadstock_item->import_date)
+                        ));
 
-        $temp_import_item = \WarehouseDeadstockTempImport::all();
-        foreach ($temp_import_item as $temp_item) {
-            if (\WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->count() > 0) {
-                $deadstock_item = \WarehouseDeadstockItem::where('code_no', $temp_item->code_no)->first();
-                if ($temp_item->xp5 > 0) {
-                    if ($temp_item->dead1 != $deadstock_item->dead1) {
-                        \DB::table('warehouse_deadstock_item')
-                                ->where('code_no', $temp_item->code_no)
-                                ->update(array('dead1' => $temp_import_item->dead1));
+                        if ($temp_item->xp5 < $deadstock_item->xp5) {
+                            $deadstock_item_log = new \WarehouseDeadstockItemLog();
+                            $deadstock_item_log->type_id = $temp_item->type;
+                            $deadstock_item_log->brand_id = $temp_item->brand;
+                            $deadstock_item_log->code_no = $temp_item->code_no;
+                            $deadstock_item_log->description = $temp_item->description;
+                            $deadstock_item_log->xp5 = $temp_item->xp5;
+                            $deadstock_item_log->xp51_12 = $temp_item->xp51_12;
+                            $deadstock_item_log->xp5a = $temp_item->xp5a;
+                            $deadstock_item_log->unit = $temp_item->unit;
+                            $deadstock_item_log->price_per_unit = $temp_item->price_per_unit;
+                            $deadstock_item_log->total_value = $temp_item->total_value;
+                            $deadstock_item_log->dead1 = $temp_item->dead1;
+                            $deadstock_item_log->dead2 = $temp_item->dead2;
+                            $deadstock_item_log->dead3 = $temp_item->dead3;
+                            $deadstock_item_log->dead4 = $temp_item->dead4;
+                            $deadstock_item_log->dead5 = $temp_item->dead5;
+                            $deadstock_item_log->summary = $temp_item->summary;
+                            $deadstock_item_log->import_date = $temp_item->import_date;
+                            $deadstock_item_log->status_up = ($deadstock_item->xp5 - $temp_item->xp5);
+                            $deadstock_item_log->save();
+                        }
+                    } else {
+                        \DB::table('warehouse_deadstock_item')->where('code_no', '=', $temp_item->code_no)->delete();
+
+                        $deadstock_item_log1 = new \WarehouseDeadstockItemLog();
+                        $deadstock_item_log1->type_id = $temp_item->type;
+                        $deadstock_item_log1->brand_id = $temp_item->brand;
+                        $deadstock_item_log1->code_no = $temp_item->code_no;
+                        $deadstock_item_log1->description = $temp_item->description;
+                        $deadstock_item_log1->xp5 = $temp_item->xp5;
+                        $deadstock_item_log1->xp51_12 = $temp_item->xp51_12;
+                        $deadstock_item_log1->xp5a = $temp_item->xp5a;
+                        $deadstock_item_log1->unit = $temp_item->unit;
+                        $deadstock_item_log1->price_per_unit = $temp_item->price_per_unit;
+                        $deadstock_item_log1->total_value = $temp_item->total_value;
+                        $deadstock_item_log1->dead1 = $temp_item->dead1;
+                        $deadstock_item_log1->dead2 = $temp_item->dead2;
+                        $deadstock_item_log1->dead3 = $temp_item->dead3;
+                        $deadstock_item_log1->dead4 = $temp_item->dead4;
+                        $deadstock_item_log1->dead5 = $temp_item->dead5;
+                        $deadstock_item_log1->summary = $temp_item->summary;
+                        $deadstock_item_log1->import_date = $temp_item->import_date;
+                        $deadstock_item_log1->status_up = 0;
+                        $deadstock_item_log1->save();
                     }
-                    if ($temp_item->dead2 != $deadstock_item->dead2) {
-                        \DB::table('warehouse_deadstock_item')
-                                ->where('code_no', $temp_item->code_no)
-                                ->update(array('dead2' => $temp_import_item->dead2));
-                    }
-                    if ($temp_item->dead3 != $deadstock_item->dead3) {
-                        \DB::table('warehouse_deadstock_item')
-                                ->where('code_no', $temp_item->code_no)
-                                ->update(array('dead3' => $temp_import_item->dead3));
-                    }
-                    if ($temp_item->dead4 != $deadstock_item->dead4) {
-                        \DB::table('warehouse_deadstock_item')
-                                ->where('code_no', $temp_item->code_no)
-                                ->update(array('dead4' => $temp_import_item->dead4));
-                    }
-                    if ($temp_item->dead5 != $deadstock_item->dead5) {
-                        \DB::table('warehouse_deadstock_item')
-                                ->where('code_no', $temp_item->code_no)
-                                ->update(array('dead5' => $temp_import_item->dead5));
-                    }
-//                    $deadstock_item = new \WarehouseDeadstockItem();
-//                    $deadstock_item->type_id = $item_temp->type;
-//                    $deadstock_item->brand_id = $item_temp->brand;
-//                    $deadstock_item->code_no = $item_temp->code_no;
-//                    $deadstock_item->description = $item_temp->description;
-//                    $deadstock_item->xp5 = $item_temp->xp5;
-//                    $deadstock_item->xp51_12 = $item_temp->xp51_12;
-//                    $deadstock_item->xp5a = $item_temp->xp5a;
-//                    $deadstock_item->unit = $item_temp->unit;
-//                    $deadstock_item->price_per_unit = $item_temp->price_per_unit;
-//                    $deadstock_item->total_value = $item_temp->total_value;
-//                    $deadstock_item->dead1 = $item_temp->dead1;
-//                    $deadstock_item->dead2 = $item_temp->dead2;
-//                    $deadstock_item->dead3 = $item_temp->dead3;
-//                    $deadstock_item->dead4 = $item_temp->dead4;
-//                    $deadstock_item->dead5 = $item_temp->dead5;
-//                    $deadstock_item->summary = floatval(str_replace(",", "", $item_temp->summary));
-//                    $deadstock_item->import_date = $item_temp->import_date;
-//                    $deadstock_item->save();
                 }
             }
+        } else {
+            \DB::statement(\DB::raw('CALL not_exists_insert_deadstock_temp_to_item();'));
         }
-
         \DB::table('warehouse_deadstock_temp_import')->truncate();
         return \Response::json(array(
                     'error' => array(
@@ -298,7 +313,6 @@ class WarehouseController extends \BaseController {
     }
 
     public function deadstock_report_listall() {
-
         $analysis_item = \DB::table('warehouse_deadstock_item_log')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item_log.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item_log.brand_id', '=', 'warehouse_brand.code_no')
@@ -317,11 +331,23 @@ class WarehouseController extends \BaseController {
             'warehouse_deadstock_item_log.dead3 as dead3',
             'warehouse_deadstock_item_log.dead4 as dead4',
             'warehouse_deadstock_item_log.dead5 as dead5',
-            'warehouse_deadstock_item_log.disabled as disabled'
+            'warehouse_deadstock_item_log.import_date as import_date'
         ));
+
+        if (\Input::has('type_id')) {
+            $deadstock_item->where('warehouse_deadstock_item_log.type_id', \Input::get('type_id'));
+        }
+
+        if (\Input::has('brand_id')) {
+            $deadstock_item->where('warehouse_deadstock_item_log.brand_id', \Input::get('brand_id'));
+        }
 
         if (\Input::has('import_date_from')) {
             $analysis_item->whereBetween('warehouse_deadstock_item_log.import_date', array(\Input::get('import_date_from'), (\Input::get('import_date_to') ? \Input::get('import_date_to') : date('Y-m-d'))));
+        }
+
+        if (!\Input::has('import_date_from')) {
+            $analysis_item->where('disabled', 1);
         }
 
         $link = '<div class="dropdown">';
@@ -331,10 +357,8 @@ class WarehouseController extends \BaseController {
         $link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
-
         return \Datatables::of($analysis_item)
                         ->edit_column('id', $link)
-                        ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
                         ->add_column('cover', function($result_obj) {
                             $photo = \WarehouseDeadstockPhotoItem::where('deadstock_code_no', '=', $result_obj->code_no)->where('photo_cover', '=', 1)->first();
                             $str = (isset($photo->photo_resize) ? $photo->photo_resize : null);
@@ -381,11 +405,11 @@ class WarehouseController extends \BaseController {
                 ->select(array('import_date'))
                 ->lists('import_date', 'import_date');
         $data = array(
-            'title' => 'ประวัติรายการ Dead Stock',
+            'title' => 'ประวัติการขาย',
             'breadcrumbs' => array(
                 'ภาพรวมระบบ' => '',
                 'ภาพรวมฝ่ายคลังสินค้า' => 'warehouse',
-                'ประวัติรายการ Dead Stock' => '#'
+                'ประวัติการขาย' => '#'
             ),
             'import_date_from' => $import_date,
             'import_date_to' => $import_date

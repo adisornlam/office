@@ -42,7 +42,7 @@
                 <i class="fa fa-bar-chart"></i>
             </div>
             <div class="value">
-                <p>ประวัติรายการ Dead Stock</p>
+                <p>ประวัติการขาย</p>
             </div>
         </section>
     </div>

@@ -30,22 +30,18 @@
     <div class="col-lg-12">
         <div class="panel">
             <div class="panel-body">
-                <div class="pull-left">      
+                <div class="pull-left">  
+                    <div class="form-group">
+                        {{ \Form::select('type_id', array(''=>'Type')+\DB::table('warehouse_type')->select(array('code_no as id',\DB::raw('CONCAT("(",code_no,") ",title) as title')))->lists('title','id'),null, array('class' => 'form-control', 'id' => 'type_id')); }}
+                    </div>
+                    <div class="form-group">
+                        {{ \Form::select('brand_id', array(''=>'Brand')+\DB::table('warehouse_brand')->select(array('code_no as id',\DB::raw('CONCAT("(",code_no,") ",title) as title')))->lists('title','id'), null, array('class' => 'form-control', 'id' => 'brand_id')); }}
+                    </div>
                     <div class="form-group">
                         {{ \Form::select('import_date_from', array(''=>'Date From')+$import_date_from,null, array('class' => 'form-control', 'id' => 'import_date_from')); }}
                     </div>
                     <div class="form-group">
                         {{ \Form::select('import_date_to', array(''=>'Date To')+$import_date_to,null, array('class' => 'form-control', 'id' => 'import_date_to')); }}
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="down" value="1" id="chk_down"> รายการลด
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="up" value="2" id="chk_up"> รายการเพิ่ม
-                        </label>
                     </div>
                 </div>
             </div>
@@ -98,6 +94,8 @@
             "ajax": {
                 "url": base_url + index_page + "warehouse/deadstock/report/listall",
                 "data": function (d) {
+                    d.type_id = $('#type_id').val();
+                    d.brand_id = $('#brand_id').val();
                     d.import_date_from = $('#import_date_from').val();
                     d.import_date_to = $('#import_date_to').val();
                 }
@@ -129,7 +127,7 @@
                 {"data": "dead3", "title": "2-3 Year 732-1097 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "dead4", "title": "3 Year Up 1097 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "import_date", "title": "Date", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
             ]
 //            dom: 'T<"clear">lfrtip',
 //            "tableTools": {
@@ -160,6 +158,24 @@
             }
         });
         $('#import_date_to').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#type_id').on('change', function () {
+            if ($(this).val() !== '') {
+                delay(function () {
+                    oTable.fnDraw();
+                }, 500);
+            } else {
+                oTable.fnDraw();
+            }
+        });
+        $('#brand_id').on('change', function () {
             if ($(this).val() !== '') {
                 delay(function () {
                     oTable.fnDraw();
