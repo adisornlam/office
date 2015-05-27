@@ -533,11 +533,11 @@ class HswareController extends \BaseController {
             $rules = array(
                 'group_id' => 'required',
                 'serial_no' => 'unique:hsware_item,serial_no',
-                'photo1' => 'image|mimes:jpeg,png|max:512',
-                'photo2' => 'image|mimes:jpeg,png|max:512',
-                'photo3' => 'image|mimes:jpeg,png|max:512',
-                'photo4' => 'image|mimes:jpeg,png|max:512',
-                'photo5' => 'image|mimes:jpeg,png|max:512'
+                'photo1' => 'image|mimes:jpeg,png|max:1024',
+                'photo2' => 'image|mimes:jpeg,png|max:1024',
+                'photo3' => 'image|mimes:jpeg,png|max:1024',
+                'photo4' => 'image|mimes:jpeg,png|max:1024',
+                'photo5' => 'image|mimes:jpeg,png|max:1024'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {

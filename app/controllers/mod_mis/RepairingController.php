@@ -326,6 +326,11 @@ class RepairingController extends \BaseController {
             $repairing_item->save();
 
             if (\Input::get('hsware_id') > 0 && \Input::get('computer_id') > 0) {
+                $hsware_item = \HswareItem::find(\Input::get('hsware_id'));
+                $hsware_item->status = 1;
+                $hsware_item->spare = 0;
+                $hsware_item->save();
+
                 $hs_com = new \ComputerHsware();
                 $hs_com->computer_id = \Input::get('computer_id');
                 $hs_com->hsware_id = \Input::get('hsware_id');
@@ -336,6 +341,8 @@ class RepairingController extends \BaseController {
                 $hslog->created_user = \Auth::user()->id;
                 $hslog->save();
             }
+
+
 
             if (\Input::get('license_id')) {
                 if (\Input::get('license_group_id') == 1) {
