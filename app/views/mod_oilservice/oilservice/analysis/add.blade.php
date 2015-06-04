@@ -146,85 +146,86 @@
             </section>
         </div>    
     </div>
-    @stop
+</form>
+@stop
 
-    @section('script')
-    {{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
-    {{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
-    {{HTML::script('js/jquery.form.min.js')}}
-    @stop
+@section('script')
+{{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
+{{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
+{{HTML::script('js/jquery.form.min.js')}}
+@stop
 
-    @section('script_code')
-    <script type="text/javascript">
-        $('#btnReset').click(function () {
-            //$('input:radio').prop('checked', false);
-            window.location.href = window.location.href;
+@section('script_code')
+<script type="text/javascript">
+    $('#btnReset').click(function () {
+        //$('input:radio').prop('checked', false);
+        window.location.href = window.location.href;
+    });
+    $(function () {
+        var options = {
+            url: base_url + index_page + "oilservice/analysis/add",
+            success: showResponse
+        };
+        $('#btnSave').click(function () {
+            $('#form-add, textarea').ajaxSubmit(options);
         });
-        $(function () {
-            var options = {
-                url: base_url + index_page + "oilservice/analysis/add",
-                success: showResponse
-            };
-            $('#btnSave').click(function () {
-                $('#form-add, textarea').ajaxSubmit(options);
-            });
-        });
+    });
 
-        function showResponse(response, statusText, xhr, $form) {
-            if (response.error.status === false) {
-                $('#btnSave').removeAttr('disabled');
-                alert(response.error.message);
-            } else {
-                window.location.href = base_url + index_page + "oilservice/analysis";
-            }
+    function showResponse(response, statusText, xhr, $form) {
+        if (response.error.status === false) {
+            $('#btnSave').removeAttr('disabled');
+            alert(response.error.message);
+        } else {
+            window.location.href = base_url + index_page + "oilservice/analysis";
         }
+    }
 
-        $('#machine_id').change(function () {
-            $.get("{{ url('get/getOilNas')}}",
-                    {option: $(this).val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
-                var nas = $('#nas');
-                nas.empty();
-                nas.append("<option value=''>เลือกรายการ NAS</option>");
-                $.each(data, function (index, element) {
-                    nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
-                });
-            });
-
-        });
-
-        $('#type_id').change(function () {
-            if ($(this).val() == 3) {
-                $('#density').removeClass('hidden');
-                $('#intensity').removeClass('hidden');
-                $('#colour').addClass('hidden');
-                $('#moisture').addClass('hidden');
-                $('#tan').addClass('hidden');
-            } else {
-                $('#density').addClass('hidden');
-                $('#intensity').addClass('hidden');
-                $('#colour').removeClass('hidden');
-                $('#moisture').removeClass('hidden');
-                $('#tan').removeClass('hidden');
-            }
-            $.get("{{ url('get/getOilMachine')}}",
-                    {option: $(this).val()}, function (data) {
-                var machine = $('#machine_id');
-                machine.empty();
-                machine.append("<option value=''>เลือกประเภทเครื่องจักร</option>");
-                $.each(data, function (index, element) {
-                    machine.append("<option value='" + element.id + "'>" + element.title + "</option>");
-                });
-            });
-
-            $.get("{{ url('get/getOilNas')}}",
-                    {option: $('#machine_id').val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
-                var nas = $('#nas');
-                nas.empty();
-                nas.append("<option value=''>เลือกรายการ NAS</option>");
-                $.each(data, function (index, element) {
-                    nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
-                });
+    $('#machine_id').change(function () {
+        $.get("{{ url('get/getOilNas')}}",
+                {option: $(this).val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+            var nas = $('#nas');
+            nas.empty();
+            nas.append("<option value=''>เลือกรายการ NAS</option>");
+            $.each(data, function (index, element) {
+                nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
             });
         });
-    </script>
-    @stop
+
+    });
+
+    $('#type_id').change(function () {
+        if ($(this).val() == 3) {
+            $('#density').removeClass('hidden');
+            $('#intensity').removeClass('hidden');
+            $('#colour').addClass('hidden');
+            $('#moisture').addClass('hidden');
+            $('#tan').addClass('hidden');
+        } else {
+            $('#density').addClass('hidden');
+            $('#intensity').addClass('hidden');
+            $('#colour').removeClass('hidden');
+            $('#moisture').removeClass('hidden');
+            $('#tan').removeClass('hidden');
+        }
+        $.get("{{ url('get/getOilMachine')}}",
+                {option: $(this).val()}, function (data) {
+            var machine = $('#machine_id');
+            machine.empty();
+            machine.append("<option value=''>เลือกประเภทเครื่องจักร</option>");
+            $.each(data, function (index, element) {
+                machine.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+
+        $.get("{{ url('get/getOilNas')}}",
+                {option: $('#machine_id').val(), group_id: 1, type_id: $('#type_id').val()}, function (data) {
+            var nas = $('#nas');
+            nas.empty();
+            nas.append("<option value=''>เลือกรายการ NAS</option>");
+            $.each(data, function (index, element) {
+                nas.append("<option value='" + element.id + "'>" + element.title + "</option>");
+            });
+        });
+    });
+</script>
+@stop

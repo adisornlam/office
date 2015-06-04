@@ -35,26 +35,26 @@
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="notebook_list">
         <section class="panel">
             <div class="symbol terques">
                 <i class="fa fa-laptop"></i>
             </div>
             <div class="value">
-                <h1 class="computer_count">
+                <h1 class="notebook_count">
                     {{$notebook_count}}
                 </h1>
                 <p>ระเบียนโน๊ตบุ๊ค</p>
             </div>
         </section>
     </div>
-    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="computer_list">
+    <div class="col-lg-3 col-sm-6" style="cursor: pointer;" id="printer_list">
         <section class="panel">
             <div class="symbol terques">
                 <i class="fa fa-print"></i>
             </div>
             <div class="value">
-                <h1 class="computer_count">
+                <h1 class="printer_count">
                     {{$printer_count}}
                 </h1>
                 <p>ระเบียนปริ้นเตอร์</p>
@@ -383,7 +383,10 @@
 <script type="text/javascript">
     //Computer icon
     $('#computer_list').click(function () {
-        window.location.href = base_url + index_page + 'mis/computer';
+        window.location.href = base_url + index_page + 'mis/computer?computer_type_id=1';
+    });
+    $('#notebook_list').click(function () {
+        window.location.href = base_url + index_page + 'mis/computer?computer_type_id=2';
     });
     $('#computer_add').click(function () {
         var data = {
@@ -461,8 +464,8 @@
     $('#form_online_list').click(function () {
         window.location.href = base_url + index_page + 'mis/formonline';
     });
-    
-    
+
+
     $('#block5').click(function () {
         window.location.href = base_url + index_page + 'users';
     });

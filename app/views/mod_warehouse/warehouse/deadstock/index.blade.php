@@ -83,7 +83,7 @@
             "processing": true,
             "serverSide": true,
             "scrollX": true,
-            "pageLength": 25,
+            "pageLength": 10,
             stateSave: true,
             "ajax": {
                 "url": base_url + index_page + "warehouse/deadstock/listall",
@@ -96,7 +96,7 @@
                     "defaultContent": "",
                     "render": function (data, type, row) {
                         if (data == null) {
-                            return '<img alt="" src="http://www.placehold.it/80x80/EFEFEF/AAAAAA&text=no+image" class="img-rounded" />';
+                            return '<img alt="" src="http://www.placehold.it/80x80/EFEFEF/AAAAAA" class="img-rounded" />';
                         } else {
                             var url = base_url + data;
                             return '<img src="' + url + '" width="80" height="80" class="img-rounded" />';
@@ -119,8 +119,7 @@
                 {"data": "dead2", "title": "2-3 Year 366-731 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "dead3", "title": "2-3 Year 732-1097 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "dead4", "title": "3 Year Up 1097 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "disabled", "title": "สถานะ", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
+                {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false}
             ],
             dom: 'T<"clear">lfrtip',
             "tableTools": {

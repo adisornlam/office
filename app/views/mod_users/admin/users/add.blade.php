@@ -1,3 +1,4 @@
+{{HTML::style('assets/bootstrap-datepicker/css/datepicker3.css')}}
 {{Form::open(array('name'=>'form-add','id'=>'form-add','method' => 'POST','role'=>'form','class'=>'form-horizontal'))}}
 <div role="tabpanel">
 
@@ -76,6 +77,17 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    {{Form::label('start_work', 'วันเริ่มงาน', array('class' => 'col-sm-3 control-label'))}}
+                    <div class="col-sm-4">
+                        <div class="input-group date form_datetime-component">
+                            {{Form::text('start_work', date('Y-m-d'),array('class'=>'form-control datepicker','id'=>'start_work'))}}
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger date-set"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     {{Form::label('disabled', '&nbsp;', array('class' => 'col-sm-3 control-label'))}}
                     <div class="col-sm-3">
                         <label>
@@ -124,8 +136,17 @@
     </div>
 </div>
 {{ Form::close() }}
+{{HTML::script('assets/bootstrap-datepicker/js/bootstrap-datepicker.js')}}
+{{HTML::script('assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js')}}
 {{HTML::script('js/jquery.form.min.js')}}
 <script type="text/javascript">
+    $('.datepicker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd',
+        language: 'th'
+    });
+
     $('body').on('shown.bs.modal', '.modal', function () {
         $('#firstname').focus();
     });

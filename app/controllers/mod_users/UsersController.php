@@ -108,6 +108,7 @@ class UsersController extends \BaseController {
                 'lastname' => 'required',
                 'codes' => 'unique:users',
                 'email' => 'email|unique:users',
+                'email_in' => 'email',
                 'role_id' => 'required',
                 'username' => 'unique:users',
                 'password' => 'min:8'
@@ -128,7 +129,9 @@ class UsersController extends \BaseController {
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
+                $user->email_in = trim(\Input::get('email_in'));
                 $user->mobile = trim(\Input::get('mobile'));
+                $user->start_work = trim(\Input::get('start_work'));
                 $user->username = trim(\Input::get('username'));
                 $user->password = trim(\Input::get('password'));
                 $user->disabled = (\Input::has('disabled') ? 0 : 1);
@@ -167,7 +170,8 @@ class UsersController extends \BaseController {
             $rules = array(
                 'company_id' => 'required',
                 'firstname' => 'required',
-                'lastname' => 'required'
+                'lastname' => 'required',
+                'email_in' => 'email'
             );
             $validator = \Validator::make(\Input::all(), $rules);
             if ($validator->fails()) {
@@ -193,7 +197,9 @@ class UsersController extends \BaseController {
                 $user->firstname = trim(\Input::get('firstname'));
                 $user->lastname = trim(\Input::get('lastname'));
                 $user->email = trim(\Input::get('email'));
+                $user->email_in = trim(\Input::get('email_in'));
                 $user->mobile = trim(\Input::get('mobile'));
+                $user->start_work = trim(\Input::get('start_work'));
                 $user->username = trim(\Input::get('username'));
                 if (\Input::has('password')) {
                     $user->password = trim(\Input::get('password'));

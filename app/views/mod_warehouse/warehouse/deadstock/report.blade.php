@@ -89,7 +89,7 @@
             "processing": true,
             "serverSide": true,
             "scrollX": true,
-            "pageLength": 25,
+            "pageLength": 10,
             stateSave: true,
             "ajax": {
                 "url": base_url + index_page + "warehouse/deadstock/report/listall",
@@ -100,20 +100,7 @@
                     d.import_date_to = $('#import_date_to').val();
                 }
             },
-            "columnDefs": [{
-                    "defaultContent": "",
-                    "render": function (data, type, row) {
-                        if (data == null) {
-                            return '<img alt="" src="http://www.placehold.it/80x80/EFEFEF/AAAAAA&text=no+image" class="img-rounded" />';
-                        } else {
-                            var url = base_url + data;
-                            return '<img src="' + url + '" width="80" height="80" class="img-rounded" />';
-                        }
-                    },
-                    "targets": 0
-                }],
             "columns": [
-                {"data": "cover", "title": "", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "type_title", "title": "Type", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "brand", "title": "Brand", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": true},
                 {"data": "code_no", "title": "Code", "width": "7%", "orderable": false, "searchable": true},
@@ -128,24 +115,24 @@
                 {"data": "dead4", "title": "3 Year Up 1097 Day", "width": "7%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "dead5", "title": "3 Year Up (A) 1097 Day Up(A)", "width": "8%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "import_date", "title": "Date", "width": "8%", "sClass": "text-center", "orderable": true, "searchable": true}
-            ]
-//            dom: 'T<"clear">lfrtip',
-//            "tableTools": {
-//                "sSwfPath": base_url + "assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-//                "aButtons": [
-//                    {
-//                        "sExtends": "copy",
-//                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-//                        "bSelectedOnly": true
-//                    },
-//                    {
-//                        "sExtends": "xls",
-//                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-//                        "sFileName": "Report_Analysis_" + $.now() + ".csv",
-//                        "bSelectedOnly": true
-//                    }
-//                ]
-//            }
+            ],
+            dom: 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": base_url + "assets/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                        "bSelectedOnly": true
+                    },
+                    {
+                        "sExtends": "xls",
+                        "mColumns": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                        "sFileName": "Report_Analysis_" + $.now() + ".csv",
+                        "bSelectedOnly": true
+                    }
+                ]
+            }
         });
         $('#import_date_from').on('change', function () {
             $('#import_date_to').find('option:first').attr('selected', 'selected');

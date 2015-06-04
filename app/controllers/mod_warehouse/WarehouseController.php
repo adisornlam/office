@@ -85,6 +85,7 @@ class WarehouseController extends \BaseController {
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
         $link .= '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">';
+        $link .= '<li><a href="warehouse/deadstock/view/{{$id}}"  title="ดูรายละเอียด {{$code_no}}"><i class="fa fa-eye"></i> ดูรายละเอียด</a></li>';
         $link .= '<li><a href="javascript:;"  rel="warehouse/deadstock/upload/photo/{{$id}}" class="link_dialog" title="เพิ่มรูปภาพ {{$code_no}}"><i class="fa fa-picture-o"></i> เพิ่มรูปภาพ</a></li>';
         //$link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
@@ -148,6 +149,7 @@ class WarehouseController extends \BaseController {
                                 'message' => $validator->errors()->toArray()
                             ), 400));
             } else {
+                \DB::table('warehouse_deadstock_temp_import')->truncate();
                 $destinationPath = 'uploads/warehouse/deadstock/';
                 $files = \Request::file('deadstock_file');
                 $extension = $files->getClientOriginalExtension();
@@ -313,7 +315,7 @@ class WarehouseController extends \BaseController {
     }
 
     public function deadstock_report_listall() {
-        $analysis_item = \DB::table('warehouse_deadstock_item_log')
+        $deadstock_item = \DB::table('warehouse_deadstock_item_log')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item_log.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item_log.brand_id', '=', 'warehouse_brand.code_no')
                 ->select(array(
@@ -343,11 +345,11 @@ class WarehouseController extends \BaseController {
         }
 
         if (\Input::has('import_date_from')) {
-            $analysis_item->whereBetween('warehouse_deadstock_item_log.import_date', array(\Input::get('import_date_from'), (\Input::get('import_date_to') ? \Input::get('import_date_to') : date('Y-m-d'))));
+            $deadstock_item->whereBetween('warehouse_deadstock_item_log.import_date', array(\Input::get('import_date_from'), (\Input::get('import_date_to') ? \Input::get('import_date_to') : date('Y-m-d'))));
         }
 
         if (!\Input::has('import_date_from')) {
-            $analysis_item->where('disabled', 1);
+            $deadstock_item->where('disabled', 1);
         }
 
         $link = '<div class="dropdown">';
@@ -357,7 +359,7 @@ class WarehouseController extends \BaseController {
         $link .= '<li><a href="javascript:;" rel="warehouse/deadstock/delete/{{$id}}" class="link_dialog delete" title="ลบรายการ"><i class="fa fa-trash"></i> ลบรายการ</a></li>';
         $link .= '</ul>';
         $link .= '</div>';
-        return \Datatables::of($analysis_item)
+        return \Datatables::of($deadstock_item)
                         ->edit_column('id', $link)
                         ->add_column('cover', function($result_obj) {
                             $photo = \WarehouseDeadstockPhotoItem::where('deadstock_code_no', '=', $result_obj->code_no)->where('photo_cover', '=', 1)->first();
