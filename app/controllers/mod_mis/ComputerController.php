@@ -68,8 +68,8 @@ class ComputerController extends \BaseController {
         if (\Input::has('department_id')) {
             $computer_item->where('users.department_id', \Input::get('department_id'));
         }
-        
-        $computer_item->orderBy('computer_item.serial_code','ASC');
+
+        $computer_item->orderBy('computer_item.serial_code', 'ASC');
 
         $link = '<div class="dropdown">';
         $link .= '<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><span class="fa fa-pencil-square-o"></span ></a>';
@@ -1257,6 +1257,8 @@ class ComputerController extends \BaseController {
                     'computer_item.title as title',
                     'company.title as company',
                     'computer_item.company_id as company_id',
+                    'computer_item.nb_model as nb_model',
+                    'computer_item.nb_submodel as nb_submodel',
                     'computer_item.serial_code as serial_code',
                     'computer_item.access_no as access_no',
                     'computer_item.type_id as type_id',
@@ -1277,7 +1279,8 @@ class ComputerController extends \BaseController {
         $ma_item = \DB::select('call getRepairingList(' . $param . ')');
         $data = array(
             'item' => $item,
-            'ma' => $ma_item
+            'ma' => $ma_item,
+            'model' => \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel)
         );
         if ($item->company_id == 1) {
             return \View::make('mod_mis.computer.admin.word_export_arf', $data);

@@ -125,6 +125,12 @@
                             </div>   
                             @endif 
                             <div class="form-group">
+                                {{Form::label('cost', 'ราคาต่อหน่วย', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('cost',$item->cost,array('class'=>'form-control','id'=>'cost'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">

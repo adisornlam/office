@@ -217,6 +217,7 @@
                                                                     'hsware_item.id as id',
                                                                     'hsware_item.sub_model as sub_model',
                                                                     'hsware_item.serial_code as codes',
+                                                                    'hsware_item.serial_no as serial_no',
                                                                     'hsware_model.title as title',
                                                                     'hsware_item.status as status',
                                                                     'hsware_item.spare as spare'
@@ -226,7 +227,7 @@
                                                             <div class="checkbox">
                                                                 <label>
                                                                     {{Form::checkbox('hsware_item[]', $hs_item2->id,($hs_item2->status==1?TRUE:FALSE))}}
-                                                                    {{$hs_item2->codes}} {{$hs_item2->title}}  {{\HswareItem::get_hsware($hs_item2->id)}}
+                                                                    {{$hs_item2->codes}} @if($hs_item2->serial_no)({{$hs_item2->serial_no}})@endif {{$hs_item2->title}}  {{\HswareItem::get_hsware($hs_item2->id)}}
                                                                 </label>
                                                                 @if($hs_item2->spare==1)
                                                                 <span class="label label-warning">Spare</span>

@@ -350,7 +350,7 @@ Route::get('get/getSerialCom', function() {
             ->where('company_id', Input::get('company_id'))
             ->where('deleted_at', null)
             ->where('type_id', 1)
-            ->orderBy('id', 'desc')
+            ->orderBy('serial_code', 'desc')
             ->select(array('serial_code'))
             ->first();
     $str = explode("-", $item->serial_code);

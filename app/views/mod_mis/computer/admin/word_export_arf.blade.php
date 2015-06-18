@@ -2,7 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
+        <title>{{$item->serial_code}}</title>
         <style type="text/css">
             body {
                 font-family: 'tahoma', sans-serif; 
@@ -72,7 +72,7 @@
                     </td>
                 </tr>
             </table>
-            <h3>ข้อมูลคอมพิวเตอร์</h3>
+            <h3>ข้อมูลคอมพิวเตอร์ {{$model}}</h3>
             <table border="0" width="100%" class="myTable">
                 <tr>
                     <td width="20%">

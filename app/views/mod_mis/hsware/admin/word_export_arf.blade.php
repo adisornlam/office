@@ -2,7 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
+        <title>{{$item->serial_code}}</title>
         <style type="text/css">
             body {
                 font-family: 'tahoma', sans-serif; 

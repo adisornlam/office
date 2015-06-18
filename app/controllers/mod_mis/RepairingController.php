@@ -195,7 +195,6 @@ class RepairingController extends \BaseController {
         $check = \User::find((\Auth::check() ? \Auth::user()->id : 0));
         $item = \RepairingItem::find($param);
         if ($item->group_id == 1) {
-
             if (\DB::table('computer_item')
                             ->join('computer_user', 'computer_item.id', '=', 'computer_user.computer_id')
                             ->where('computer_user.user_id', $item->created_user)

@@ -145,6 +145,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                {{Form::label('cost', 'ราคาต่อหน่วย', array('class' => 'col-sm-2 control-label'))}}
+                                <div class="col-sm-2">
+                                    {{Form::text('cost',null,array('class'=>'form-control','id'=>'cost'))}}
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 {{Form::label('warranty_date', 'วันหมดประกัน', array('class' => 'col-sm-2 control-label'))}}
                                 <div class="col-sm-2">
                                     <div class="input-group date form_datetime-component">
@@ -174,12 +180,7 @@
                                         {{Form::checkbox('disabled', 1,TRUE)}} เปิดใช้งาน
                                     </label>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>                    
                     @if(\Input::get('group_id')!=2)
@@ -239,6 +240,11 @@
                                     <input type="file" class="default" name="photo5" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
                         </div>
                     </div>
                 </div>

@@ -634,6 +634,8 @@ class HswareController extends \BaseController {
                 $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
                 $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
                 $hsware_item->spec_value_35 = trim(\Input::get('spec_value_35'));
+                $hsware_item->spec_value_36 = trim(\Input::get('spec_value_36'));
+                $hsware_item->spec_value_37 = trim(\Input::get('spec_value_37'));
                 $hsware_item->photo1 = $photo_1;
                 $hsware_item->photo2 = $photo_2;
                 $hsware_item->photo3 = $photo_3;
@@ -642,6 +644,7 @@ class HswareController extends \BaseController {
                 $hsware_item->ip_address = trim(\Input::get('ip_address'));
                 $hsware_item->locations = trim(\Input::get('locations'));
                 $hsware_item->floor = \Input::get('floor');
+                $hsware_item->cost = trim(\Input::get('cost'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = (\Input::get('warranty_date') != '' ? trim(\Input::get('warranty_date')) : NULL);
                 $hsware_item->spare = (\Input::has('spare') ? 1 : 0);
@@ -814,12 +817,16 @@ class HswareController extends \BaseController {
                 $hsware_item->spec_value_32 = trim(\Input::get('spec_value_32'));
                 $hsware_item->spec_value_33 = trim(\Input::get('spec_value_33'));
                 $hsware_item->spec_value_34 = trim(\Input::get('spec_value_34'));
+                $hsware_item->spec_value_35 = trim(\Input::get('spec_value_35'));
+                $hsware_item->spec_value_36 = trim(\Input::get('spec_value_36'));
+                $hsware_item->spec_value_37 = trim(\Input::get('spec_value_37'));
                 $hsware_item->photo1 = $photo_1;
                 $hsware_item->photo2 = $photo_2;
                 $hsware_item->photo3 = $photo_3;
                 $hsware_item->photo4 = $photo_4;
                 $hsware_item->photo5 = $photo_5;
                 $hsware_item->ip_address = trim(\Input::get('ip_address'));
+                $hsware_item->cost = trim(\Input::get('cost'));
                 $hsware_item->locations = trim(\Input::get('locations'));
                 $hsware_item->register_date = trim(\Input::get('register_date'));
                 $hsware_item->warranty_date = trim(\Input::get('warranty_date'));
