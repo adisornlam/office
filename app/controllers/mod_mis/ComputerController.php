@@ -250,6 +250,12 @@ class ComputerController extends \BaseController {
                         $hsware_item->computer_status = 1;
                         $hsware_item->save();
                     }
+
+                    $computer_user_log = new \ComputerUserLog();
+                    $computer_user_log->computer_id = $computer_id;
+                    $computer_user_log->user_id = $uitem;
+                    $computer_user_log->created_user = \Auth::user()->id;
+                    $computer_user_log->save();
                 }
 
                 if ($model[2][0] > 0) {
@@ -965,6 +971,12 @@ class ComputerController extends \BaseController {
                         $hsware_item->computer_status = 1;
                         $hsware_item->save();
                     }
+
+                    $computer_user_log = new \ComputerUserLog();
+                    $computer_user_log->computer_id = $computer_id;
+                    $computer_user_log->user_id = $uitem;
+                    $computer_user_log->created_user = \Auth::user()->id;
+                    $computer_user_log->save();
                 }
                 if (\Input::get('hsware_item') > 0) {
                     \DB::table('hsware_item')
@@ -1280,7 +1292,8 @@ class ComputerController extends \BaseController {
         $data = array(
             'item' => $item,
             'ma' => $ma_item,
-            'model' => \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel)
+            'model' => \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel),
+            'software' => \DB::select('call getListComputerSoftware(' . $param . ')')
         );
         if ($item->company_id == 1) {
             return \View::make('mod_mis.computer.admin.word_export_arf', $data);

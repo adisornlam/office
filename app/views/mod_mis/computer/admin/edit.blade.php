@@ -136,11 +136,6 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div id="option1" class="tab-pane">
@@ -356,6 +351,11 @@
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{Form::button('บันทึกการเปลี่ยนแปลง',array('class'=>'btn btn-primary btn-lg','id'=>'btnSave'))}}    
                         </div>
                     </div>
                 </div>

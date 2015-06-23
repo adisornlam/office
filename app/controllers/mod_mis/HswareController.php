@@ -900,7 +900,7 @@ class HswareController extends \BaseController {
             'item' => $hsware_item,
             'spec_label' => \DB::table('hsware_spec_label')
                     ->where('group_id', $hsware_item->group_id)
-                    ->get()
+                    ->get()            
         );
         if ($hsware_item->company_id == 1) {
             return \View::make('mod_mis.hsware.admin.word_export_arf', $data);

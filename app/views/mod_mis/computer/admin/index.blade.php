@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5">
-                            {{ \Form::select('type_id', array(''=>'เลือกประเภทคอมพิวเตอร์',1=>'PC',2=>'Notebook'), (isset($_COOKIE['computer_type_id'])?$_COOKIE['computer_type_id']:null), array('class' => 'form-control', 'id' => 'type_id')); }}
+                            {{ \Form::select('type_id', array(''=>'เลือกประเภทคอมพิวเตอร์',1=>'PC',2=>'Notebook',3=>'Server'), (isset($_COOKIE['computer_type_id'])?$_COOKIE['computer_type_id']:null), array('class' => 'form-control', 'id' => 'type_id')); }}
                         </div>
                     </div>
                 </div>

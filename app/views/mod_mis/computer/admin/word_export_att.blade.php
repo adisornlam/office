@@ -24,12 +24,15 @@
             #footer {
                 width:100%;
                 height:150px;
-                position:absolute;
+                /*position:absolute;*/
                 bottom:0;
                 left:0;
             }
             table.myTable { border-collapse:collapse; }
             table.myTable td, table.myTable th { border:1px solid black;padding:5px; }
+            @media print {
+                .page_break {page-break-after: always;}
+            }
         </style>
     </head>
     <body>
@@ -175,39 +178,68 @@
                 }
                 ?>
             </table>
-            @if($ma)
-            <h3>รายการ MA</h3>
+            <div id="footer" class="page_break">
+                <table border="0" width="100%">
+                    <tr>
+                        <td colspan="2"><hr /></td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            {{HTML::image('img/att/adds_att.jpg',null,array('width'=>300))}}
+                        </td>
+                        <td align="right">
+                            {{HTML::image('img/att/cer_att.jpg',null,array('width'=>300))}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            @if($software)
+            <div id="header">
+                <table border="0" width="100%">
+                    <tr>
+                        <td align="left">
+                            {{HTML::image('img/att/logo_att.jpg',null,array('width'=>300))}}
+                        </td>
+                        <td align="right">
+                            {{HTML::image('img/att/adds_att.jpg',null,array('width'=>300))}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h3>รายการ Software</h3>
             <table border="0" width="100%" class="myTable">
                 <tr>
-                    <td><strong>อุปกรณ์</strong></td>
-                    <td><strong>ประเภทดำเนินการ</strong></td>
-                    <td><strong>กลุ่มปัญหา</strong></td>
-                    <td><strong>รายละเอียด</strong></td>
-                    <td><strong>วันที่</strong></td>
+                    <td><strong>Item</strong></td>
+                    <td><strong>Version</strong></td>
+                    <td><strong>OS</strong></td>
+                    <td><strong>Free</strong></td>
+                    <td><strong>License</strong></td>
                 </tr>
-                @foreach($ma as $ma_item)
+                @foreach($software as $software_item)
                 <tr>
-                    <td width="5%">
-                        {{$ma_item->group_title}}
+                    <td width="20%">
+                        {{$software_item->title}}
                     </td>
                     <td width="5%">
-                        {{$ma_item->type_title}}
+                        {{$software_item->version}}
                     </td>
                     <td width="5%">
-                        {{$ma_item->publem_title}}
+                        {{$software_item->bit_os}}
+                    </td>
+                    <td width="5%">
+                        @if($software_item->free == 0)
+                        Yes
+                        @endif
                     </td>
                     <td width="20%">
-                        {{$ma_item->title}}
-                    </td>
-                    <td width="10%">
-                        {{$ma_item->created_at}}
+                        {{$software_item->license_code}}
                     </td>
                 </tr>
                 @endforeach
             </table>
-            @endif
+            @endif            
         </div>
-        <div id="footer">
+        <div id="footer" class="page_break">
             <table border="0" width="100%">
                 <tr>
                     <td colspan="2"><hr /></td>
