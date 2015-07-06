@@ -905,6 +905,7 @@ class ComputerController extends \BaseController {
                         'computer_item.access_no as access_no',
                         'computer_item.type_id as type_id',
                         'computer_item.locations as locations',
+                        'computer_item.floor as floor',
                         'computer_item.ip_address as ip_address',
                         'computer_item.mac_lan as mac_lan',
                         'computer_item.mac_wireless as mac_wireless',
@@ -955,6 +956,7 @@ class ComputerController extends \BaseController {
                 $computer_item->mac_lan = trim(\Input::get('mac_lan'));
                 $computer_item->mac_wireless = trim(\Input::get('mac_wireless'));
                 $computer_item->locations = \Input::get('locations');
+                $computer_item->floor = \Input::get('floor');
                 $computer_item->register_date = trim(\Input::get('register_date'));
                 $computer_item->disabled = (\Input::has('disabled') ? 0 : 1);
                 $computer_item->updated_user = \Auth::user()->id;
@@ -1275,6 +1277,7 @@ class ComputerController extends \BaseController {
                     'computer_item.access_no as access_no',
                     'computer_item.type_id as type_id',
                     'computer_item.locations as locations',
+                    'computer_item.floor as floor',
                     'computer_item.ip_address as ip_address',
                     'computer_item.mac_lan as mac_lan',
                     'computer_item.mac_wireless as mac_wireless',
@@ -1292,7 +1295,7 @@ class ComputerController extends \BaseController {
         $data = array(
             'item' => $item,
             'ma' => $ma_item,
-            'model' => \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel),
+            'model' => 'Notebook ' . \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel),
             'software' => \DB::select('call getListComputerSoftware(' . $param . ')')
         );
         if ($item->company_id == 1) {

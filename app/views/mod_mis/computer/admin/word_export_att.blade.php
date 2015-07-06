@@ -117,7 +117,7 @@
                     <td><strong>IP Address</strong></td>
                     <td><p>{{$item->ip_address}}</p></td>
                     <td><strong>Location</strong></td>
-                    <td>&nbsp;</td>
+                    <td>{{$item->place}} @if($item->floor>0) ชั้น {{$item->floor}} @endif</td>
                 </tr>
                 <tr>
                     <td><strong>วันที่เริ่มใช้งาน</strong></td>
@@ -166,7 +166,7 @@
                                         ->get() as $hs_item) {
                                     ?>
                                     <p>
-                                        {{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}  @if($hs_item->warranty=="0000-00-00") ประกัน LT @elseif($hs_item->warranty) วันหมดประกัน {{$hs_item->warranty}} @else ประกัน LT @endif
+                                        {{$hs_item->codes}} {{$hs_item->title}} {{\HswareItem::get_submodel($hs_item->sub_model)}}  {{\HswareItem::get_hsware($hs_item->id)}}  @if($hs_item->warranty=="0000-00-00") @elseif($hs_item->warranty) วันหมดประกัน {{$hs_item->warranty}} @endif
                                     </p>
                                 <?php } ?>
                             </td>
@@ -176,6 +176,7 @@
                 }
                 ?>
             </table>
+            @if($ma)
             <h3>รายการ MA</h3>
             <table border="0" width="100%" class="myTable">
                 <tr>
@@ -183,7 +184,7 @@
                     <td><strong>ประเภทดำเนินการ</strong></td>
                     <td><strong>กลุ่มปัญหา</strong></td>
                     <td><strong>รายละเอียด</strong></td>
-                    <td><strong>วันที่</strong></td>
+                    <td><strong>วันที่ดำเนินการ</strong></td>
                 </tr>
                 @foreach($ma as $ma_item)
                 <tr>
@@ -205,6 +206,7 @@
                 </tr>
                 @endforeach
             </table>
+            @endif
             <p class="breakhere"></p>
             @if($software)
             <h3>รายการ Software</h3>
@@ -232,8 +234,16 @@
                         Yes
                         @endif
                     </td>
-                    <td width="20%">
+                    <td width="20%">               
+                        @if($software_item->license_code)
+                        @if($software_item->id==15)
                         {{$software_item->license_code}}
+                        @elseif($software_item->id==39)
+                        {{$software_item->license_code}}
+                        @else
+
+                        @endif
+                        @endif
                     </td>
                 </tr>
                 @endforeach
