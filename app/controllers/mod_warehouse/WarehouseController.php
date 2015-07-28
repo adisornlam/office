@@ -40,7 +40,7 @@ class WarehouseController extends \BaseController {
         }
     }
 
-    public function deadstock() {
+    public function deadstock1() {
         $data = array(
             'title' => 'รายการสินค้าคงค้าง',
             'breadcrumbs' => array(
@@ -53,7 +53,7 @@ class WarehouseController extends \BaseController {
         return \View::make('mod_warehouse.warehouse.deadstock.index', $data);
     }
 
-    public function deadstock_listall() {
+    public function deadstock_listall1() {
         $deadstock_item = \DB::table('warehouse_deadstock_item')
                 ->leftJoin('warehouse_type', 'warehouse_deadstock_item.type_id', '=', 'warehouse_type.code_no')
                 ->leftJoin('warehouse_brand', 'warehouse_deadstock_item.brand_id', '=', 'warehouse_brand.code_no')
@@ -132,6 +132,20 @@ class WarehouseController extends \BaseController {
                             return $str;
                         })
                         ->make(true);
+    }
+
+    public function deadstock() {
+        //$item = \WhItem::on('mysql2')->all();
+        $data = array(
+            'title' => 'รายการสินค้าคงค้าง',
+            'breadcrumbs' => array(
+                'ภาพรวมระบบ' => '',
+                'ภาพรวมฝ่ายคลังสินค้า' => 'warehouse',
+                'รายการสินค้าคงค้าง' => '#'
+            ),
+        );
+
+        return \View::make('mod_warehouse.warehouse.deadstock.index', $data);
     }
 
     public function import_dialog() {

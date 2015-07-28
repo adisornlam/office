@@ -265,9 +265,12 @@ class OilController extends \BaseController {
                 $oil_analysis_item->type_id = \Input::get('type_id');
                 $oil_analysis_item->machine_id = \Input::get('machine_id');
                 $oil_analysis_item->nas = \Input::get('nas');
+                $oil_analysis_item->varnish = \Input::get('varnish');
                 $oil_analysis_item->colour = \Input::get('colour');
                 $oil_analysis_item->viscosity = \Input::get('viscosity');
+                $oil_analysis_item->viscosity100 = \Input::get('viscosity100');
                 $oil_analysis_item->kind_id = \Input::get('kind_id');
+                $oil_analysis_item->kind100_id = \Input::get('kind100_id');
                 $oil_analysis_item->tan = \Input::get('tan');
                 $oil_analysis_item->moisture = \Input::get('moisture');
                 $oil_analysis_item->oxidation = \Input::get('oxidation');

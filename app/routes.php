@@ -225,10 +225,10 @@ Route::group(array('prefix' => 'warehouse', 'before' => 'authen'), function() {
     Route::get('deadstock/import_temp', 'App\Controllers\WarehouseController@deadstock_temp');
     Route::get('deadstock/import_temp/listall', 'App\Controllers\WarehouseController@deadstock_temp_listall');
     Route::post('deadstock/import_save', 'App\Controllers\WarehouseController@import_save');
-    
+
     Route::get('deadstock/report', 'App\Controllers\WarehouseController@deadstock_report');
     Route::get('deadstock/report/listall', 'App\Controllers\WarehouseController@deadstock_report_listall');
-    
+
     Route::match(array('GET', 'POST'), 'deadstock/upload/photo/{id}', array('uses' => 'App\Controllers\WarehouseController@upload_dialog'));
 
     Route::match(array('GET', 'POST'), 'deadstock/add', array('uses' => 'App\Controllers\WarehouseController@add'));
@@ -397,6 +397,18 @@ Route::get('get/licenseddl', function() {
 Route::get('get/getOilMachine', function() {
     $input = Input::get('option');
     $users = \DB::table('oil_machine_type')
+            ->where('type_id', $input);
+    $users->select(array(
+        'id',
+        'title'
+    ));
+    return Response::json($users->get());
+});
+
+Route::get('get/getOilType', function() {
+    //$input = Input::get('option');
+    $input = (Input::get('option') != 2 ? 1 : Input::get('option'));
+    $users = \DB::table('oil_oiltype_item')
             ->where('type_id', $input);
     $users->select(array(
         'id',

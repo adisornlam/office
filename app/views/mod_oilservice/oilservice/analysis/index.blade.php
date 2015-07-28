@@ -127,8 +127,8 @@
                 {"data": "nitration_text", "title": "Nitration", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "density_text", "title": "Density", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
                 {"data": "intensity_text", "title": "Intensity", "width": "5%", "sClass": "text-center", "orderable": false, "searchable": false},
-                {"data": "diagnose", "title": "วินิจฉัย", "width": "30%", "orderable": false, "searchable": false},
-                {"data": "solve", "title": "การแก้ปัญหา", "width": "30%", "orderable": false, "searchable": false}
+                {"data": "diagnose", "title": "วินิจฉัย", "width": "30%", "orderable": false, "searchable": false, "type": "html"},
+                {"data": "solve", "title": "การแก้ปัญหา", "width": "30%", "orderable": false, "searchable": false, "type": "html"}
             ],
             dom: 'T<"clear">lfrtip',
             "tableTools": {

@@ -83,7 +83,7 @@ class ComputerController extends \BaseController {
         return \Datatables::of($computer_item)
                         ->edit_column('id', $link)
                         ->edit_column('serial_code', function($result_obj) {
-                            $str = '<a href="' . \URL::to('computer/view/' . $result_obj->item_id . '') . '" title="ดูรายละเอียด เลขระเบียน ' . $result_obj->serial_code . '">' . $result_obj->serial_code . '</a>';
+                            $str = '<a href="' . \URL::to('mis/computer/export/' . $result_obj->item_id . '') . '" title="ดูรายละเอียด เลขระเบียน ' . $result_obj->serial_code . '" target="_blank">' . $result_obj->serial_code . '</a>';
                             return $str;
                         })
                         ->edit_column('disabled', '@if($disabled==0) <span class="label label-success">Active</span> @else <span class="label label-danger">Inactive</span> @endif')
@@ -1295,7 +1295,7 @@ class ComputerController extends \BaseController {
         $data = array(
             'item' => $item,
             'ma' => $ma_item,
-            'model' => 'Notebook ' . \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel),
+            'model' => ($item->type_id==2?'Notebook':'').' ' . \HswareModel::getName($item->nb_model) . ' ' . \HswareModel::getName($item->nb_submodel),
             'software' => \DB::select('call getListComputerSoftware(' . $param . ')')
         );
         if ($item->company_id == 1) {

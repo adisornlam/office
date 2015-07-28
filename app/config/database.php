@@ -47,13 +47,23 @@ return array(
         ),
         'mysql' => array(
             'driver' => 'mysql',
-            'host' => 'localhost',
+            'host' => '150.128.128.16',
             'database' => 'officedb',
             'username' => 'root',
-            'password' => '1234',
+            'password' => 'root',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
+            'prefix' => ''
+        ),
+        'mysql2' => array(
+            'driver' => 'mysql',
+            'host' => '150.128.128.27',
+            'database' => 'wsms',
+            'username' => 'mysql',
+            'password' => 'mysqllock',
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => ''
         ),
         'pgsql' => array(
             'driver' => 'pgsql',
